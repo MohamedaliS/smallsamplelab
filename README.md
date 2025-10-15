@@ -177,14 +177,14 @@ mw_test(x, y)
 
 ## Key Features
 
-✅ **British English** throughout with traditional academic tone  
-✅ **16 complete chapters** with learning objectives, examples, and key takeaways  
-✅ **All code tested** and runnable in fresh R sessions  
-✅ **Reproducible**: Uses `set.seed(2025)` for all random generation  
-✅ **Curated package list**: Only vetted, stable packages used  
-✅ **Three complete worked projects** integrating multiple methods  
-✅ **Proper citations** to core methodological references  
-✅ **Transparent reporting** emphasis throughout  
+- **British English** throughout with traditional academic tone  
+- **16 complete chapters** with learning objectives, examples, and key takeaways  
+- **All code tested** and runnable in fresh R sessions  
+- **Reproducible**: Uses `set.seed(2025)` for all random generation  
+- **Curated package list**: Only vetted, stable packages used  
+- **Three complete worked projects** integrating multiple methods  
+- **Proper citations** to core methodological references  
+- **Transparent reporting** emphasis throughout  
 
 ## Core References
 

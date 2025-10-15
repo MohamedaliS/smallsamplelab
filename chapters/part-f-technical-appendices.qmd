@@ -1,0 +1,1189 @@
+# Part 6: Detailed Technical Appendices
+
+## Pre-Registration and Registered Reports for Small-Sample Studies
+
+### Why Pre-Registration Matters Even More with Small Samples
+
+Pre-registration involves specifying research hypotheses, methods, and the analysis plan before collecting or analysing data. This practice is particularly important for small-sample studies because:
+
+1. **Limited power increases temptation for p-hacking**: With borderline results (p ≈ 0.06), researchers may be tempted to try alternative analyses until significance is achieved.
+2. **Researcher degrees of freedom are amplified**: Small samples make results more sensitive to analytic choices (outlier handling, transformations, covariates).
+3. **Multiple testing is common**: With limited power, researchers may test many potential predictors or moderators.
+4. **Post-hoc storytelling**: It is easier to construct plausible narratives around unexpected findings when samples are small.
+
+Pre-registration separates confirmatory from exploratory analyses, making the evidential value of findings transparent.
+
+### What to Pre-Register
+
+#### Minimum Requirements
+
+1. **Research questions and hypotheses**
+   - Primary research question(s).
+   - Specific hypotheses (directional if appropriate).
+   - Primary vs. secondary outcomes.
+
+2. **Study design**
+   - Sample size and justification (power analysis or feasibility).
+   - Sampling method.
+   - Randomisation procedure (if applicable).
+   - Inclusion/exclusion criteria.
+
+3. **Variables and measures**
+   - How each variable will be operationalised.
+   - Scales and scoring procedures.
+   - Definition of outliers and handling plan.
+
+4. **Analysis plan**
+   - Statistical tests for each hypothesis.
+   - Planned covariates and their justification.
+   - Multiple comparison corrections (if applicable).
+   - Handling of missing data.
+   - Sensitivity analyses planned.
+
+5. **Decision rules**
+   - What constitutes support for hypotheses.
+   - Conditions for stopping data collection (if sequential design).
+
+#### Example Pre-Registration Template for Small-Sample Study
+
+```markdown
+# Study Title: Effect of Brief Mindfulness Intervention on Test Anxiety
+
+## 1. Research Questions
+**Primary**: Does a 10-minute mindfulness exercise reduce test anxiety 
+compared to control condition in undergraduate students?
+
+**Secondary (Exploratory)**: 
+- Does effect differ by prior meditation experience?
+- Does effect differ by baseline anxiety level?
+
+## 2. Hypotheses
+**H1 (Confirmatory)**: Students in mindfulness condition will report lower 
+test anxiety than control group (one-tailed, d ≥ 0.5 expected).
+
+**H2 (Exploratory)**: Effect will be stronger for students with no prior 
+meditation experience (interaction test, not corrected for multiple testing).
+
+## 3. Study Design
+- **Design**: Randomised controlled trial, parallel groups
+- **Sample size**: n = 40 (20 per group)
+  - Justification: 80% power to detect d = 0.9 at α = 0.05 (one-tailed)
+  - Feasible sample given time/resource constraints
+  - Pilot study, not definitive test
+- **Randomisation**: Simple randomisation using random number generator
+- **Inclusion**: Undergraduates enrolled in statistics course
+- **Exclusion**: Regular meditation practice (>1x per week), clinical anxiety diagnosis
+
+## 4. Variables
+**Primary Outcome**: Test anxiety 
+- Measure: Test Anxiety Inventory (TAI), 20 items, 4-point Likert
+- Scoring: Sum of items (range 20-80), higher = more anxiety
+- Timing: Administered immediately before exam
+
+**Secondary Measures**:
+- Prior meditation experience: Yes/No
+- Baseline trait anxiety: STAI-T (administered 1 week before)
+
+**Covariates**: None planned (randomisation should balance)
+
+## 5. Analysis Plan
+
+### Primary Analysis (Confirmatory)
+**Test**: Independent samples t-test (or Mann-Whitney U if severely non-normal)
+**Assumptions**: Check normality with Q-Q plots; if skewness > |2|, use Mann-Whitney
+**Outliers**: Values > 3 SD from group mean flagged; primary analysis includes all 
+data, sensitivity analysis excludes outliers
+**Alpha**: 0.05 (one-tailed, directional hypothesis)
+**Effect size**: Cohen's d with 95% CI
+**Missing data**: Complete-case analysis (expect <5% missing)
+
+### Secondary Analyses (Exploratory)
+**Moderation by prior experience**: 
+- Test: 2×2 ANOVA (condition × experience) or Kruskal-Wallis
+- No correction for multiple testing (exploratory)
+- Report: "This analysis was exploratory and not pre-registered as confirmatory"
+
+**Moderation by baseline anxiety**:
+- Test: Linear regression with interaction term
+- If interaction p > 0.10, report main effects only
+
+### Sensitivity Analyses
+1. Analysis excluding outliers (if any)
+2. Analysis with baseline anxiety as covariate
+3. Complier-average causal effect (if non-compliance occurs)
+
+## 6. Decision Rules
+**Support for H1**: 
+- One-tailed p < 0.05 AND Cohen's d > 0.4 (minimum practically important effect)
+- If p < 0.05 but d < 0.4: "statistically significant but small effect"
+- If p > 0.05: "No evidence for effect; study may be underpowered"
+
+**Deviations from plan**:
+Any deviations from this pre-registration will be documented with justification.
+
+## 7. Timeline
+- Pre-registration posted: [Date]
+- Data collection: [Start] to [End]
+- Analysis: Within 2 weeks of completion
+- Results reported: By [Date]
+
+## 8. Data/Code Availability
+- De-identified data will be posted to OSF upon publication
+- Analysis scripts will be shared on GitHub
+```
+
+### Where to Pre-Register
+
+1. **Open Science Framework (OSF)** - <https://osf.io>
+   - Free, widely used, time-stamped.
+   - Can be public or embargoed.
+   - Integrated with many platforms.
+   - **Best for**: Most small-sample studies.
+
+2. **AsPredicted** - <https://aspredicted.org>
+   - Simpler interface, 9 required questions.
+   - Embargoed for up to 4 years.
+   - Quick to complete (15-20 minutes).
+   - **Best for**: Student projects, pilot studies.
+
+3. **ClinicalTrials.gov** - <https://clinicaltrials.gov>
+   - Required for clinical trials in the US.
+   - More complex registration.
+   - Public database.
+   - **Best for**: Clinical or health research.
+
+4. **Registered Reports** (Journal Format)
+   - Submit protocol before data collection.
+   - In-principle acceptance if methodology is sound.
+   - Publication guaranteed regardless of results.
+   - **Best for**: Confirmatory studies with novel questions.
+
+### Implementing Pre-Registration: Practical Steps
+
+1. **Draft your pre-registration (before data collection)**
+   - Specify exact hypotheses (include direction if predicted).
+   - Document sample size with justification.
+   - Outline all planned analyses.
+   - Define decision rules for interpreting results.
+
+2. **Get feedback**
+   - Share with advisors or colleagues.
+   - Identify ambiguities or underspecified elements.
+   - Revise before finalising.
+
+3. **Submit and time-stamp**
+   - Upload to OSF or AsPredicted.
+   - Embargo if needed (set a reasonable end date).
+   - Save confirmation or DOI.
+
+4. **Follow your plan**
+   - Conduct study as pre-registered.
+   - Document any deviations with justification.
+   - Distinguish confirmatory from exploratory analyses in results.
+
+5. **Report transparently**
+
+> "This study was pre-registered at [URL] on [Date]. All confirmatory analyses followed the pre-registered plan. The following deviations occurred: [list]. Exploratory analyses not included in the pre-registration are clearly labeled."
+
+### Handling Deviations from Pre-Registration
+
+Deviations are inevitable and acceptable if reported transparently.
+
+#### Acceptable deviations (with justification)
+
+- **Sample size smaller than planned**: e.g., recruitment difficulties.
+- **Different statistical test**: e.g., assumptions violated.
+- **Additional covariates**: reviewer request or new information.
+- **Exclusions**: data quality issues not anticipated.
+
+#### How to report deviations
+
+```markdown
+**Deviations from Pre-Registration:**
+
+1. **Sample size**: Planned n=40, achieved n=36. Recruitment ended due to 
+   course completion. Power reduced to 75% for d=0.9.
+
+2. **Primary analysis**: Pre-registered t-test replaced with Mann-Whitney U 
+   due to severe right skew (skewness=2.4). Sensitivity analysis with 
+   log-transformation yielded similar results.
+
+3. **Additional analysis**: Added baseline anxiety as covariate per reviewer 
+   request. This was not pre-registered but is clearly labeled as post-hoc.
+```
+
+### Benefits of Pre-Registration for Small-Sample Studies
+
+1. **Credibility**
+   - Readers know analyses were not data-driven.
+   - Reduces suspicion of p-hacking.
+   - Distinguishes confirmatory from exploratory work.
+
+2. **Protection against publication bias**
+   - Registered reports guarantee publication regardless of results.
+   - Reduces the file-drawer problem.
+
+3. **Conceptual clarity**
+   - Forces precise hypothesis formulation.
+   - Identifies analytic ambiguities early.
+   - Improves overall research quality.
+
+4. **Efficiency**
+   - Pre-planned analyses save time.
+   - Reduces post-hoc decision-making stress.
+   - Clear stopping rules prevent endless data collection.
+
+### Common Concerns and Responses
+
+- **"But my study is exploratory..."** – Pre-register it as exploratory and specify that you are exploring patterns rather than testing hypotheses.
+- **"What if I think of a better analysis after seeing the data?"** – Conduct both analyses; report the pre-registered analysis as confirmatory and the new one as exploratory.
+- **"My sample size is already small; strict pre-registration seems excessive."** – Small samples make pre-registration more important because results are more variable.
+- **"I'm worried I'll make mistakes in my pre-registration."** – Mistakes are acceptable if documented; deviations do not invalidate your study.
+
+### Pre-Registration Checklist
+
+Before submitting your pre-registration, verify:
+
+- [ ] Hypotheses are specific and testable.
+- [ ] Sample size is justified (power analysis or constraints explained).
+- [ ] All variables are operationally defined.
+- [ ] Statistical tests are specified for each hypothesis.
+- [ ] Alpha level(s) stated explicitly.
+- [ ] Multiple comparison correction method stated (if applicable).
+- [ ] Outlier definition and handling specified.
+- [ ] Missing data approach specified.
+- [ ] Primary vs. secondary outcomes distinguished.
+- [ ] Exploratory analyses labeled as such.
+- [ ] Document is time-stamped before data collection or analysis.
+
+### Example R Code for a Pre-Registered Analysis
+
+```{r eval = FALSE}
+# ==========================================================
+# PRE-REGISTERED ANALYSIS SCRIPT
+# Study: Brief Mindfulness Intervention
+# Pre-registration: osf.io/xxxxx
+# Date: October 15, 2025
+# ==========================================================
+
+library(tidyverse)
+library(rstatix)
+
+# Load data
+study_data <- read_csv("data/anxiety_study.csv")
+
+# ==========================================================
+# 1. SAMPLE VERIFICATION
+# ==========================================================
+cat("Pre-registered target: n = 40 (20 per group)\n")
+cat("Achieved sample size: n =", nrow(study_data), "\n")
+cat("By group:\n")
+print(table(study_data$condition))
+
+# Check for protocol violations
+cat("\nExclusions applied per pre-registration:\n")
+cat("  - Regular meditators:", 
+    sum(study_data$regular_meditation == "Yes"), "excluded\n")
+
+# ==========================================================
+# 2. DESCRIPTIVE STATISTICS (PRE-REGISTERED)
+# ==========================================================
+cat("\n=== DESCRIPTIVE STATISTICS ===\n")
+desc_stats <- study_data %>%
+  group_by(condition) %>%
+  summarise(
+    n = n(),
+    Mean_TAI = mean(test_anxiety),
+    SD_TAI = sd(test_anxiety),
+    Median_TAI = median(test_anxiety)
+  )
+print(desc_stats)
+
+# ==========================================================
+# 3. ASSUMPTION CHECKS (PRE-REGISTERED)
+# ==========================================================
+cat("\n=== ASSUMPTION CHECKS ===\n")
+
+# Normality check (per pre-registration: if |skewness| > 2, use Mann-Whitney)
+skewness_vals <- study_data %>%
+  group_by(condition) %>%
+  summarise(Skewness = psych::skew(test_anxiety))
+print(skewness_vals)
+
+severe_skew <- any(abs(skewness_vals$Skewness) > 2)
+cat("\nSevere skewness detected:", severe_skew, "\n")
+
+# Q-Q plots
+ggplot(study_data, aes(sample = test_anxiety)) +
+  stat_qq() + stat_qq_line() +
+  facet_wrap(~condition) +
+  labs(title = "Q-Q Plots by Condition")
+
+# Outlier detection (per pre-registration: > 3 SD)
+outliers <- study_data %>%
+  group_by(condition) %>%
+  mutate(
+    z_score = (test_anxiety - mean(test_anxiety)) / sd(test_anxiety),
+    is_outlier = abs(z_score) > 3
+  ) %>%
+  filter(is_outlier)
+
+if (nrow(outliers) > 0) {
+  cat("\nOutliers detected (>3 SD):\n")
+  print(outliers)
+} else {
+  cat("\nNo outliers detected.\n")
+}
+
+# ==========================================================
+# 4. PRIMARY ANALYSIS (PRE-REGISTERED, CONFIRMATORY)
+# ==========================================================
+cat("\n=== PRIMARY ANALYSIS (CONFIRMATORY) ===\n")
+cat("Pre-registration: One-tailed t-test or Mann-Whitney U\n\n")
+
+if (severe_skew) {
+  cat("Using Mann-Whitney U (severe skewness detected)\n")
+  primary_test <- wilcox_test(study_data, test_anxiety ~ condition, 
+                               alternative = "less", detailed = TRUE)
+  effect_size <- wilcox_effsize(study_data, test_anxiety ~ condition)
+} else {
+  cat("Using independent samples t-test\n")
+  primary_test <- t_test(study_data, test_anxiety ~ condition, 
+                         alternative = "less", detailed = TRUE)
+  effect_size <- cohens_d(study_data, test_anxiety ~ condition)
+}
+
+print(primary_test)
+print(effect_size)
+
+# Decision rule (per pre-registration)
+cat("\n=== DECISION RULE ===\n")
+cat("Support for H1 requires: p < 0.05 AND d > 0.4\n")
+cat("Result: p =", round(primary_test$p, 3), 
+    ", effect size =", round(abs(effect_size$effsize), 2), "\n")
+
+if (primary_test$p < 0.05 & abs(effect_size$effsize) > 0.4) {
+  cat("CONCLUSION: Hypothesis supported\n")
+} else if (primary_test$p < 0.05 & abs(effect_size$effsize) <= 0.4) {
+  cat("CONCLUSION: Statistically significant but small effect\n")
+} else {
+  cat("CONCLUSION: No evidence for effect (may be underpowered)\n")
+}
+
+# ==========================================================
+# 5. SENSITIVITY ANALYSIS (PRE-REGISTERED)
+# ==========================================================
+cat("\n=== SENSITIVITY ANALYSIS ===\n")
+
+if (nrow(outliers) > 0) {
+  cat("5a. Analysis excluding outliers:\n")
+  data_no_outliers <- anti_join(study_data, outliers, by = "participant_id")
+  sens_test <- t_test(data_no_outliers, test_anxiety ~ condition, 
+                      alternative = "less")
+  print(sens_test)
+}
+
+# Covariate adjustment
+cat("\n5b. Adjusted for baseline anxiety:\n")
+ancova_model <- lm(test_anxiety ~ condition + baseline_anxiety, data = study_data)
+summary(ancova_model)
+
+# ==========================================================
+# 6. EXPLORATORY ANALYSES (NOT PRE-REGISTERED)
+# ==========================================================
+cat("\n=== EXPLORATORY ANALYSES (POST-HOC) ===\n")
+cat("WARNING: These were not pre-registered. Interpret cautiously.\n\n")
+
+# Interaction with prior experience
+cat("6a. Moderation by prior meditation experience:\n")
+kruskal_test(study_data, test_anxiety ~ interaction(condition, prior_experience))
+
+# ==========================================================
+# END OF PRE-REGISTERED ANALYSIS
+# ==========================================================
+cat("\n=== ANALYSIS COMPLETE ===\n")
+cat("All confirmatory analyses followed pre-registered plan.\n")
+cat("Deviations documented above.\n")
+```
+
+### Key Takeaways
+
+- Pre-registration protects against p-hacking, which is especially important for small samples.
+- Distinguish confirmatory from exploratory analyses in both pre-registration and reporting.
+- Deviations are acceptable if documented transparently with justification.
+- OSF and AsPredicted offer free, time-stamped pre-registration options, and registered reports provide publication security.
+- Pre-register even exploratory studies to document your planned approach.
+
+### Further Resources
+
+- **OSF Pre-registration**: <https://osf.io/prereg/>
+- **AsPredicted**: <https://aspredicted.org/>
+- **Center for Open Science Guide**: <https://cos.io/prereg/>
+- **Nosek et al. (2018)**: The preregistration revolution. *PNAS*, 115(11), 2600–2606.
+- **Simmons et al. (2011)**: False-positive psychology. *Psychological Science*, 22(11), 1359–1366.
+
+## Teaching Supplement: Quantitative Analysis with Small Samples
+
+### Instructor's Guide and Exercise Bank
+
+---
+
+### Part 1: Course Integration Suggestions
+
+#### Sample Course Structures
+
+##### Option 1: 10-Week Quarter Course — "Quantitative Methods for Small Samples"
+
+| Week | Topic | Chapters | Activities |
+|------|-------|----------|------------|
+| 1 | Introduction & Foundations | Ch 1–2 | Setup R, generate datasets |
+| 2 | Sampling & Data Collection | Ch 9–10 | Design a small-sample study |
+| 3 | Data Screening & Missing Data | Ch 11–12 | Clean provided messy dataset |
+| 4 | Exact Tests & Resampling | Ch 3 | Compare exact vs. asymptotic |
+| 5 | Nonparametric Methods | Ch 4 | Rank-based analyses lab |
+| 6 | Penalized & Bayesian Regression | Ch 5 | Fit Firth & brms models |
+| 7 | Reliability & MCDM | Ch 6–7 | Scale development project |
+| 8 | Reporting & Visualization | Ch 13–16 | Create publication-ready figures |
+| 9 | Worked Project Analysis | Part E | Work through all three projects |
+| 10 | Student Presentations | — | Present own small-sample study |
+
+**Assessment**
+
+- Weekly problem sets (40%).
+- Mid-term take-home exam (20%).
+- Final project: Analyse own small dataset (40%).
+
+##### Option 2: 5-Session Workshop Series — For Graduate Students or Practitioners
+
+- **Session 1 (3 hours)**: Foundations & Exact Tests — why small-sample methods matter, Fisher's exact test, exact binomial/Poisson; hands-on 2×2 analyses.
+- **Session 2 (3 hours)**: Nonparametric & Resampling — Mann-Whitney U, Wilcoxon, bootstrap confidence intervals; compare parametric vs. nonparametric.
+- **Session 3 (3 hours)**: Regression for Small Samples — Firth logistic regression, Bayesian regression with `brms`; fit models with sparse data.
+- **Session 4 (3 hours)**: Reliability & Measurement — Cronbach's alpha, omega, scale development; short-scale reliability lab.
+- **Session 5 (3 hours)**: Reporting & Integration — effect sizes, transparent reporting; complete a worked project.
+
+### Part 2: Exercise Bank
+
+The following exercises align with the chapters and include answer sketches to support instructors.
+
+#### Chapters 1–2 Exercises
+
+**Exercise 1.1 — Identifying Appropriate Methods**
+
+For each scenario, identify whether standard large-sample methods are appropriate or small-sample methods are needed. Justify your answer.
+
+a) A psychology study with n = 200 testing differences in reaction time between two groups.
+
+b) A pilot study of a new teaching method with n = 15 per class.
+
+c) An evaluation of a rare disease treatment with n = 8 patients total.
+
+d) A survey of 500 customers rating satisfaction on a 1–10 scale.
+
+e) A comparison of defect rates in 12 manufacturing batches.
+
+**Answer key**
+
+- a) Standard methods are adequate (n = 200).
+- b) Small-sample methods needed (n = 15 per group).
+- c) Small-sample methods needed (n = 8 total).
+- d) Standard methods are adequate (n = 500).
+- e) Small-sample methods needed (n = 12, count data).
+
+**Exercise 1.2 — Outcome Selection**
+
+A researcher can measure student performance as binary (pass ≥ 60, fail < 60), ordinal (grades A–F), or continuous (0–100 score). With n = 20 students, which outcome measure provides the most information? Use a simulation to illustrate why preserving granularity improves inference.
+
+```{r}
+set.seed(2025)
+n <- 20
+
+# Simulate continuous scores
+scores <- round(rnorm(n, mean = 68, sd = 12))
+scores <- pmax(0, pmin(100, scores))
+
+# Create binary outcome
+pass_fail <- ifelse(scores >= 60, "Pass", "Fail")
+
+# Create ordinal outcome
+grades <- cut(scores, breaks = c(0, 60, 70, 80, 90, 100),
+              labels = c("F", "D", "C", "B", "A"), right = FALSE)
+
+# Compare information content
+mean(scores)
+table(pass_fail)
+table(grades)
+```
+
+Encourage students to discuss which summaries are most informative and how much precision is lost after dichotomising or coarsening data.
+
+#### Chapters 3–4 Exercises
+
+**Exercise 3.1 — Fisher's Exact Test**
+
+A small clinical trial tests a new therapy (n = 10) vs. standard care (n = 10). Success rates:
+
+- New therapy: 7 successes, 3 failures.
+- Standard care: 3 successes, 7 failures.
+
+Tasks:
+
+1. Construct the 2×2 contingency table.
+2. Compute Fisher's exact test in R.
+3. Interpret the odds ratio and 95% CI.
+4. Compare with the chi-square test and explain why chi-square is inappropriate.
+
+```{r eval = FALSE}
+therapy_success <- c(7, 3)
+therapy_fail <- c(3, 7)
+table_data <- matrix(c(7, 3, 3, 7), nrow = 2)
+
+# Fisher's exact test
+fisher.test(table_data)
+
+# Chi-square (shows warning about small expected frequencies)
+chisq.test(table_data)
+```
+
+**Exercise 4.1 — Choosing the Right Test**
+
+Select the appropriate test (t-test, Mann-Whitney U, or Wilcoxon signed-rank) for each scenario and justify your choice.
+
+- a) Compare blood pressure in 15 patients before and after treatment (paired design, approximately normal).
+- b) Compare job satisfaction (1–10 ordinal) between 12 remote and 12 office workers (right-skewed data).
+- c) Compare customer ratings (1–5 stars) for two app versions, n = 20 per group, with a ceiling effect.
+
+Expected answers: (a) paired t-test, (b) Mann-Whitney U, (c) Mann-Whitney U.
+
+#### Chapters 5–6 Exercises
+
+**Exercise 5.1 — When Standard Logistic Regression Fails**
+
+Generate a dataset with separation to illustrate why Firth regression is helpful.
+
+```{r eval = FALSE}
+set.seed(2025)
+data_sep <- data.frame(
+  x = c(1, 1, 2, 2, 3, 3, 4, 4, 5, 5),
+  y = c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1)
+)
+
+glm_fit <- glm(y ~ x, data = data_sep, family = binomial)
+summary(glm_fit)
+
+library(logistf)
+firth_fit <- logistf(y ~ x, data = data_sep)
+summary(firth_fit)
+```
+
+Discuss:
+
+- Why standard GLM fails (infinite estimates with separation).
+- How Firth regression fixes the problem (penalised likelihood).
+- When to use Firth regression (small samples, separation, rare events).
+
+**Exercise 6.1 — Reliability Analysis**
+
+Using `reliability_exercise.csv` (n = 25, 3 items):
+
+```{r eval = FALSE}
+library(tidyverse)
+library(psych)
+
+items <- read_csv("data/reliability_exercise.csv")
+
+alpha(items)
+```
+
+Questions:
+
+- What is Cronbach's alpha? Is it acceptable?
+- Which item, if any, should be removed to improve alpha?
+- What is the 95% CI for alpha?
+- How would alpha change if two more items with similar correlations were added?
+
+#### Chapters 13–16 Exercises
+
+**Exercise 13.1 — Effect Size Interpretation**
+
+A study with n = 15 per group finds a mean difference of 5 points on a 100-point scale, pooled SD = 12, Cohen's d = 0.42, 95% CI [-2, 12], and p = 0.12. Write a results paragraph emphasising effect size and uncertainty.
+
+**Model answer**
+
+> The intervention group scored 5 points higher on average than the control group (95% CI: -2 to 12 points), corresponding to a small-to-medium effect (Cohen's d = 0.42, 95% CI: -0.15 to 0.98). The confidence interval includes both trivial and moderate effects, indicating substantial uncertainty due to the limited sample size (n = 15 per group). The p-value (p = 0.12) does not provide evidence against the null hypothesis, but the study was underpowered to detect effects smaller than d ≈ 1.0. These findings suggest a possible modest benefit that warrants investigation in a larger sample.
+
+**Exercise 16.1 — Visualisation Critique**
+
+```{r eval = FALSE}
+# Problematic visualisations
+# BAD: Suppressed zero axis
+# ggplot(data, aes(x = group, y = satisfaction)) +
+#   geom_col() +
+#   coord_cartesian(ylim = c(3.5, 4.5))
+
+# BAD: No error bars
+# ggplot(data, aes(x = group, y = satisfaction)) +
+#   geom_col()
+
+# Improved visualisation
+# ggplot(data, aes(x = group, y = satisfaction)) +
+#   geom_jitter(width = 0.1, alpha = 0.5) +
+#   stat_summary(fun = mean, geom = "point", size = 4, color = "red") +
+#   stat_summary(fun.data = mean_cl_normal, geom = "errorbar", width = 0.2, color = "red")
+```
+
+Questions:
+
+- What is wrong with the first two plots? (Suppressed axis exaggerates differences; no uncertainty markers.)
+- Why is showing individual points important with small samples? (Highlights distribution and outliers.)
+- When, if ever, is it acceptable to suppress the zero axis? (Only when the zero point is distant and the focus is on relative differences, with clear justification.)
+
+### Part 3: Assessment Materials
+
+**Quiz 1 — Foundations (Chapters 1–2)**
+
+Multiple choice:
+
+1. Why might a t-test be inappropriate with n = 8 per group?
+   - a) Not enough degrees of freedom for any inference.
+   - b) Central Limit Theorem does not guarantee a normal sampling distribution.
+   - c) Effect sizes cannot be computed.
+   - d) Confidence intervals are undefined.
+   - **Answer**: b.
+
+2. Which outcome type generally provides the most information per observation?
+   - a) Binary (yes/no).
+   - b) Ordinal (1–5 scale).
+   - c) Continuous (0–100 score).
+   - d) All provide equal information.
+   - **Answer**: c.
+
+3. A study with n = 20 per group has 30% power to detect d = 0.5. What does this mean?
+   - a) There is a 30% chance the effect exists.
+   - b) If the true effect is d = 0.5, there is a 30% chance of detecting it.
+   - c) The study will have a 30% Type I error rate.
+   - d) The effect size will be underestimated by 30%.
+   - **Answer**: b.
+
+Short answer prompts:
+
+4. Describe when it is acceptable to proceed with a small sample despite limited power (e.g., pilot studies, rare populations, ethical or logistical constraints).
+
+5. Explain why dichotomising a 0–100 outcome into high vs. low loses information and reduces statistical power (loss of variability, reduced effect size precision).
+
+**Quiz 2 — Methods (Chapters 3–6)**
+
+Problem-solving questions use `quiz2_data.csv` (ordinal outcome, n = 12 per group).
+
+1. Conduct the appropriate test (likely Mann-Whitney U), compute effect size with CI, and interpret magnitude vs. p-value.
+2. Critique the statement “Cronbach's alpha = 0.58 for a 3-item scale with n = 15. This is unacceptable.” Provide a more nuanced interpretation considering sample size, item count, and confidence intervals.
+
+**Final Project Rubric**
+
+| Component | Points | Criteria |
+|-----------|--------|----------|
+| Research Question | 10 | Clear, focused, appropriate for small sample |
+| Study Design | 10 | Sampling method, sample size justification |
+| Data Collection | 10 | Measures described, reliability addressed |
+| Data Screening | 10 | Outliers, assumptions, missing data checked |
+| Primary Analysis | 20 | Appropriate method, correct implementation |
+| Effect Sizes & CIs | 15 | Computed and interpreted correctly |
+| Visualisation | 10 | Publication quality, uncertainty shown |
+| Transparent Reporting | 10 | Limitations acknowledged, decisions documented |
+| R Code Quality | 5 | Reproducible, commented, clean |
+| **Total** | **100** | |
+
+### Part 4: Common Student Mistakes and How to Address Them
+
+1. **“My p-value is 0.06, so there's a trend.”** Emphasise effect sizes, uncertainty, and pre-registered thresholds rather than arbitrary cut-offs. Use an exercise that alters one data point to show p-value volatility.
+2. **Using t-tests with ordinal data without justification.** Reinforce the assumptions of parametric tests and encourage rank-based alternatives.
+3. **“No significant result means no effect.”** Discuss power and the distinction between absence of evidence and evidence of absence. Use confidence intervals to highlight plausible effect ranges.
+4. **Adding covariates after seeing results.** Highlight the risk of p-hacking and connect back to pre-registration. Encourage labelling post-hoc analyses transparently.
+5. **Reporting only Cronbach's alpha.** Introduce omega and item-total correlations, especially for short scales where alpha assumptions may not hold.
+
+### Part 5: Supplementary Datasets
+
+Provide students with realistic small-sample datasets for practice. Run the code below to generate CSV files in the `data/` directory.
+
+```{r eval = FALSE}
+# Dataset 1: Hospital Readmissions (n = 25)
+set.seed(2025)
+hospital_data <- tibble(
+  patient_id = 1:25,
+  age = sample(45:85, 25, replace = TRUE),
+  comorbidities = sample(0:4, 25, replace = TRUE),
+  length_of_stay = sample(2:10, 25, replace = TRUE),
+  readmitted_30d = c(1,1,1,0,1,0,0,0,1,0,0,0,1,0,0,0,0,1,0,0,0,0,1,0,0)
+)
+
+write_csv(hospital_data, "data/hospital_readmissions.csv")
+
+# Dataset 2: Employee Engagement Survey (n = 36, 5 items)
+n <- 36
+latent_engagement <- rnorm(n, mean = 4, sd = 1)
+
+engagement_data <- tibble(
+  employee_id = 1:n,
+  department = sample(c("Sales", "IT", "HR"), n, replace = TRUE),
+  q1_satisfaction = round(pmin(7, pmax(1, latent_engagement + rnorm(n, 0, 0.9)))),
+  q2_commitment = round(pmin(7, pmax(1, latent_engagement + rnorm(n, 0, 0.8)))),
+  q3_advocacy = round(pmin(7, pmax(1, latent_engagement + rnorm(n, 0, 0.9)))),
+  q4_turnover_intent = round(pmin(7, pmax(1, 8 - latent_engagement + rnorm(n, 0, 1.0)))),
+  q5_performance = round(pmin(7, pmax(1, latent_engagement + rnorm(n, 0, 1.1))))
+)
+
+write_csv(engagement_data, "data/employee_engagement.csv")
+
+# Dataset 3: A/B Test with Sparse Conversions (n = 40, 4 conversions)
+ab_test_data <- tibble(
+  user_id = 1:40,
+  variant = rep(c("A", "B"), each = 20),
+  converted = c(rep(0, 17), rep(1, 3), rep(0, 18), rep(1, 2))
+)
+
+write_csv(ab_test_data, "data/ab_test_sparse.csv")
+```
+
+Each dataset includes an accompanying exercise in the chapter narrative to reinforce method selection and interpretation.
+
+### Part 6: Advanced Topics Roadmap
+
+For learners who master the core material, offer extension topics:
+
+1. **Bayesian Methods in Depth**: Prior elicitation, MCMC diagnostics (R-hat, ESS, trace plots), posterior predictive checks, and model comparison with WAIC/LOOIC. (*Reference*: McElreath, 2020.)
+2. **Causal Inference with Small Samples**: Potential outcomes framework, propensity score matching with n < 100, sensitivity analysis for unmeasured confounding, instrumental variables. (*Reference*: Imbens & Rubin, 2015.)
+3. **Mixed Effects Models**: Random effects for clustered or longitudinal data, REML estimation, deciding when mixed models are appropriate. (*Reference*: Gelman & Hill, 2007.)
+4. **Measurement Error and Reliability**: Classical test theory vs. item response theory, attenuation due to measurement error, corrections for unreliability. (*Reference*: Lord & Novick, 1968.)
+5. **Network Analysis for Small Samples**: Social network analysis with n < 50, ERGMs, small-world and scale-free properties. (*Reference*: Lusher, Koskinen & Robins, 2013.)
+
+### Part 7: Answers to Common Instructor Questions
+
+- **Can this book be used for undergraduates?** Yes—advanced undergraduates with prior statistics coursework can engage with most chapters. Skip advanced Bayesian content if needed.
+- **How much R background do students need?** Basic literacy: loading data, running functions, interpreting tidy output. Provide introductory R sessions before starting.
+- **Is the book suitable beyond SIDS contexts?** Absolutely. The methods apply to any setting where samples are limited (rare diseases, pilot studies, niche populations).
+- **What if students prefer Python?** Concepts translate, but code will not run directly. Suggest `scipy.stats`, `statsmodels`, and `pingouin` for similar functionality, or encourage R for course activities.
+- **What if brms/Stan is unavailable?** Focus on Firth regression and other penalised methods; use cloud platforms if Bayesian examples are essential.
+- **How long does Part E take?** Allocate 2–3 hours per project. Activities can be completed in lab sessions or as homework.
+
+### Part 8: Teaching Tips
+
+1. **Start with real examples**: Open each session with a scenario where small samples are unavoidable (e.g., rare disease trials, startup A/B tests).
+2. **Emphasise conceptual understanding over formulas**: Students should know when and why to use each method.
+3. **Use think–pair–share for interpretation**: Build habits of collaborative sense-making.
+4. **Assign code peer review**: Students review each other's scripts for reproducibility, clarity, and correctness.
+5. **Create a “gallery of bad visualisations”**: Critique and improve misleading plots to build critical data-literacy skills.
+
+### Conclusion
+
+This teaching supplement provides:
+
+- Two ready-to-use course structures.
+- 20+ exercises with answer guidance.
+- Assessment templates (quizzes, project rubric).
+- Common student misconceptions with interventions.
+- Supplementary datasets and advanced topic suggestions.
+- Instructor FAQs and practical teaching tips.
+
+## Complete Troubleshooting Guide
+
+**Quantitative Analysis with Small Samples — Version 1.0**  
+Last updated: 15 October 2025
+
+### Table of Contents
+
+1. [Installation Issues](#installation-issues)
+2. [Package Loading Errors](#package-loading-errors)
+3. [Data Import Problems](#data-import-problems)
+4. [Common Statistical Errors](#common-statistical-errors)
+5. [Visualisation Issues](#visualisation-issues)
+6. [Bayesian/brms Specific Problems](#bayesianbrms-specific-problems)
+7. [Platform-Specific Issues](#platform-specific-issues)
+8. [Performance Optimisation](#performance-optimisation)
+
+### Installation Issues
+
+#### Problem 1.1 — Package installation fails
+
+```
+Warning: package 'xxx' is not available for this version of R
+```
+
+**Fix**
+
+```{r eval = FALSE}
+R.version.string
+install.packages("xxx")
+install.packages("xxx", repos = "https://cran.rstudio.com/")
+```
+
+Update R if your version is below 4.0.
+
+#### Problem 1.2 — `exact2x2` installation fails
+
+```
+package 'exact2x2' is not available for R version X.X.X
+```
+
+**Fix**
+
+```{r eval = FALSE}
+install.packages(c("ssanv", "exactci"))
+install.packages("exact2x2")
+# Fallback: install from archive
+url <- "https://cran.r-project.org/src/contrib/Archive/exact2x2/exact2x2_1.6.9.tar.gz"
+install.packages(url, repos = NULL, type = "source")
+```
+
+#### Problem 1.3 — `logistf` requires compilation (Windows)
+
+```
+installation of package 'logistf' had non-zero exit status
+```
+
+**Fix**
+
+1. Install Rtools: <https://cran.r-project.org/bin/windows/Rtools/>.
+2. Then run `install.packages("logistf", type = "binary")`.
+
+Mac users should install Xcode Command Line Tools via `xcode-select --install` and then install the package.
+
+#### Problem 1.4 — `brms`/Stan installation issues
+
+```
+Error: CXX14 is not defined
+```
+
+**Fix**
+
+```{r eval = FALSE}
+install.packages("rstan", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+install.packages("brms")
+```
+
+If compilation still fails, use RStudio Cloud or Docker images with Stan pre-configured, or treat Bayesian examples as optional.
+
+### Package Loading Errors
+
+#### Problem 2.1 — Missing package during `library()`
+
+```
+Error in library(xxx) : there is no package called 'xxx'
+```
+
+**Fix**
+
+```{r eval = FALSE}
+install.packages("xxx")
+required <- c("tidyverse", "rstatix", "boot", "exact2x2", 
+              "logistf", "gt", "performance", "psych", "DescTools")
+install.packages(required)
+```
+
+#### Problem 2.2 — Namespace conflicts
+
+```
+The following objects are masked from 'package:stats': filter, lag
+```
+
+**Fix**
+
+- This is a warning, not an error.
+- Use qualified names (e.g., `stats::filter()`) where needed.
+- Load `tidyverse` last to use its versions of overlapping functions.
+
+#### Problem 2.3 — Package version warnings
+
+```
+Warning: package 'xxx' was built under R version 4.5.1
+```
+
+**Fix**
+
+- Usually safe to ignore — packages are backward compatible.
+- Run `update.packages(ask = FALSE)` or upgrade R to eliminate warnings.
+
+### Data Import Problems
+
+#### Problem 3.1 — Missing file
+
+```
+Error: 'data/mini_marketing.csv' does not exist
+```
+
+**Fix**
+
+```{r eval = FALSE}
+getwd()
+setwd("path/to/smallsamplelab")
+source("R/make_datasets.R")
+list.files("data")
+```
+
+Ensure the working directory is the project root (where `smallstat.Rproj` resides).
+
+#### Problem 3.2 — CSV encoding issues
+
+```
+Warning: invalid UTF-8 byte sequence detected
+```
+
+**Fix**
+
+```{r eval = FALSE}
+read_csv("data/file.csv", locale = locale(encoding = "UTF-8"))
+read_csv("data/file.csv", locale = locale(encoding = "latin1"))
+```
+
+#### Problem 3.3 — Byte order marks
+
+Symptoms: column names such as `ï»¿satisfaction`.
+
+**Fix**
+
+```{r eval = FALSE}
+read_csv("data/file.csv", skip_empty_rows = TRUE)
+# or
+library(janitor)
+data <- read_csv("data/file.csv") %>% clean_names()
+```
+
+### Common Statistical Errors
+
+#### Problem 4.1 — "cannot compute exact p-value with ties"
+
+This warning stems from discrete data or tied ranks. R automatically switches to a normal approximation.
+
+**Fix**
+
+```{r eval = FALSE}
+wilcox.test(x, y, exact = FALSE)
+```
+
+#### Problem 4.2 — Firth regression does not converge
+
+```
+Warning: algorithm did not converge
+```
+
+**Fix**
+
+```{r eval = FALSE}
+logistf(y ~ x, data = dat, maxit = 1000)
+logistf(y ~ x, data = dat, pl = FALSE)
+```
+
+Inspect cross-tabulations for perfect separation.
+
+#### Problem 4.3 — Bootstrap CI fails
+
+```
+Error in boot.ci(...): estimated adjustment 'a' is NA
+```
+
+**Fix**
+
+```{r eval = FALSE}
+boot_result <- boot(data, statistic = fun, R = 5000)
+boot.ci(boot_result, type = "basic")
+```
+
+Increase replications or use a different CI type.
+
+#### Problem 4.4 — "system is computationally singular"
+
+Occurs when predictors are perfectly correlated or constant.
+
+**Fix**
+
+```{r eval = FALSE}
+cor(model_data[, c("x1", "x2", "x3")])
+sapply(model_data, sd)
+```
+
+Remove or combine collinear predictors, or switch to penalised regression.
+
+#### Problem 4.5 — Negative alpha
+
+A negative Cronbach's alpha indicates reversed items or weak correlations.
+
+**Fix**
+
+- Check inter-item correlations.
+- Confirm reverse-coded items are recoded (`item2_rev <- max_scale + 1 - item2`).
+- Re-express or remove problematic items.
+
+### Visualisation Issues
+
+#### Problem 5.1 — Aesthetic length mismatch
+
+```
+Error: Aesthetics must be either length 1 or the same as the data
+```
+
+**Fix**
+
+```{r eval = FALSE}
+dim(plot_data)
+length(plot_data$x)
+length(plot_data$y)
+plot_data <- plot_data %>% filter(!is.na(x), !is.na(y))
+```
+
+#### Problem 5.2 — Plots do not appear
+
+- Ensure the RStudio Plots pane is visible.
+- Explicitly `print()` stored ggplot objects in scripts.
+- In Quarto, set chunk options (`fig.width`, `fig.height`).
+
+#### Problem 5.3 — `stat_summary` missing
+
+Load `ggplot2` or `tidyverse` before using `stat_summary`.
+
+#### Problem 5.4 — Overlapping labels
+
+Use `theme()` adjustments to rotate text, reduce size, or expand margins.
+
+### Bayesian/brms Specific Problems
+
+#### Problem 6.1 — No C++ compiler
+
+See installation solutions above (Problem 1.4).
+
+#### Problem 6.2 — Chains do not converge (R-hat > 1.01)
+
+- Increase iterations and warmup (`iter = 4000`, `warmup = 2000`).
+- Increase chains (≥ 4).
+- Adjust `adapt_delta = 0.95` for divergent transitions.
+- Inspect trace plots.
+
+#### Problem 6.3 — `brms` models are slow
+
+- Run short chains for testing (`iter = 500`).
+- Use multiple cores (`cores = parallel::detectCores() - 1`).
+- Simplify models or postpone Bayesian analyses if performance is unacceptable.
+
+#### Problem 6.4 — Prior mismatch warnings
+
+Use `get_prior()` to inspect parameter names and match `class`/`coef` arguments.
+
+### Platform-Specific Issues
+
+#### Problem 7.1 — Permission denied (Windows)
+
+Run RStudio as administrator or set the working directory to a user-controlled location (e.g., `Documents`).
+
+#### Problem 7.2 — File path issues (Windows)
+
+Use forward slashes (`"C:/Users/..."`) or escape backslashes (`"C:\\Users\\..."`).
+
+#### Problem 7.3 — Memory errors
+
+Increase memory limit on Windows (`memory.limit(size = 16000)`), reduce bootstrap iterations, or sample smaller subsets for demonstrations.
+
+### Performance Optimisation
+
+#### Tip 8.1 — Speed up bootstrap
+
+```{r eval = FALSE}
+library(boot)
+library(parallel)
+boot(data, statistic = fun, R = 2000, parallel = "multicore", ncpus = detectCores() - 1)
+```
+
+Use `parallel = "snow"` on Windows.
+
+#### Tip 8.2 — Multiple imputation performance
+
+Use fewer imputations for testing (`m = 5`, `maxit = 5`), and increase for final analyses (`m = 20`).
+
+#### Tip 8.3 — Efficient data manipulation
+
+```{r eval = FALSE}
+library(data.table)
+dt <- as.data.table(data)
+dt[, mean(x), by = group]
+```
+
+### Emergency Fixes
+
+#### Fix 1 — Reset environment
+
+```{r eval = FALSE}
+rm(list = ls())
+# Detach non-base packages
+lapply(paste0("package:", names(sessionInfo()$otherPkgs)), detach, character.only = TRUE, unload = TRUE)
+# Restart R in RStudio
+tools::rstudioapi::restartSession()
+```
+
+#### Fix 2 — Reinstall packages
+
+```{r eval = FALSE}
+installed <- rownames(installed.packages())
+remove.packages(installed)
+required <- c("tidyverse", "rstatix", "boot", "exact2x2", 
+              "logistf", "gt", "performance", "psych", "DescTools")
+install.packages(required)
+```
+
+#### Fix 3 — Capture diagnostics
+
+```{r eval = FALSE}
+sink("diagnostics.txt")
+sessionInfo()
+R.version
+.libPaths()
+Sys.info()
+sink()
+```
+
+### Getting Help
+
+When requesting assistance, share:
+
+1. The exact error message.
+2. A minimal reproducible example.
+3. Session information (`sessionInfo()`).
+4. Troubleshooting steps already attempted.
+
+Suggested resources include the book repository issue tracker, Stack Overflow (`[r]` tag), RStudio Community, and package documentation.
+
+### Preventive Measures
+
+- Use R projects (`.Rproj`) to manage working directories.
+- Document R and package versions at the top of scripts.
+- Consider `renv` for reproducible environments.
+- Test code in a fresh session (`Session > Restart R` in RStudio).
+- Keep R and packages up to date (`update.packages`).
+
+### Final Checklist — "My Code Doesn’t Work"
+
+Confirm the following before escalating:
+
+- [ ] R version ≥ 4.0 and RStudio current.
+- [ ] Required packages installed.
+- [ ] Working directory set to project root.
+- [ ] Datasets present in `data/`.
+- [ ] Code runs in a fresh session.
+- [ ] Complete error message captured.
+- [ ] Solutions from this guide attempted.
+
+### Appendix — Package Version Matrix (October 2025)
+
+| Package | Version | Critical? |
+|---------|---------|-----------|
+| R | 4.5.0+ | Yes |
+| tidyverse | 2.0.0+ | Yes |
+| rstatix | 0.7.2+ | Yes |
+| boot | 1.3-28+ | Yes |
+| exact2x2 | 1.6.9+ | Yes |
+| logistf | 1.26+ | Yes |
+| gt | 0.10.0+ | Yes |
+| performance | 0.11.0+ | Yes |
+| psych | 2.3.9+ | Yes |
+| DescTools | 0.99.50+ | Yes |
+| brms | 2.20.0+ | Optional |
+| mice | 3.16.0+ | Optional |
+
+---
+
+This appendix compiles pre-registration guidance, teaching resources, troubleshooting tips, and advanced topic pathways so instructors and researchers can implement small-sample methods confidently.

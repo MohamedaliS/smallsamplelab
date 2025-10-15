@@ -24,6 +24,16 @@ With small samples, probability sampling can still be valuable, but estimates wi
 
 **When to use**: Accessible sampling frame, desire for generalisability, resources permit random selection, even if total sample size is modest.
 
+### Sequential and Adaptive Sampling
+
+When recruitment is costly or uncertain, sequential designs allow researchers to review interim results and decide whether to continue sampling. For example, you might pre-specify that recruitment will proceed in waves of five participants, stopping early if credible intervals for the primary outcome are sufficiently narrow or if feasibility metrics (e.g., consent rates) fall below thresholds. Adaptive sampling can also target underrepresented strata after an initial wave, improving balance without committing to a large upfront sample. Key principles:
+
+- **Set decision rules in advance.** Define stopping boundaries for efficacy, futility, or feasibility to avoid ad hoc choices.
+- **Maintain error control.** Use exact tests, Bayesian posterior probabilities, or alpha-spending functions appropriate for small *n*.
+- **Document adaptations transparently.** Report how the sampling plan evolved, including any changes to recruitment targets or strata weights.
+
+Sequential or response-adaptive sampling is especially valuable in rare populations, where pausing after each wave prevents over-committing resources if early data already provide actionable evidence.
+
 ### Example: Stratified Sampling Calculation
 
 Suppose we are surveying employees in a small organisation with 120 total staff: 60 in Department A, 40 in Department B, 20 in Department C. We can afford to survey 30 employees. Proportional stratified sampling ensures each department is represented in proportion to its size.
@@ -75,6 +85,23 @@ Statistical power is the probability of detecting a true effect of a given size.
 
 If the achieved sample size is smaller than desired, report the minimum detectable effect (MDE): the smallest effect the study can detect with specified power (typically 80%) and alpha (typically 0.05). This helps readers judge whether the study could have detected effects of practical importance.
 
+### Finite Population Correction
+
+When sampling without replacement from a small, known population, the variance of estimates decreases because each sampled unit reduces remaining uncertainty. The finite population correction (FPC) adjusts the required sample size accordingly. If a power analysis suggests 30 participants are needed assuming an infinite population, but the accessible population is only 120 people, the adjusted sample size is smaller:
+
+```{r}
+# Finite population correction example
+n_required_infinite <- 30  # From power analysis
+N_population <- 120        # Size of accessible population
+
+n_adjusted <- n_required_infinite /
+  (1 + (n_required_infinite - 1) / N_population)
+
+n_adjusted
+```
+
+Interpretation: Sampling without replacement from 120 individuals means that a sample of roughly 24 (instead of 30) achieves the same precision. Always report whether you applied the FPC so readers can replicate the calculation.
+
 ### Example: Power Calculation for a Small Study
 
 We plan a study comparing two groups with n = 12 per group. We compute power to detect a medium effect size (Cohen's d = 0.5) using a two-sample t-test.
@@ -102,6 +129,33 @@ if (requireNamespace("pwr", quietly = TRUE)) {
 ```
 
 Interpretation: With 12 participants per group, power to detect a medium effect (d = 0.5) is modest (approximately 30–40%). To achieve 80% power, we would need to detect a larger effect (d ≈ 1.2, a very large effect). This illustrates the limitation of small samples for hypothesis testing. If the true effect is small or medium, the study is underpowered. Researchers should acknowledge this limitation and interpret non-significant results cautiously (absence of evidence is not evidence of absence).
+
+### Sample Size Planning Workflow
+
+Integrating power analysis into a broader planning conversation prevents unrealistic promises and surfaces design trade-offs early. Use the following workflow whenever you scope a small-sample study:
+
+1. **Clarify the question and estimand.** What parameter (difference in means, odds ratio, correlation) must the study estimate?
+2. **Specify tolerable uncertainty.** Define the minimum detectable effect or target confidence-interval width that would make the study actionable.
+3. **Map constraints.** Document recruitment limits, budget, timeline, and ethical restrictions (e.g., maximum patient burden).
+4. **Select design and analysis.** Choose the test/model, decide on one- vs two-sided inference, and note planned covariates or repeated measures.
+5. **Compute required *n*.** Use analytical power formulas, simulation, or resampling as appropriate; apply finite-population corrections if sampling without replacement.
+6. **Assess feasibility.** Compare required *n* to constraints. If infeasible, adjust expectations (e.g., shift to estimation focus, reduce assurance level, adopt sequential design).
+7. **Document decisions.** Record assumptions, software/code used, and any compromises for transparency.
+
+```{mermaid}
+flowchart TD
+  Q[Define research question & estimand] --> U[Specify target effect or CI width]
+  U --> C[Document recruitment, budget, ethical constraints]
+  C --> D[Choose design & analysis plan]
+  D --> N[Compute required sample size / MDE]
+  N --> F{Feasible within constraints?}
+  F -- Yes --> T[Lock plan & preregister]
+  F -- No --> A[Adjust goals: revise estimand, adopt sequential design, or reframe as exploratory]
+  A --> C
+  T --> R[Record assumptions & share in protocol]
+```
+
+This loop makes trade-offs explicit: if the required sample size exceeds what is feasible, researchers can justify an exploratory framing, add interim analyses, or negotiate for additional resources before data collection begins.
 
 ### Justifying Small Sample Sizes
 
@@ -152,6 +206,26 @@ Short scales (3–5 items) can be internally consistent and valid if items are c
 Content validity refers to whether items comprehensively and appropriately represent the construct being measured. Face validity refers to whether items appear relevant and appropriate to respondents. Both are assessed through expert review and respondent feedback, not statistical tests.
 
 **When to assess**: During scale development, before quantitative pilot testing. Involves domain experts and representatives of the target population.
+
+#### Content Validity Ratio (CVR)
+
+Lawshe's Content Validity Ratio provides a simple index of expert agreement on whether an item is "essential" to a construct. With *N* experts and *N*<sub>e</sub> rating an item as essential, the CVR is:
+
+\[
+\operatorname{CVR} = \frac{N_e - N/2}{N/2}
+\]
+
+CVR ranges from −1 to +1. Positive values indicate majority agreement that the item is essential; thresholds depend on the number of experts (e.g., ≥0.75 when *N* = 8). Use CVR alongside qualitative feedback to decide which items to retain.
+
+```{r}
+# CVR example: 8 experts, 6 judge the item essential
+n_experts <- 8
+n_essential <- 6
+cvr <- (n_essential - n_experts / 2) / (n_experts / 2)
+cvr
+```
+
+Interpretation: A CVR of 0.50 indicates that 75% of experts deemed the item essential. Consult published critical values to confirm whether the item meets the desired level of agreement for your expert panel size.
 
 ### Steps for Scale Development with Small Samples
 
@@ -288,6 +362,36 @@ Outliers are observations that are unusually large or small relative to the rest
 
 **When to remove outliers**: Only if there is clear evidence of data entry error or that the observation does not belong to the target population. Document the rationale and report results with and without outliers.
 
+#### Multivariate Outliers with Mahalanobis Distance
+
+Univariate rules may miss cases that are unusual only when variables are considered jointly. Mahalanobis distance measures how far an observation lies from the multivariate centre, accounting for covariances among variables. Distances can be compared to a chi-square threshold with degrees of freedom equal to the number of variables.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+# Simulated bivariate data with one multivariate outlier
+multi_data <- tibble(
+  satisfaction = rnorm(14, mean = 6, sd = 1),
+  wait_time = rnorm(14, mean = 10, sd = 2)
+) %>%
+  bind_rows(tibble(satisfaction = 2, wait_time = 18))  # potential outlier
+
+center <- colMeans(multi_data)
+cov_mat <- cov(multi_data)
+
+multi_data <- multi_data %>%
+  mutate(
+    mahal = mahalanobis(., center, cov_mat),
+    flag = mahal > qchisq(0.975, df = ncol(multi_data))
+  )
+
+multi_data
+```
+
+Interpretation: Observations with Mahalanobis distance exceeding the chi-square cutoff (95% or 97.5% quantile) are flagged as multivariate outliers. Inspect the flagged cases individually to determine whether they reflect data errors, rare but valid combinations, or participants from a different subpopulation. Report how thresholds were chosen, as small samples make covariance estimates noisy.
+
 ### Example: Outlier Detection with Boxplots and Z-Scores
 
 We examine a small dataset of customer wait times (n = 20) and check for outliers.
@@ -300,13 +404,16 @@ set.seed(2025)
 # Simulated wait times (most between 5–15 minutes, one outlier at 45)
 wait_times <- c(7, 9, 8, 11, 10, 12, 8, 9, 10, 11, 13, 9, 10, 12, 8, 11, 10, 9, 45, 10)
 
+# Create the data frame
 wait_data <- tibble(observation = 1:20, wait_time = wait_times)
 
 # Boxplot
-ggplot(wait_data, aes(y = wait_time)) +
-  geom_boxplot(fill = "lightblue") +
-  labs(title = "Boxplot of Wait Times", y = "Wait Time (minutes)") +
-  theme_minimal()
+print(
+  ggplot(wait_data, aes(y = wait_time)) +
+    geom_boxplot(fill = "lightblue") +
+    labs(title = "Boxplot of Wait Times", y = "Wait Time (minutes)") +
+    theme_minimal()
+)
 
 # Identify outliers using 1.5*IQR rule
 Q1 <- quantile(wait_times, 0.25)
@@ -315,18 +422,22 @@ IQR_val <- IQR(wait_times)
 lower_fence <- Q1 - 1.5 * IQR_val
 upper_fence <- Q3 + 1.5 * IQR_val
 
+# Filter to find outliers
 outliers <- wait_data %>%
-  filter(wait_time < lower_fence | wait_time > upper_fence)
+  dplyr::filter(wait_time < lower_fence | wait_time > upper_fence)
 
+print("Outliers (1.5*IQR rule):")
 print(outliers)
 
-# Z-scores
+# Z-scores for outlier identification
 wait_data <- wait_data %>%
   mutate(z_score = (wait_time - mean(wait_time)) / sd(wait_time))
 
+# Filter to find extreme values (absolute z-score > 3)
 extreme <- wait_data %>%
-  filter(abs(z_score) > 3)
+  dplyr::filter(abs(z_score) > 3)
 
+print("Extreme values (Z-score > 3):")
 print(extreme)
 ```
 
@@ -477,16 +588,15 @@ Before handling missing data, describe the pattern:
 - Are missing values concentrated in certain individuals or certain variables?
 - Is missingness related to observed variables (compare characteristics of complete vs. incomplete cases)?
 
-### Example: Summarising Missing Data
+### Example Dataset for Diagnostics
 
-We examine a small dataset (n = 25) with missing values on two variables.
+To demonstrate the diagnostics in this chapter, we simulate a small dataset with missing values on `satisfaction` and `performance`.
 
 ```{r}
 library(tidyverse)
 
 set.seed(2025)
 
-# Simulated dataset with missing values
 study_data <- tibble(
   participant = 1:25,
   age = sample(20:60, 25, replace = TRUE),
@@ -494,6 +604,33 @@ study_data <- tibble(
   performance = c(sample(50:90, 20, replace = TRUE), rep(NA, 5))
 )
 
+glimpse(study_data)
+```
+
+### Testing the MCAR Assumption
+
+Little's MCAR test evaluates whether missingness is consistent with the MCAR mechanism. The test compares observed means across missing-data patterns; a large p-value suggests MCAR is plausible, whereas a small p-value indicates that missingness likely depends on observed data (i.e., not MCAR). With very small samples the test has limited power, so interpret results alongside descriptive checks.
+
+```{r}
+# Little's MCAR test using the BaylorEdPsych package
+if (requireNamespace("BaylorEdPsych", quietly = TRUE)) {
+  library(BaylorEdPsych)
+  mcar_result <- LittleMCAR(study_data %>% select(age, satisfaction, performance))
+  mcar_result$ChiSquare
+  mcar_result$df
+  mcar_result$p.value
+} else {
+  cat("Install 'BaylorEdPsych' to run Little's MCAR test; with very small samples, complement the test with descriptive checks.\n")
+}
+```
+
+Interpretation: A non-significant p-value (e.g., p > 0.05) supports the MCAR assumption. However, with small *n*, the test may fail to detect systematic missingness, so combine it with substantive reasoning and comparisons of observed covariates between complete and incomplete cases.
+
+### Example: Summarising Missing Data
+
+We continue working with the simulated dataset (`study_data`) created above.
+
+```{r}
 # Count missing values per variable
 missing_summary <- study_data %>%
   summarise(across(everything(), ~ sum(is.na(.))))

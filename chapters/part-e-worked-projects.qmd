@@ -83,12 +83,19 @@ mw_result <- wilcox_test(marketing_data, satisfaction ~ campaign, detailed = TRU
 print(mw_result)
 
 # Extract key values
-cat("\nMann–Whitney U statistic:", mw_result$statistic, "\n")
-cat("p-value:", round(mw_result$p.value, 3), "\n")
+mw_statistic <- mw_result %>% pull(statistic) %>% as.numeric()
+mw_p_value <- mw_result %>% pull(p) %>% as.numeric()
+
+cat("\nMann–Whitney U statistic:", formatC(mw_statistic, format = "f", digits = 0), "\n")
+cat("p-value:", formatC(mw_p_value, format = "f", digits = 3), "\n")
 
 # Effect size: rank-biserial correlation
-effect_size <- wilcox_effsize(marketing_data, satisfaction ~ campaign)
-print(effect_size)
+if (requireNamespace("coin", quietly = TRUE)) {
+  effect_size <- wilcox_effsize(marketing_data, satisfaction ~ campaign)
+  print(effect_size)
+} else {
+  cat("Rank-biserial effect size not computed (install.packages('coin') to enable).\n")
+}
 ```
 
 **Interpretation**: The Mann–Whitney test yields a p-value of approximately 0.03 (exact value depends on the random data generation). This suggests a statistically significant difference at the 0.05 level. The rank-biserial correlation (effect size) quantifies the magnitude; values near 0.5 indicate a medium-to-large effect. The Email campaign appears to generate higher satisfaction rankings than the Social campaign.
@@ -138,6 +145,8 @@ print(kw_result)
 ```
 
 **Interpretation**: The stratified summary shows satisfaction patterns across campaign and prior purchase combinations. If cell sizes are very small (n < 5), statistical power is limited. The Kruskal–Wallis test assesses whether satisfaction differs across the four combinations. If significant, post-hoc pairwise comparisons can identify which groups differ. However, with n = 30 divided into four groups, power is limited.
+
+> **Multiplicity reminder:** When screening several potential moderators (e.g., age group, prior purchase, loyalty status), apply a multiplicity adjustment such as Holm–Bonferroni or control the false discovery rate. This keeps the overall Type I error in check, especially when exploratory subgroup tests proliferate.
 
 ### Visualisation: Interaction Plot
 
@@ -403,6 +412,27 @@ reliability_summary %>%
   )
 ```
 
+### Standard Error of Measurement (SEM)
+
+The **Standard Error of Measurement** quantifies the typical error attached to an individual's observed score. It combines scale variability with reliability:
+$$\text{SEM} = SD_{\text{total}} \times \sqrt{1 - \alpha}.$$
+A smaller SEM indicates more precise measurement.
+
+```{r}
+# Compute total score and SEM using Cronbach's alpha
+total_scores <- rowSums(items_only)
+total_sd <- sd(total_scores)
+alpha_value <- alpha_result$total$raw_alpha
+
+sem <- total_sd * sqrt(1 - alpha_value)
+
+cat("Total score SD:", round(total_sd, 2), "\n")
+cat("Cronbach's alpha:", round(alpha_value, 3), "\n")
+cat("Standard Error of Measurement (SEM):", round(sem, 2), "\n")
+```
+
+Interpretation: An SEM of ~0.8 indicates that individual total scores may fluctuate by roughly ±0.8 points due to measurement error. When interpreting change scores or subgroup differences, compare them against the SEM to judge whether differences exceed expected measurement noise. With small samples, treat SEM as approximate and revisit it when a larger validation sample is available.
+
 ### Discussion and Limitations
 
 **Findings**: The 3-item service quality scale demonstrates moderate internal consistency (α = 0.65, ω = 0.70). All items contribute positively to the total score, with no items clearly problematic. The scale is brief, which limits reliability, but acceptable for pilot or screening purposes. Reliability appears similar across branches, though subgroup estimates are imprecise.
@@ -494,16 +524,14 @@ ggplot(process_data, aes(x = before, y = after)) +
 Since defect counts are small and may not be normally distributed, we use the Wilcoxon signed-rank test (nonparametric paired test). This test assesses whether the distribution of differences differs from zero (Conover, 1999).
 
 ```{r}
-# Wilcoxon signed-rank test
-wilcox_result <- wilcox_test(process_data, before ~ after, paired = TRUE, detailed = TRUE)
-print(wilcox_result)
-
-# Alternative: base R with confidence interval for pseudomedian
+# Wilcoxon signed-rank test (base R)
 wilcox_base <- wilcox.test(process_data$before, process_data$after, paired = TRUE, conf.int = TRUE)
 print(wilcox_base)
 
-cat("\nPseudomedian (median of pairwise averages):", round(wilcox_base$estimate, 2), "\n")
-cat("95% CI:", round(wilcox_base$conf.int, 2), "\n")
+cat("\nWilcoxon signed-rank statistic:", formatC(unname(wilcox_base$statistic), format = "f", digits = 0), "\n")
+cat("P-value:", formatC(wilcox_base$p.value, format = "f", digits = 3), "\n")
+cat("Pseudomedian (median of pairwise averages):", formatC(wilcox_base$estimate, format = "f", digits = 2), "\n")
+cat("95% CI:", paste(formatC(wilcox_base$conf.int, format = "f", digits = 2), collapse = " to "), "\n")
 ```
 
 **Interpretation**: The Wilcoxon test yields a significant p-value (p < 0.05), indicating that defect counts decreased after the intervention. The pseudomedian (approximately 1.5) estimates the typical reduction in defects per batch. The 95% CI excludes zero, confirming statistical significance. The effect size is moderate: a reduction of 1–2 defects per batch is practically meaningful.
@@ -513,16 +541,21 @@ cat("95% CI:", round(wilcox_base$conf.int, 2), "\n")
 To assess robustness, we also conduct a paired t-test, treating defect counts as if they were continuous and normally distributed.
 
 ```{r}
-# Paired t-test
-t_result <- t_test(process_data, before ~ after, paired = TRUE, detailed = TRUE)
-print(t_result)
+# Paired t-test (base R)
+t_base <- t.test(process_data$before, process_data$after, paired = TRUE)
+print(t_base)
 
-cat("\nMean difference (Before - After):", round(t_result$estimate, 2), "\n")
-cat("95% CI: [", round(t_result$conf.low, 2), ",", round(t_result$conf.high, 2), "]\n", sep = "")
+mean_diff <- unname(t_base$estimate)
+ci_low <- t_base$conf.int[1]
+ci_high <- t_base$conf.int[2]
 
-# Cohen's d for paired data
-d_paired <- cohens_d(process_data, before ~ after, paired = TRUE)
-print(d_paired)
+cat("\nMean difference (Before - After):", formatC(mean_diff, format = "f", digits = 2), "\n")
+cat("95% CI: [", formatC(ci_low, format = "f", digits = 2), ",", formatC(ci_high, format = "f", digits = 2), "]\n", sep = "")
+
+# Cohen's d for paired data (manual)
+diff_scores <- process_data$before - process_data$after
+cohens_d_value <- mean(diff_scores) / sd(diff_scores)
+cat("Cohen's d (paired):", formatC(cohens_d_value, format = "f", digits = 2), "\n")
 ```
 
 **Interpretation**: The paired t-test also yields a significant result (p < 0.05). The mean reduction is approximately 1.5 defects, with a 95% CI that excludes zero. Cohen's d is moderate-to-large (d ≈ 0.6–0.8), indicating a meaningful effect. The parametric and nonparametric tests converge, strengthening confidence that the intervention was effective.
@@ -550,11 +583,12 @@ if (nrow(outliers) > 0) {
 }
 
 # Boxplot of change
-ggplot(process_data, aes(y = change)) +
+ggplot(process_data, aes(x = "", y = change)) +
   geom_boxplot(fill = "lightblue", alpha = 0.7) +
   geom_jitter(width = 0.1, alpha = 0.5, size = 2) +
   labs(
     title = "Distribution of Change in Defect Counts",
+    x = NULL,
     y = "Change (After - Before)"
   ) +
   theme_minimal()
@@ -633,8 +667,8 @@ summary_table <- tibble(
     round(mean(process_data$after), 2),
     round(mean(process_data$change), 2),
     round(median(process_data$change), 2),
-    round(wilcox_result$p, 3),
-    0.70  # Approximate from earlier
+    formatC(wilcox_base$p.value, format = "f", digits = 3),
+    formatC(cohens_d_value, format = "f", digits = 2)
   )
 )
 
@@ -654,6 +688,7 @@ summary_table %>%
 
 - Small sample size (n = 20) limits power for subgroup comparisons.
 - No control group (before–after design); external factors (seasonality, concurrent changes) could confound results.
+- Possible regression to the mean: units with unusually high baseline defects may improve even without intervention. Longer baselines or staggered rollouts help separate regression effects from true change.
 - Defect counts are self-reported by units and may be subject to measurement bias.
 - Longer-term follow-up is needed to assess sustainability of improvements.
 

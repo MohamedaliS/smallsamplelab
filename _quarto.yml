@@ -1,6 +1,7 @@
 project:
   type: book
   output-dir: _book
+  execute-dir: project
 
 book:
   title: "Quantitative Analysis with Small Samples"
@@ -24,6 +25,9 @@ book:
     - part: "Part E: Worked Projects"
       chapters:
         - chapters/part-e-worked-projects.qmd
+    - part: "Part F: Technical Appendices"
+      chapters:
+        - chapters/part-f-technical-appendices.qmd
     - references.qmd
 
 bibliography: references.bib

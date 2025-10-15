@@ -8,21 +8,12 @@ This part addresses how to communicate findings from small-sample studies transp
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to compute and interpret standardised effect sizes (Cohen's d, odds ratios, correlation coefficients), report confidence intervals alongside point estimates, explain why p-values alone are insufficient for interpreting small-sample findings, and distinguish between statistical significance and practical importance. You will understand how to frame results in terms of magnitude and precision rather than dichotomous significance.
-
-### The Limitations of P-Values
-
-P-values indicate the probability of observing data as extreme as (or more extreme than) what was observed, assuming the null hypothesis is true. They do not measure effect size, practical importance, or the probability that the null hypothesis is true. With small samples, p-values are especially problematic:
-
 - Underpowered studies may fail to detect meaningful effects (p > 0.05 does not mean "no effect").
 - Small, trivial effects can be significant if measurement is precise (significant does not mean "important").
 - P-values are highly variable across replications, particularly with small samples.
 
 Reporting effect sizes and confidence intervals alongside (or instead of) p-values provides a more informative picture. Effect sizes quantify magnitude; confidence intervals quantify precision and range of plausible values.
 
-### Standardised Effect Sizes
-
-Standardised effect sizes express differences or associations on a common scale, facilitating comparison across studies and meta-analysis. Common standardised effect sizes include:
 
 - **Cohen's d**: Difference in means divided by pooled standard deviation (for t-tests and similar comparisons).
 - **Odds ratio (OR)**: Ratio of odds of an event in two groups (for binary outcomes).
@@ -69,10 +60,6 @@ cat("Cohen's d:", round(d, 2), "\n")
 ```
 
 Interpretation: Cohen's d quantifies the standardised difference between groups. Here, d ≈ 2.0 (a very large effect), indicating that Method A scores are about 2 standard deviations higher than Method B scores. The confidence interval for d provides a range of plausible values. Even if the study is underpowered to detect small or medium effects, a large effect is clearly evident. Reporting d alongside the p-value and means provides a complete picture.
-
-### Unstandardised Effect Sizes and Original Units
-
-Standardised effect sizes are useful for comparison, but unstandardised effect sizes (differences in original units) are often more interpretable for applied audiences. For example, "Method A students scored 10 points higher on average (95% CI: 7 to 13 points)" is more tangible than "Cohen's d = 0.8 (95% CI: 0.5 to 1.1)".
 
 Report both when possible: standardised for comparison with other studies, unstandardised for practical interpretation.
 
@@ -122,6 +109,31 @@ cat("95% CI: [", round(fisher_result$conf.int[1], 2), ",",
 ```
 
 Interpretation: The odds of success are 3 times higher in the treatment group than in the control group (OR = 3.0). The 95% CI [0.8, 12.5] is wide (reflecting small sample size) and includes 1, indicating that the association is not statistically significant at the 0.05 level. However, the point estimate suggests a potentially important effect. With a larger sample, the CI would be narrower and might exclude 1. Report the OR and CI, and acknowledge that the study may be underpowered to detect the effect definitively.
+
+### Number Needed to Treat (NNT)
+
+For binary outcomes, clinicians often prefer the **Number Needed to Treat**, defined as the reciprocal of the absolute risk reduction (ARR):
+$$\text{NNT} = \frac{1}{p_{\text{treat}} - p_{\text{control}}}.$$
+NNT answers, *"How many patients must receive the intervention for one additional success (or avoided event) relative to control?"* Smaller NNT values indicate more effective treatments. If the intervention increases risk (harm), report the **Number Needed to Harm (NNH)** using the absolute value of the risk increase.
+
+```{r}
+# Compute absolute risk reduction and NNT from the 2x2 table
+success_rates <- prop.table(table_data, margin = 1)[, "Success"]
+arr <- success_rates["Treatment"] - success_rates["Control"]
+nnt <- 1 / arr
+
+cat("Treatment success rate:", round(success_rates["Treatment"], 2), "\n")
+cat("Control success rate:", round(success_rates["Control"], 2), "\n")
+cat("Absolute risk reduction (ARR):", round(arr, 2), "\n")
+cat("Number Needed to Treat (NNT):", round(nnt, 1), "\n")
+
+# Confidence interval by inverting the risk-difference CI
+rd_ci <- prop.test(x = c(15, 10), n = c(20, 20), correct = FALSE)$conf.int
+nnt_ci <- sort(1 / rd_ci)
+cat("95% CI for NNT:", round(nnt_ci[1], 1), "to", round(nnt_ci[2], 1), "\n")
+```
+
+Interpretation: The treatment yields an absolute risk reduction of 0.25, implying an NNT of 4 (treat four patients to gain one additional success). The NNT confidence interval is wide because the risk-difference CI nearly includes zero; when the CI crosses zero, the implied NNT is infinite (no assured benefit). Always report the ARR and its CI alongside NNT so readers see both direction and uncertainty. For harmful outcomes, reverse the framing (report NNH) and note the sign of the risk difference explicitly.
 
 ### Confidence Intervals as Primary Inferential Tool
 
@@ -296,6 +308,112 @@ Every study has limitations. Common limitations of small-sample studies include:
 - Multiple comparisons (if many tests were conducted, some significant findings may be false positives).
 
 Acknowledge these limitations honestly. Discuss how they might affect conclusions and what future research could address them.
+
+### Handling Multiple Comparisons
+
+When conducting multiple statistical tests within a single study, the probability of at least one false positive (Type I error) increases with the number of tests. If $k$ independent tests are each conducted at $\alpha = 0.05$, the family-wise error rate (FWER) is approximately
+$$\text{FWER} \approx 1 - (1 - \alpha)^k.$$
+For example, 5 tests yield FWER ≈ 0.23, 10 tests ≈ 0.40, and 20 tests ≈ 0.64.
+
+**When to correct**: multiple outcomes or endpoints, subgroup analyses, post-hoc pairwise comparisons after omnibus tests, repeated time-points, or broad exploratory screens.
+
+**When correction may be relaxed**: independent research questions reported separately, clearly labelled exploratory analyses, hierarchical/Bayesian models that regularise, or when the focus is on estimation (effect sizes and confidence intervals).
+
+#### Common adjustment methods
+
+1. **Bonferroni** (conservative FWER control): $\alpha_\text{adjusted} = \alpha / k$.
+
+```{r}
+library(tidyverse)
+
+p_values <- c(0.01, 0.03, 0.08, 0.15, 0.25)
+results <- tibble(
+  Test = seq_along(p_values),
+  Original_p = p_values,
+  Bonferroni_p = p.adjust(p_values, method = "bonferroni"),
+  Sig_Original = Original_p < 0.05,
+  Sig_Bonferroni = Bonferroni_p < 0.05
+)
+results
+```
+
+2. **Holm–Bonferroni** (step-down, more powerful than Bonferroni).
+
+```{r}
+results <- results %>%
+  mutate(
+    Holm_p = p.adjust(Original_p, method = "holm"),
+    Sig_Holm = Holm_p < 0.05
+  )
+results
+```
+
+3. **Benjamini–Hochberg (FDR control)** for exploratory screens accepting a small proportion of false positives.
+
+```{r}
+results <- results %>%
+  mutate(
+    FDR_p = p.adjust(Original_p, method = "fdr"),
+    Sig_FDR = FDR_p < 0.05
+  )
+results
+```
+
+#### Practical strategies for small samples
+
+- **Pre-specify primary vs. secondary outcomes** and correct only confirmatory tests; label others exploratory.
+- **Use omnibus tests first** (e.g., Kruskal–Wallis) and only follow with pairwise tests if the omnibus result is significant.
+- **Report both corrected and uncorrected p-values** alongside effect sizes and CIs.
+- **Limit ad-hoc testing**; consider multilevel or Bayesian models when exploring many related hypotheses.
+
+```{r}
+library(rstatix)
+
+set.seed(2025)
+data_multi <- tibble(
+  group = rep(c("A", "B", "C"), each = 10),
+  score = c(rnorm(10, 5, 1), rnorm(10, 6, 1), rnorm(10, 7, 1))
+)
+
+kruskal_test(data_multi, score ~ group)
+
+pairwise <- dunn_test(data_multi, score ~ group, p.adjust.method = "none")
+pairwise <- pairwise %>%
+  mutate(
+    p_bonf = p.adjust(p, method = "bonferroni"),
+    p_holm = p.adjust(p, method = "holm"),
+    p_fdr = p.adjust(p, method = "fdr")
+  )
+pairwise
+```
+
+**Worked example (Project 1 revisit).** Screening three moderators without correction inflates Type I error; applying Holm control keeps the family-wise error near 5%.
+
+```{r}
+library(tidyverse)
+library(rstatix)
+
+marketing_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+tests <- list(
+  "Age 18-34" = wilcox_test(filter(marketing_data, age_group == "18-34"), satisfaction ~ campaign),
+  "Prior Purchase: Yes" = wilcox_test(filter(marketing_data, prior_purchase == "Yes"), satisfaction ~ campaign),
+  "Age 35-54" = wilcox_test(filter(marketing_data, age_group == "35-54"), satisfaction ~ campaign)
+)
+
+p_vals <- map_dbl(tests, "p")
+holm_adj <- p.adjust(p_vals, method = "holm")
+
+tibble(
+  Subgroup = names(p_vals),
+  Original_p = round(p_vals, 3),
+  Holm_p = round(holm_adj, 3),
+  Sig_Original = Original_p < 0.05,
+  Sig_Holm = Holm_p < 0.05
+)
+```
+
+**Reporting template**: “We evaluated campaign effects across three pre-specified subgroups. Holm-adjusted p-values controlled the family-wise error (only age 18–34 remained significant; adjusted p = 0.03). Other subgroup findings are exploratory until replicated.”
 
 ### Following Reporting Guidelines
 

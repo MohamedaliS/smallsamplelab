@@ -22,6 +22,48 @@ Classical parametric tests (t-tests, ANOVA, standard logistic regression) rely o
 
 Small samples also amplify the impact of outliers and violations of distributional assumptions. A single extreme value can dominate a mean or distort a regression slope. Skewed or heavy-tailed distributions, which cause few problems in large samples, become serious concerns when n is small.
 
+### Visualising Power Trade-offs
+
+Even modest reductions in sample size can have a dramatic impact on statistical power. The figure below uses the exact `power.t.test()` function to illustrate how power declines for medium-sized effects as per-group sample size drops from 60 to 10. Curves are shown for three standardised effect sizes (Cohen's *d* = 0.3, 0.5, and 0.8).
+
+```{r}
+library(tidyverse)
+
+effect_sizes <- c(0.3, 0.5, 0.8)
+n_values <- seq(10, 60, by = 5)
+alpha <- 0.05
+
+power_grid <- crossing(n = n_values, d = effect_sizes) %>%
+  mutate(power = map2_dbl(
+    n,
+    d,
+    ~ power.t.test(
+      n = .x,
+      delta = .y,
+      sd = 1,
+      sig.level = alpha,
+      type = "two.sample",
+      alternative = "two.sided"
+    )$power
+  ))
+
+ggplot(power_grid, aes(x = n, y = power, colour = factor(d))) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  geom_hline(yintercept = 0.80, linetype = "dashed", colour = "grey40") +
+  scale_colour_brewer(palette = "Set1", name = "Effect size (d)") +
+  scale_y_continuous(labels = scales::percent_format(accuracy = 1)) +
+  labs(
+    x = "Sample size per group",
+    y = "Power",
+    title = "Power drops steeply as per-group sample size decreases",
+    subtitle = "Dashed line marks the conventional 80% power threshold"
+  ) +
+  theme_minimal(base_size = 12)
+```
+
+Interpretation: With medium effects (*d* ≈ 0.5), power slips below 50% once per-group sample size falls beneath about 20 participants. Detecting smaller effects (*d* ≈ 0.3) would require many more observations than are typically feasible in small-sample settings. This visual reinforces the need to report minimum detectable effects and to focus on estimation rather than binary significance testing when *n* is limited.
+
 ### Appropriate Methods for Small Samples
 
 Fortunately, a suite of exact, resampling-based, and robust methods can provide valid inferences with limited data. Exact tests (such as Fisher's exact test, exact binomial tests, and exact Poisson tests) compute p-values directly from the combinatorial distribution of the data, without relying on asymptotic approximations. Resampling methods (bootstrap and permutation tests) use the observed data to approximate the sampling distribution, often yielding more accurate inferences than large-sample formulas.
@@ -97,6 +139,18 @@ For example, rather than dichotomising patient improvement into "improved" versu
 
 Count outcomes (number of adverse events, number of customer complaints) are also informative but may be sparse when samples are small. Exact Poisson tests and negative binomial models can handle low counts, but very sparse data (many zeros, few events) may require careful interpretation or resampling methods.
 
+#### Outcome Selection Decision Guide
+
+1. **Start with the construct of interest.** Can it be measured on a genuine numeric scale (e.g., duration, dosage, test score)?
+  - **Yes** → Prefer a continuous measure. Report means/medians with confidence intervals; consider transformations if the scale is skewed.
+  - **No/uncertain** → Proceed to step 2.
+2. **Can respondents make ordered distinctions beyond "yes/no"?**
+  - **Yes** → Use an ordinal scale with 4–7 categories. Analyse with rank-based or ordinal models; report medians or cumulative odds ratios.
+  - **No** → Retain a binary outcome. Use exact or penalised methods and emphasise risk differences or odds ratios with wide intervals.
+3. **Is the event a count that can exceed one per subject?**
+  - **Yes** → Model counts directly (Poisson, negative binomial, or exact tests). Report event rates and their uncertainty.
+4. **Document the rationale.** Explain why the chosen outcome scale is the most informative and feasible given participant burden, measurement error, and sample size.
+
 ### Effect Sizes and Estimation
 
 In small-sample research, point estimates of effect sizes (differences in means, odds ratios, correlation coefficients) are often more useful than p-values alone. A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect.
@@ -154,6 +208,16 @@ Small-sample studies benefit from tight experimental control. Paired or matched 
 Stratification and blocking can also improve efficiency by accounting for known sources of variation. For example, if you are comparing two teaching methods in a small class, stratify by prior achievement level to reduce heterogeneity within each comparison.
 
 Finally, consider sequential or adaptive designs if feasible. Rather than committing to a fixed sample size in advance, you might plan an interim analysis and decide whether to stop early (if results are clear) or continue (if uncertainty remains). Bayesian methods are well-suited to adaptive designs, as they naturally update beliefs as data accumulate.
+
+### Designing Pilot Studies
+
+Pilot studies serve specific purposes: assessing feasibility (recruitment rates, attrition, protocol adherence), refining measurement instruments, and estimating variability to inform future sample size calculations. With very small *n* (often 10–30 participants), focus on collecting process metrics and precision estimates rather than hypothesis testing. Report:
+
+- **Primary feasibility outcomes** (e.g., proportion screened who consent, time to complete assessments).
+- **Preliminary effect estimates** with wide confidence intervals, making clear that they are exploratory.
+- **Adaptations for the main study**, especially where procedures proved onerous or data quality issues emerged.
+
+Guidance: choose a pilot sample large enough to detect major logistical problems (often 12–20 per arm is sufficient), prespecify success criteria (such as acceptable recruitment rate), and plan in advance how you will decide whether to proceed to a full trial.
 
 ### Key Takeaways
 
