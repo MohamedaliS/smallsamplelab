@@ -65,25 +65,7 @@ install.packages(c(
 
 ## Getting Started
 
-### Quick Setup (Recommended)
-
-For first-time setup, simply open the project in RStudio and run:
-
-```r
-source("setup.R")
-```
-
-This will:
-- Check and install all required R packages
-- Create necessary directories
-- Generate the synthetic datasets
-- Verify the installation
-
-### Manual Setup
-
-If you prefer to set up manually:
-
-#### 1. Generate the Datasets
+### 1. Generate the Datasets
 
 Before rendering the book or running examples, generate the synthetic datasets:
 
@@ -97,26 +79,7 @@ This creates three CSV files in the `data/` folder:
 - `service_quality.csv` (n=36): Short scale for reliability analysis
 - `process_change.csv` (n=20): Before–after intervention data
 
-#### 2. Validate Installation
-
-Check that everything is working correctly:
-
-```r
-source("validation_script.R")
-```
-
-This runs key examples from each chapter to verify your setup.
-
-### Using RStudio
-
-1. **Open the project**: Double-click `smallstat.Rproj` to open in RStudio
-2. **Run setup**: In the R console, type `source("setup.R")`
-3. **Explore chapters**: Open any `.qmd` file from the `chapters/` folder
-4. **Run code chunks**: Click the green "Run" button on any code chunk
-
-### Rendering the Book
-
-#### 2. Preview the Book
+### 2. Preview the Book
 
 To preview the book in your browser:
 
@@ -127,7 +90,7 @@ quarto preview
 
 This starts a local web server and opens the book in your browser. Changes to `.qmd` files will automatically trigger re-rendering.
 
-#### 3. Render the Complete Book
+### 3. Render the Complete Book
 
 To render the book to HTML:
 
@@ -172,11 +135,6 @@ source("extracted_code.R")
 
 ```
 smallstat/
-├── smallstat.Rproj          # RStudio project file (NEW)
-├── .Rprofile                # Project startup script (NEW)
-├── .gitignore               # Git ignore rules (NEW)
-├── setup.R                  # Initial setup script (NEW)
-├── validation_script.R      # Installation validation
 ├── _quarto.yml              # Book configuration
 ├── index.qmd                # Preface
 ├── references.bib           # BibTeX bibliography
