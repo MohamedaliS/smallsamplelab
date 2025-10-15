@@ -1,0 +1,52 @@
+# R and RStudio files
+.Rhistory
+.RData
+.Rproj.user/
+.Ruserdata
+
+# Quarto build outputs
+_book/
+_freeze/
+/.quarto/
+
+# Data files (optional - uncomment if you want to exclude generated data)
+# data/*.csv
+
+# R package development
+*.tar.gz
+*.Rcheck/
+
+# Temporary files
+*~
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# LaTeX intermediate files (if generating PDF)
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+
+# OS-specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Desktop.ini
+
+# IDE files
+.vscode/
+.idea/
+
+# Backup files
+*.bak
+*~
+
+# Output files from validation
+extracted_code.R
