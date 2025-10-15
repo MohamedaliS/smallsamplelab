@@ -39,6 +39,7 @@ Sequential or response-adaptive sampling is especially valuable in rare populati
 Suppose we are surveying employees in a small organisation with 120 total staff: 60 in Department A, 40 in Department B, 20 in Department C. We can afford to survey 30 employees. Proportional stratified sampling ensures each department is represented in proportion to its size.
 
 ```{r}
+#| label: part-b-chunk-01
 library(tidyverse)
 
 # Population strata
@@ -90,6 +91,7 @@ If the achieved sample size is smaller than desired, report the minimum detectab
 When sampling without replacement from a small, known population, the variance of estimates decreases because each sampled unit reduces remaining uncertainty. The finite population correction (FPC) adjusts the required sample size accordingly. If a power analysis suggests 30 participants are needed assuming an infinite population, but the accessible population is only 120 people, the adjusted sample size is smaller:
 
 ```{r}
+#| label: part-b-chunk-02
 # Finite population correction example
 n_required_infinite <- 30  # From power analysis
 N_population <- 120        # Size of accessible population
@@ -107,6 +109,7 @@ Interpretation: Sampling without replacement from 120 individuals means that a s
 We plan a study comparing two groups with n = 12 per group. We compute power to detect a medium effect size (Cohen's d = 0.5) using a two-sample t-test.
 
 ```{r}
+#| label: part-b-chunk-03
 # Power calculation using pwr package (if available)
 # If not installed, use approximations or manual calculation
 if (requireNamespace("pwr", quietly = TRUE)) {
@@ -180,6 +183,7 @@ When sample sizes are constrained, justify them transparently:
 ### Smoke Test
 
 ```{r}
+#| label: part-b-chunk-04
 # Re-run stratified allocation
 departments <- c(60, 40, 20)
 total_n <- 30
@@ -218,6 +222,7 @@ Lawshe's Content Validity Ratio provides a simple index of expert agreement on w
 CVR ranges from −1 to +1. Positive values indicate majority agreement that the item is essential; thresholds depend on the number of experts (e.g., ≥0.75 when *N* = 8). Use CVR alongside qualitative feedback to decide which items to retain.
 
 ```{r}
+#| label: part-b-chunk-05
 # CVR example: 8 experts, 6 judge the item essential
 n_experts <- 8
 n_essential <- 6
@@ -242,6 +247,7 @@ Interpretation: A CVR of 0.50 indicates that 75% of experts deemed the item esse
 We pilot a 5-item job satisfaction scale with n = 25 employees. Each item uses a 1–7 Likert response.
 
 ```{r}
+#| label: part-b-chunk-06
 library(tidyverse)
 library(psych)
 
@@ -294,6 +300,7 @@ Interpretation: Examine item means and standard deviations. Items with very high
 Based on item analysis, revise or remove problematic items. For example, if Item 3 shows a ceiling effect and Item 4 has weak item-total correlation, consider removing them. Compute alpha for the revised scale.
 
 ```{r}
+#| label: part-b-chunk-07
 # Revised scale: remove item3 and item4
 revised_items <- select(pilot_data, item1, item2, item5)
 alpha_revised <- psych::alpha(revised_items)
@@ -327,6 +334,7 @@ This feedback can prevent major problems before larger-scale data collection.
 ### Smoke Test
 
 ```{r}
+#| label: part-b-chunk-08
 # Re-run item statistics
 set.seed(2025)
 items_test <- data.frame(
@@ -367,6 +375,7 @@ Outliers are observations that are unusually large or small relative to the rest
 Univariate rules may miss cases that are unusual only when variables are considered jointly. Mahalanobis distance measures how far an observation lies from the multivariate centre, accounting for covariances among variables. Distances can be compared to a chi-square threshold with degrees of freedom equal to the number of variables.
 
 ```{r}
+#| label: part-b-chunk-09
 library(tidyverse)
 
 set.seed(2025)
@@ -397,6 +406,8 @@ Interpretation: Observations with Mahalanobis distance exceeding the chi-square 
 We examine a small dataset of customer wait times (n = 20) and check for outliers.
 
 ```{r}
+#| label: part-b-chunk-10
+#| fig-cap: "Boxplot highlighting a potential customer wait-time outlier."
 library(tidyverse)
 
 set.seed(2025)
@@ -457,6 +468,7 @@ If data are clearly skewed or have heavy tails, consider:
 We check whether a small sample of test scores (n = 18) is approximately normally distributed.
 
 ```{r}
+#| label: part-b-chunk-11
 library(tidyverse)
 
 set.seed(2025)
@@ -490,6 +502,7 @@ Linear regression assumes a linear relationship between predictors and outcome, 
 We fit a simple linear regression (outcome ~ predictor) with n = 20 and check diagnostic plots.
 
 ```{r}
+#| label: part-b-chunk-12
 library(tidyverse)
 
 set.seed(2025)
@@ -550,6 +563,7 @@ Report the number of observations excluded and reasons. Provide summary statisti
 ### Smoke Test
 
 ```{r}
+#| label: part-b-chunk-13
 # Re-run outlier detection
 set.seed(2025)
 x <- c(5, 6, 7, 8, 5, 6, 7, 20)  # 20 is an outlier
@@ -593,6 +607,7 @@ Before handling missing data, describe the pattern:
 To demonstrate the diagnostics in this chapter, we simulate a small dataset with missing values on `satisfaction` and `performance`.
 
 ```{r}
+#| label: part-b-chunk-14
 library(tidyverse)
 
 set.seed(2025)
@@ -612,6 +627,7 @@ glimpse(study_data)
 Little's MCAR test evaluates whether missingness is consistent with the MCAR mechanism. The test compares observed means across missing-data patterns; a large p-value suggests MCAR is plausible, whereas a small p-value indicates that missingness likely depends on observed data (i.e., not MCAR). With very small samples the test has limited power, so interpret results alongside descriptive checks.
 
 ```{r}
+#| label: part-b-chunk-15
 # Little's MCAR test using the BaylorEdPsych package
 if (requireNamespace("BaylorEdPsych", quietly = TRUE)) {
   library(BaylorEdPsych)
@@ -631,6 +647,7 @@ Interpretation: A non-significant p-value (e.g., p > 0.05) supports the MCAR ass
 We continue working with the simulated dataset (`study_data`) created above.
 
 ```{r}
+#| label: part-b-chunk-16
 # Count missing values per variable
 missing_summary <- study_data %>%
   summarise(across(everything(), ~ sum(is.na(.))))
@@ -685,6 +702,7 @@ Multiple imputation (MI) generates several plausible imputed datasets, analyses 
 We apply MI to the dataset with missing `satisfaction` and `performance` values. Given the small sample (n = 25) and 20% missingness, interpret results cautiously.
 
 ```{r}
+#| label: part-b-chunk-17
 # Multiple imputation requires the 'mice' package
 if (requireNamespace("mice", quietly = TRUE)) {
   library(mice)
@@ -743,6 +761,7 @@ The best approach to missing data is prevention:
 ### Smoke Test
 
 ```{r}
+#| label: part-b-chunk-18
 # Re-run missing data summary
 set.seed(2025)
 x <- c(5, 6, NA, 8, 7, NA, 9)

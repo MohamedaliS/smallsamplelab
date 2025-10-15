@@ -27,6 +27,7 @@ Reporting effect sizes and confidence intervals alongside (or instead of) p-valu
 We compare test scores between two teaching methods (n = 12 per group) and compute Cohen's d with a confidence interval.
 
 ```{r}
+#| label: part-d-chunk-01
 library(tidyverse)
 library(rstatix)
 
@@ -68,6 +69,7 @@ Report both when possible: standardised for comparison with other studies, unsta
 Using the same teaching methods data, we report the unstandardised mean difference with CI.
 
 ```{r}
+#| label: part-d-chunk-02
 # Mean difference and CI from t-test
 mean_diff <- mean_a - mean_b
 se_diff <- sd_pooled * sqrt(1/12 + 1/12)
@@ -91,6 +93,7 @@ Report the OR with a confidence interval. If the CI includes 1, the association 
 We analyse data from a small RCT (n = 20 per group) comparing treatment vs. control on a binary outcome (success/failure).
 
 ```{r}
+#| label: part-d-chunk-03
 library(tidyverse)
 
 # 2x2 table: treatment vs control, success vs failure
@@ -117,6 +120,7 @@ $$\text{NNT} = \frac{1}{p_{\text{treat}} - p_{\text{control}}}.$$
 NNT answers, *"How many patients must receive the intervention for one additional success (or avoided event) relative to control?"* Smaller NNT values indicate more effective treatments. If the intervention increases risk (harm), report the **Number Needed to Harm (NNH)** using the absolute value of the risk increase.
 
 ```{r}
+#| label: part-d-chunk-04
 # Compute absolute risk reduction and NNT from the 2x2 table
 success_rates <- prop.table(table_data, margin = 1)[, "Success"]
 arr <- success_rates["Treatment"] - success_rates["Control"]
@@ -158,6 +162,7 @@ When interpreting CIs, avoid the common error of treating them as fixed. A 95% C
 ### Smoke Test
 
 ```{r}
+#| label: part-d-chunk-05
 # Re-run Cohen's d calculation
 set.seed(2025)
 x <- c(10, 12, 11, 13, 12)
@@ -204,6 +209,7 @@ Best practices:
 A well-documented analysis script includes comments explaining each decision.
 
 ```{r}
+#| label: part-d-chunk-06
 library(tidyverse)
 
 # Load cleaned data (see data_cleaning.R for details)
@@ -245,6 +251,8 @@ Use a table to summarise sample characteristics. For RCTs, report characteristic
 We create a descriptive table for the `mini_marketing` dataset using the `gt` package.
 
 ```{r}
+#| label: part-d-chunk-07
+#| tbl-cap: "Sample characteristics by campaign type."
 library(tidyverse)
 library(gt)
 
@@ -324,6 +332,7 @@ For example, 5 tests yield FWER ≈ 0.23, 10 tests ≈ 0.40, and 20 tests ≈ 0.
 1. **Bonferroni** (conservative FWER control): $\alpha_\text{adjusted} = \alpha / k$.
 
 ```{r}
+#| label: part-d-chunk-08
 library(tidyverse)
 
 p_values <- c(0.01, 0.03, 0.08, 0.15, 0.25)
@@ -340,6 +349,7 @@ results
 2. **Holm–Bonferroni** (step-down, more powerful than Bonferroni).
 
 ```{r}
+#| label: part-d-chunk-09
 results <- results %>%
   mutate(
     Holm_p = p.adjust(Original_p, method = "holm"),
@@ -351,6 +361,7 @@ results
 3. **Benjamini–Hochberg (FDR control)** for exploratory screens accepting a small proportion of false positives.
 
 ```{r}
+#| label: part-d-chunk-10
 results <- results %>%
   mutate(
     FDR_p = p.adjust(Original_p, method = "fdr"),
@@ -367,6 +378,7 @@ results
 - **Limit ad-hoc testing**; consider multilevel or Bayesian models when exploring many related hypotheses.
 
 ```{r}
+#| label: part-d-chunk-11
 library(rstatix)
 
 set.seed(2025)
@@ -390,6 +402,7 @@ pairwise
 **Worked example (Project 1 revisit).** Screening three moderators without correction inflates Type I error; applying Holm control keeps the family-wise error near 5%.
 
 ```{r}
+#| label: part-d-chunk-12
 library(tidyverse)
 library(rstatix)
 
@@ -438,6 +451,7 @@ These guidelines provide checklists of items to report. Following them improves 
 ### Smoke Test
 
 ```{r}
+#| label: part-d-chunk-13
 # Re-run sample summary
 data_test <- tibble(
   group = rep(c("A", "B"), each = 5),
@@ -482,6 +496,7 @@ Scenario 1: A study with n = 100 per group finds a mean difference of 1.0 points
 Scenario 2: A study with n = 12 per group finds a mean difference of 2.0 points (95% CI: [-1.0, 5.0], p = 0.15). The CI includes both negative and moderate positive effects. The study is underpowered and inconclusive. We cannot rule out meaningful effects.
 
 ```{r}
+#| label: part-d-chunk-14
 # Simulating the two scenarios for illustration
 set.seed(2025)
 
@@ -544,6 +559,7 @@ When reporting non-significant results:
 ### Smoke Test
 
 ```{r}
+#| label: part-d-chunk-15
 # Re-run non-significant t-test
 set.seed(2025)
 x <- rnorm(10, mean = 50, sd = 5)
@@ -587,6 +603,8 @@ Error bars (standard errors or confidence intervals) convey uncertainty. Use 95%
 We compare mean satisfaction scores between two campaign types with 95% CI error bars.
 
 ```{r}
+#| label: part-d-chunk-16
+#| fig-cap: "Mean customer satisfaction by campaign type with 95% confidence intervals."
 library(tidyverse)
 
 # Load data
@@ -628,6 +646,8 @@ With small samples (n < 50), individual data points can be overlaid on summary p
 We create a dot plot showing individual satisfaction scores, overlaid with group means and CIs.
 
 ```{r}
+#| label: part-d-chunk-17
+#| fig-cap: "Individual satisfaction scores with group means and 95% confidence intervals."
 library(tidyverse)
 
 study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
@@ -670,6 +690,8 @@ Box plots display the median, quartiles, and outliers, providing a non-parametri
 We create a box plot comparing satisfaction scores between campaigns.
 
 ```{r}
+#| label: part-d-chunk-18
+#| fig-cap: "Box plot comparing customer satisfaction across campaign types."
 library(tidyverse)
 
 study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
@@ -698,6 +720,8 @@ For regression models, plot predicted values with confidence bands, and overlay 
 We fit a linear regression (performance ~ experience) and plot the results.
 
 ```{r}
+#| label: part-d-chunk-19
+#| fig-cap: "Linear regression of performance on experience with 95% confidence band."
 library(tidyverse)
 
 set.seed(2025)
@@ -742,6 +766,8 @@ Use the `gt` package for publication-ready tables with clear formatting.
 We create a summary table for the campaign comparison.
 
 ```{r}
+#| label: part-d-chunk-20
+#| tbl-cap: "Summary statistics and Mann–Whitney test for campaign satisfaction."
 library(tidyverse)
 library(gt)
 library(rstatix)
@@ -761,13 +787,19 @@ summary_table <- study_data %>%
 
 # Mann–Whitney test
 mw_result <- wilcox_test(study_data, satisfaction ~ campaign)
+p_value <- mw_result %>% pull(p)
+subtitle_text <- if (p_value < 0.001) {
+  "Mann–Whitney U test: p < 0.001"
+} else {
+  sprintf("Mann–Whitney U test: p = %.3f", p_value)
+}
 
 # Format table
 summary_table %>%
   gt() %>%
   tab_header(
     title = "Satisfaction Scores by Campaign Type",
-    subtitle = "Mann–Whitney U test: p = 0.XX"  # Insert actual p-value
+    subtitle = subtitle_text
   ) %>%
   cols_label(
     campaign = "Campaign",
@@ -801,6 +833,8 @@ Common pitfalls:
 ### Smoke Test
 
 ```{r}
+#| label: part-d-chunk-21
+#| fig-cap: "Simple bar chart example produced during smoke test."
 # Re-run simple ggplot
 library(ggplot2)
 set.seed(2025)

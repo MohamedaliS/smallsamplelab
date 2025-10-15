@@ -33,6 +33,7 @@ The test is conservative (tends to yield p-values that are too large) in some se
 Suppose we are evaluating a new training intervention. Of 10 employees who received training, 8 met their performance target; of 10 who did not receive training, 3 met the target. We test whether training is associated with meeting the target.
 
 ```{r}
+#| label: part-c-chunk-01
 library(tidyverse)
 
 # Create 2x2 table: rows = training (Yes, No), columns = target met (Yes, No)
@@ -58,6 +59,7 @@ Barnard's exact test is an alternative to Fisher's test that does not condition 
 When both tests are available, Barnard's test may be preferred for exploratory analyses where power is a concern. For confirmatory analyses, Fisher's test remains the conventional choice.
 
 ```{r}
+#| label: part-c-chunk-02
 # Note: Barnard's exact test is not readily available in standard R packages
 # For this example, we'll demonstrate the concept using Fisher's exact test
 # which is more commonly available and serves a similar purpose
@@ -82,6 +84,7 @@ Interpretation: The exact2x2 function provides exact inference for 2×2 tables, 
 Classical exact tests (such as Fisher's) can be conservative, especially with very small margins. A common compromise is the **mid-p correction**, which subtracts half the probability of the observed table from the tail probability. Mid-p values sit between the conservative Fisher p-value and the more powerful Barnard p-value, providing a better balance of Type I error control and power for exploratory work.
 
 ```{r}
+#| label: part-c-chunk-03
 # Mid-p adjustment using exact2x2
 midp_result <- exact2x2(table_data, alternative = "two.sided", midp = TRUE)
 print(midp_result)
@@ -107,6 +110,7 @@ The exact binomial test assesses whether the observed proportion of successes di
 A clinic claims that 70% of patients improve with standard care. In a small audit of 15 patients, 13 improved. We test whether the observed proportion is consistent with the clinic's claim.
 
 ```{r}
+#| label: part-c-chunk-04
 # Exact binomial test
 # H0: p = 0.70
 binom_result <- binom.test(x = 13, n = 15, p = 0.70, alternative = "two.sided")
@@ -128,6 +132,7 @@ The exact Poisson test is used for count data when the outcome is the number of 
 A manufacturing process is expected to produce 3 defects per batch on average. In a random sample of 8 batches, we observe 32 total defects. We test whether the observed rate is consistent with the expected rate of 3 per batch.
 
 ```{r}
+#| label: part-c-chunk-05
 # Exact Poisson test
 # H0: lambda = 3 per batch (expected 3 * 8 = 24 defects in 8 batches)
 poisson_result <- poisson.test(x = 32, T = 8, r = 3, alternative = "two.sided")
@@ -149,6 +154,7 @@ Permutation tests are exact (given enough permutations) and make no distribution
 We compare test scores between two teaching methods with small groups (n = 8 per group). Scores may not be normally distributed.
 
 ```{r}
+#| label: part-c-chunk-06
 library(tidyverse)
 
 set.seed(2025)
@@ -205,6 +211,7 @@ Percentile bootstrap confidence intervals are formed by taking the appropriate q
 We estimate the median recovery time (in days) for a small sample of patients and construct a 95% bootstrap confidence interval.
 
 ```{r}
+#| label: part-c-chunk-07
 library(boot)
 
 set.seed(2025)
@@ -242,6 +249,7 @@ Interpretation: The sample median is our point estimate of the typical recovery 
 ### Smoke Test
 
 ```{r}
+#| label: part-c-chunk-08
 # Re-run exact binomial test
 binom.test(x = 8, n = 10, p = 0.5)
 ```
@@ -275,6 +283,7 @@ The test ranks all observations together, then compares the sum of ranks in each
 We compare customer wait times (in minutes) between two service branches. Branch A has 10 observations, Branch B has 12 observations. Wait times are right-skewed.
 
 ```{r}
+#| label: part-c-chunk-09
 library(tidyverse)
 library(rstatix)
 
@@ -305,6 +314,7 @@ Interpretation: The p-value tests whether the distributions differ. If p < 0.05,
 Rank-biserial correlation is convenient when produced automatically, but **Cliff's delta (Δ)** offers a distribution-free measure of stochastic superiority that works well for small samples and tied ranks. Δ ranges from -1 (all observations in group B exceed those in group A) to +1 (the reverse); Δ = 0 indicates no systematic dominance.
 
 ```{r}
+#| label: part-c-chunk-10
 library(effsize)
 
 # Cliff's delta for the wait-time example
@@ -335,6 +345,7 @@ The test produces a pseudomedian (the median of all pairwise averages of the dif
 We measure anxiety scores (0–100 scale) before and after a brief intervention in 12 participants.
 
 ```{r}
+#| label: part-c-chunk-11
 library(tidyverse)
 
 set.seed(2025)
@@ -378,6 +389,7 @@ If the Kruskal–Wallis test is significant, post-hoc pairwise comparisons (with
 We compare patient satisfaction scores (1–10 scale) across three hospital wards with small sample sizes.
 
 ```{r}
+#| label: part-c-chunk-12
 library(tidyverse)
 library(rstatix)
 
@@ -416,6 +428,7 @@ The Friedman test is the nonparametric analogue of repeated-measures ANOVA. It c
 We measure performance scores under three different task conditions for 8 participants.
 
 ```{r}
+#| label: part-c-chunk-13
 library(tidyverse)
 library(rstatix)
 
@@ -455,6 +468,7 @@ Spearman's ρ measures the monotonic association between two variables by comput
 We examine the association between years of experience and job satisfaction scores (1–10 scale) in a small sample of 15 employees.
 
 ```{r}
+#| label: part-c-chunk-14
 library(tidyverse)
 
 set.seed(2025)
@@ -482,6 +496,7 @@ Kendall's τ is an alternative measure of monotonic association based on concord
 Using the same employee data, we compute Kendall's τ.
 
 ```{r}
+#| label: part-c-chunk-15
 # Kendall's correlation
 kendall_result <- cor.test(experience, satisfaction, method = "kendall", exact = FALSE)
 print(kendall_result)
@@ -501,6 +516,7 @@ Interpretation: Kendall's τ has a similar interpretation to Spearman's ρ but d
 ### Smoke Test
 
 ```{r}
+#| label: part-c-chunk-16
 # Re-run Mann–Whitney test
 set.seed(2025)
 x <- c(5, 7, 6, 8, 9)
@@ -535,6 +551,7 @@ Firth's method (Firth, 1993) modifies the logistic regression likelihood to redu
 We model the probability of project success (binary outcome) based on team size and prior experience. With only 20 projects and 6 successes, standard logistic regression is unstable.
 
 ```{r}
+#| label: part-c-chunk-17
 library(tidyverse)
 library(logistf)
 
@@ -584,6 +601,7 @@ Bayesian methods naturally quantify uncertainty and remain well-defined with sma
 We model customer satisfaction scores (continuous, 1–10 scale) based on wait time and staff friendliness ratings. With only 18 observations, classical regression has limited precision.
 
 ```{r, eval=FALSE}
+#| label: part-c-chunk-18
 # Note: This example requires Rtools to be installed for Stan compilation
 # To run this code, install Rtools from: https://cran.r-project.org/bin/windows/Rtools/
 
@@ -721,6 +739,7 @@ Bayesian logistic regression extends Bayesian methods to binary outcomes. Weakly
 We model the probability of employee retention (binary: retained or left) based on job satisfaction and salary level in a small company with 25 employees.
 
 ```{r, eval=FALSE}
+#| label: part-c-chunk-19
 # Note: This example requires Rtools to be installed for Stan compilation
 # To run this code, install Rtools from: https://cran.r-project.org/bin/windows/Rtools/
 
@@ -784,6 +803,7 @@ Interpretation: Coefficients are on the log-odds scale. Positive coefficients in
 Bayesian models can be compared using LOOIC, which estimates out-of-sample predictive accuracy. LOOIC is computed efficiently from the posterior samples using Pareto-smoothed importance sampling. Lower LOOIC indicates better predictive performance.
 
 ```{r, eval=FALSE}
+#| label: part-c-chunk-20
 # Note: This example requires the bayes_logit model from the previous chunk
 # Compute LOOIC for the retention model
 loo_result <- loo(bayes_logit)
@@ -804,6 +824,7 @@ Interpretation: The LOOIC value provides a measure of model fit adjusted for com
 ### Smoke Test
 
 ```{r}
+#| label: part-c-chunk-21
 # Re-run Firth logistic regression on simple example
 library(logistf)
 set.seed(2025)
@@ -840,6 +861,7 @@ Cronbach's alpha estimates internal consistency by comparing item variances to t
 We assess the internal consistency of a 3-item service quality scale using the `service_quality.csv` data.
 
 ```{r}
+#| label: part-c-chunk-22
 library(tidyverse)
 library(psych)
 
@@ -877,6 +899,7 @@ McDonald's omega (ωₜ) is an alternative to alpha that relaxes the tau-equival
 We compute omega for the same 3-item service quality scale.
 
 ```{r}
+#| label: part-c-chunk-23
 library(psych)
 
 # Compute McDonald's omega
@@ -900,6 +923,7 @@ Split-half reliability divides a scale into two halves, computes the correlation
 We compute split-half reliability with a bootstrap confidence interval for the service quality scale.
 
 ```{r}
+#| label: part-c-chunk-24
 library(psych)
 
 set.seed(2025)
@@ -920,6 +944,7 @@ Interpretation: The split-half correlation measures consistency between the two 
 Revelle's beta identifies the **least reliable** split of a scale and reports the reliability for that worst-case partition. Beta is useful for stress-testing very short scales: if the worst split still looks acceptable, the scale is unlikely to fail under any other split.
 
 ```{r}
+#| label: part-c-chunk-25
 # Revelle's beta (accessed via psych's internal helper when available)
 beta_available <- exists("beta", where = asNamespace("psych"), inherits = FALSE)
 
@@ -951,6 +976,7 @@ When items are ordinal and have few response options, polychoric correlations an
 We compute polychoric correlations for the service quality items. With n = 36, this is at the lower bound of recommended sample sizes for polychoric estimation.
 
 ```{r}
+#| label: part-c-chunk-26
 library(psych)
 
 # Polychoric correlation matrix
@@ -988,6 +1014,7 @@ When reporting reliability for small samples and short scales:
 ### Smoke Test
 
 ```{r}
+#| label: part-c-chunk-27
 # Re-run alpha on simple dataset
 library(psych)
 set.seed(2025)
@@ -1036,6 +1063,7 @@ AHP decomposes a decision problem into a hierarchy of criteria and alternatives,
 Suppose an organisation must choose among three training programmes (A, B, C) based on three criteria: Cost (lower is better), Effectiveness (higher is better), and Feasibility (higher is better). We use AHP to rank the programmes.
 
 ```{r}
+#| label: part-c-chunk-28
 library(tidyverse)
 
 # Define criteria weights from pairwise comparisons
@@ -1090,6 +1118,7 @@ We evaluate four community projects (P1, P2, P3, P4) on three criteria: Impact (
 > **Normalisation choices.** TOPSIS typically uses vector (Euclidean) normalisation so that each criterion contributes proportionally regardless of its original scale. Cost variables must be recoded so that higher values are preferable (e.g., invert, take reciprocal, or subtract from the maximum). Alternatives include min–max scaling or z-scores; choose a method consistent across criteria and document it so stakeholders understand how raw data map into the TOPSIS space.
 
 ```{r}
+#| label: part-c-chunk-29
 library(tidyverse)
 
 # Decision matrix: rows = projects, columns = criteria
@@ -1164,6 +1193,7 @@ MCDM rankings can be sensitive to criteria weights and normalisation methods. Se
 We vary the weight on Effectiveness in the AHP training example and observe changes in rankings.
 
 ```{r}
+#| label: part-c-chunk-30
 library(tidyverse)
 
 # Original weights
@@ -1217,6 +1247,7 @@ Interpretation: The table shows how the ranking changes as the weight on Effecti
 ### Smoke Test
 
 ```{r}
+#| label: part-c-chunk-31
 # Re-run simple TOPSIS calculation
 projects <- c("P1", "P2", "P3")
 impact <- c(7, 8, 6)
@@ -1251,6 +1282,7 @@ The exact Poisson test (introduced in Chapter 3) compares an observed count to a
 A new quality control process is expected to reduce defects to 2 per batch. In a trial of 5 batches, 15 defects are observed. We test whether the observed rate (15/5 = 3 per batch) differs from the target rate (2 per batch).
 
 ```{r}
+#| label: part-c-chunk-32
 # Exact Poisson test
 # H0: lambda = 2 per batch (expected 2 * 5 = 10 defects in 5 batches)
 poisson_test_result <- poisson.test(x = 15, T = 5, r = 2, alternative = "two.sided")
@@ -1273,6 +1305,7 @@ When comparing counts from two independent groups (e.g., event rates in treatmen
 We compare adverse event counts in two small clinical trials: Trial A (8 events in 50 patient-days) vs. Trial B (3 events in 45 patient-days).
 
 ```{r}
+#| label: part-c-chunk-33
 # Rate comparison using Poisson-based approximation
 # Trial A: 8 events, 50 patient-days (rate = 8/50 = 0.16 per day)
 # Trial B: 3 events, 45 patient-days (rate = 3/45 = 0.067 per day)
@@ -1310,6 +1343,7 @@ Alternatively, simple methods (moving averages, linear trend extrapolation) may 
 We forecast the next value in a short time series of monthly sales figures (12 observations).
 
 ```{r}
+#| label: part-c-chunk-34
 library(tidyverse)
 library(boot)
 
@@ -1370,6 +1404,7 @@ Simpler approaches include:
 When variance exceeds the mean (overdispersion), classical Poisson regression underestimates standard errors and inflates Type I error. A simple fix is the **quasi-Poisson** model, which keeps the Poisson mean structure but estimates a dispersion parameter to inflate standard errors appropriately.
 
 ```{r}
+#| label: part-c-chunk-35
 library(tidyverse)
 
 set.seed(2025)
@@ -1404,6 +1439,7 @@ Interpretation: Both models yield the same coefficient estimates, but the quasi-
 ### Smoke Test
 
 ```{r}
+#| label: part-c-chunk-36
 # Re-run exact Poisson test
 poisson.test(x = 10, T = 5, r = 1.5)
 ```

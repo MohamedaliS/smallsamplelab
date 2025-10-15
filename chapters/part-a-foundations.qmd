@@ -27,6 +27,8 @@ Small samples also amplify the impact of outliers and violations of distribution
 Even modest reductions in sample size can have a dramatic impact on statistical power. The figure below uses the exact `power.t.test()` function to illustrate how power declines for medium-sized effects as per-group sample size drops from 60 to 10. Curves are shown for three standardised effect sizes (Cohen's *d* = 0.3, 0.5, and 0.8).
 
 ```{r}
+#| label: power-curve-plot
+#| fig-cap: "Power curves illustrating sensitivity to sample size."
 library(tidyverse)
 
 effect_sizes <- c(0.3, 0.5, 0.8)
@@ -75,6 +77,7 @@ Nonparametric rank-based tests (Mann–Whitney U, Wilcoxon signed-rank, Kruskal�
 Suppose we wish to compare customer satisfaction scores (on a 1–10 scale) between two service branches, each with only 12 observations. The scores are ordinal and may not be normally distributed.
 
 ```{r}
+#| label: example-mann-whitney
 library(tidyverse)
 library(rstatix)
 
@@ -106,6 +109,7 @@ Interpretation: If the p-value is small (typically p < 0.05), we have evidence t
 ### Smoke Test
 
 ```{r}
+#| label: smoke-test-mwu
 # Re-run a simple Mann–Whitney test to verify code
 library(rstatix)
 set.seed(2025)
@@ -162,6 +166,7 @@ When reporting results, emphasise effect sizes and uncertainty intervals. For ex
 Suppose you are evaluating a pilot training programme with 18 participants. You have two outcome options: (1) binary pass/fail on a final assessment, or (2) a continuous score (0–100) on the same assessment.
 
 ```{r}
+#| label: pilot-outcome-simulation
 library(tidyverse)
 
 set.seed(2025)
@@ -231,6 +236,7 @@ Guidance: choose a pilot sample large enough to detect major logistical problems
 ### Smoke Test
 
 ```{r}
+#| label: smoke-test-outcome
 # Re-run outcome comparison example
 set.seed(2025)
 scores_test <- round(rnorm(10, mean = 70, sd = 10))
