@@ -1,0 +1,181 @@
+# Part A: Foundations
+
+This part establishes why small-sample research is important and how to frame research questions that align with limited data availability.
+
+---
+
+## Chapter 1. Why Small-Sample Research Matters
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to explain why small samples are common in applied research, recognise the practical and ethical constraints that limit sample size, and identify contexts where small-sample methods are both necessary and appropriate. You will also understand the limitations of conventional large-sample approximations when applied to modest datasets.
+
+### The Reality of Small Samples
+
+Many textbooks assume that researchers can collect hundreds or thousands of observations. In practice, however, numerous research contexts yield small samples. Clinical studies of rare diseases, evaluations of pilot programmes, community-based participatory research, and studies in Small Island Developing States (SIDS) often involve fewer than 100 participants. Resource constraints, logistical barriers, and ethical considerations (such as minimising burden on vulnerable populations) make small samples the norm rather than the exception.
+
+Despite their ubiquity, small samples are often treated as deficient or temporary. Researchers may apologise for limited data, or reviewers may demand larger samples without considering feasibility. This mindset overlooks the fact that many important questions can only be addressed with small datasets. Rather than apologising, researchers should select methods that are appropriate for the sample size at hand.
+
+### When Large-Sample Approximations Fail
+
+Classical parametric tests (t-tests, ANOVA, standard logistic regression) rely on asymptotic theory. They assume that sampling distributions approximate normality as sample size increases. With small samples, these approximations can be inaccurate. P-values may be misleading, confidence intervals may have poor coverage, and maximum likelihood estimates may be unstable or even undefined (for example, in logistic regression with separation).
+
+Small samples also amplify the impact of outliers and violations of distributional assumptions. A single extreme value can dominate a mean or distort a regression slope. Skewed or heavy-tailed distributions, which cause few problems in large samples, become serious concerns when n is small.
+
+### Appropriate Methods for Small Samples
+
+Fortunately, a suite of exact, resampling-based, and robust methods can provide valid inferences with limited data. Exact tests (such as Fisher's exact test, exact binomial tests, and exact Poisson tests) compute p-values directly from the combinatorial distribution of the data, without relying on asymptotic approximations. Resampling methods (bootstrap and permutation tests) use the observed data to approximate the sampling distribution, often yielding more accurate inferences than large-sample formulas.
+
+Nonparametric rank-based tests (Mann–Whitney U, Wilcoxon signed-rank, Kruskal–Wallis) make fewer distributional assumptions and are less sensitive to outliers. Penalised regression (Firth logistic regression, ridge, LASSO) can stabilise coefficient estimates when events are sparse. Bayesian methods incorporate prior information and quantify uncertainty through posterior distributions, which remain well-defined even when data are limited.
+
+### Example: Comparing Two Small Groups
+
+Suppose we wish to compare customer satisfaction scores (on a 1–10 scale) between two service branches, each with only 12 observations. The scores are ordinal and may not be normally distributed.
+
+```{r}
+library(tidyverse)
+library(rstatix)
+
+set.seed(2025)
+branch_a <- c(7, 8, 6, 7, 9, 8, 7, 6, 8, 7, 9, 8)
+branch_b <- c(5, 6, 7, 5, 6, 5, 7, 6, 5, 6, 7, 6)
+
+data_satisfaction <- tibble(
+  score = c(branch_a, branch_b),
+  branch = rep(c("A", "B"), each = 12)
+)
+
+# Mann–Whitney U test (Wilcoxon rank-sum)
+result <- wilcox_test(data_satisfaction, score ~ branch, detailed = TRUE)
+print(result)
+```
+
+The Mann–Whitney U test compares the distributions of the two groups without assuming normality. The p-value indicates whether the observed difference in ranks is unlikely under the null hypothesis of identical distributions. Because the test is based on ranks, it is robust to skewness and outliers.
+
+Interpretation: If the p-value is small (typically p < 0.05), we have evidence that customer satisfaction differs between the two branches. The effect size (such as rank-biserial correlation) quantifies the magnitude of the difference.
+
+### Key Takeaways
+
+- Small samples are common and legitimate in many research contexts, particularly in SIDS, clinical studies, and community-based research.
+- Large-sample approximations can fail when n is small, leading to inaccurate p-values and confidence intervals.
+- Exact tests, resampling methods, and rank-based procedures provide valid inferences without requiring large samples.
+- The choice of method should match the research question, the type of outcome, and the sample size actually available.
+
+### Smoke Test
+
+```{r}
+# Re-run a simple Mann–Whitney test to verify code
+library(rstatix)
+set.seed(2025)
+x <- c(7, 8, 6, 7, 9, 8)
+y <- c(5, 6, 7, 5, 6, 5)
+test_data <- tibble(value = c(x, y), group = rep(c("X", "Y"), each = 6))
+wilcox_test(test_data, value ~ group)
+```
+
+---
+
+## Chapter 2. Questions and Outcomes that Fit Small n
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to formulate research questions that are realistic given small sample constraints, distinguish between exploratory and confirmatory aims, and select outcome measures that yield interpretable results with limited observations. You will also understand when to prioritise effect size estimation over hypothesis testing.
+
+### Framing Realistic Research Questions
+
+Not all research questions are equally suited to small samples. Broad, multivariate questions (such as identifying dozens of predictors or testing complex mediation models) typically require large datasets. In contrast, focused questions about a single outcome or a few key comparisons can often be addressed with modest samples.
+
+When planning a small-sample study, prioritise clarity and specificity. Instead of asking "What are all the factors that influence patient adherence?" ask "Does a brief reminder intervention improve adherence compared to standard care?" The latter question is binary, focused, and testable with a small randomised trial.
+
+Similarly, consider whether the study is exploratory or confirmatory. Exploratory studies generate hypotheses, describe patterns, and refine measurement instruments. They do not require large samples, but results should be interpreted cautiously and replicated before drawing firm conclusions. Confirmatory studies test prespecified hypotheses and require sufficient statistical power. With small samples, power is limited, so confirmatory aims should be modest and well-justified.
+
+### Choosing Appropriate Outcomes
+
+The type of outcome variable influences which methods are feasible and how much information can be extracted from limited data. Binary outcomes (yes/no, success/failure) are common but carry less information per observation than continuous or ordinal measures. If your sample is small, consider whether a continuous or ordinal outcome might capture more variation and yield more precise inferences.
+
+For example, rather than dichotomising patient improvement into "improved" versus "not improved", use a continuous measure of symptom severity or an ordinal scale with several levels. This preserves information and increases statistical efficiency. However, if the outcome is inherently binary (such as survival within 30 days), do not force it into a continuous form.
+
+Count outcomes (number of adverse events, number of customer complaints) are also informative but may be sparse when samples are small. Exact Poisson tests and negative binomial models can handle low counts, but very sparse data (many zeros, few events) may require careful interpretation or resampling methods.
+
+### Effect Sizes and Estimation
+
+In small-sample research, point estimates of effect sizes (differences in means, odds ratios, correlation coefficients) are often more useful than p-values alone. A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect.
+
+When reporting results, emphasise effect sizes and uncertainty intervals. For example, "The median difference in satisfaction scores was 1.5 points (95% CI: 0.5 to 2.5)" is more informative than "The difference was statistically significant (p = 0.03)". Effect size estimates help readers judge practical importance and facilitate meta-analysis or future sample size planning.
+
+### Example: Outcome Selection in a Pilot Study
+
+Suppose you are evaluating a pilot training programme with 18 participants. You have two outcome options: (1) binary pass/fail on a final assessment, or (2) a continuous score (0–100) on the same assessment.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+n <- 18
+
+# Simulate continuous scores
+scores <- round(rnorm(n, mean = 68, sd = 12))
+scores <- pmax(0, pmin(100, scores))  # clamp to [0, 100]
+
+# Create binary outcome: pass if score >= 60
+pass_fail <- ifelse(scores >= 60, "Pass", "Fail")
+
+data_pilot <- tibble(
+  participant = 1:n,
+  score = scores,
+  outcome = pass_fail
+)
+
+# Summary statistics for continuous outcome
+summary(data_pilot$score)
+
+# Frequency table for binary outcome
+table(data_pilot$outcome)
+
+# The continuous outcome carries more information
+# We can estimate a mean and standard error:
+mean_score <- mean(data_pilot$score)
+se_score <- sd(data_pilot$score) / sqrt(n)
+ci_lower <- mean_score - 1.96 * se_score
+ci_upper <- mean_score + 1.96 * se_score
+
+cat("Mean score:", round(mean_score, 1), "\n")
+cat("95% CI: [", round(ci_lower, 1), ",", round(ci_upper, 1), "]\n", sep = "")
+```
+
+By retaining the continuous score, we obtain a precise estimate of average performance with a confidence interval. Had we dichotomised into pass/fail, we would only know that 14 out of 18 passed, which provides less information about the central tendency and spread of performance.
+
+Interpretation: The continuous outcome allows us to estimate the mean score with reasonable precision. The confidence interval indicates the range of plausible population means. If the goal is to understand typical performance (not just pass rates), the continuous measure is more informative.
+
+### Research Design Considerations
+
+Small-sample studies benefit from tight experimental control. Paired or matched designs (before–after, crossover, matched-pair comparisons) reduce variability by comparing each unit to itself or a closely matched control. This within-unit comparison can yield precise inferences even when the number of units is small.
+
+Stratification and blocking can also improve efficiency by accounting for known sources of variation. For example, if you are comparing two teaching methods in a small class, stratify by prior achievement level to reduce heterogeneity within each comparison.
+
+Finally, consider sequential or adaptive designs if feasible. Rather than committing to a fixed sample size in advance, you might plan an interim analysis and decide whether to stop early (if results are clear) or continue (if uncertainty remains). Bayesian methods are well-suited to adaptive designs, as they naturally update beliefs as data accumulate.
+
+### Key Takeaways
+
+- Frame research questions narrowly and realistically given the sample size constraints.
+- Distinguish between exploratory (hypothesis-generating) and confirmatory (hypothesis-testing) aims.
+- Prefer continuous or ordinal outcomes over binary outcomes when possible, to maximise information per observation.
+- Report effect sizes and confidence intervals, not just p-values, to convey magnitude and precision.
+- Use paired, matched, or stratified designs to reduce variability and improve efficiency.
+- Consider adaptive or sequential designs if ethically and practically feasible.
+
+### Smoke Test
+
+```{r}
+# Re-run outcome comparison example
+set.seed(2025)
+scores_test <- round(rnorm(10, mean = 70, sd = 10))
+mean(scores_test)
+sd(scores_test)
+```
+
+---
+
+## Summary of Part A
+
+In Part A, we established that small-sample research is both common and legitimate. We reviewed why large-sample approximations can fail with limited data and introduced exact, resampling, and robust methods as alternatives. We also discussed how to formulate research questions and select outcomes that are realistic and informative given small sample sizes. The next part will address data collection and preparation strategies tailored to small studies.

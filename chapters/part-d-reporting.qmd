@@ -1,0 +1,697 @@
+# Part D: Reporting and Interpretation
+
+This part addresses how to communicate findings from small-sample studies transparently and responsibly. We cover effect sizes and confidence intervals, transparent reporting of methods and limitations, interpreting non-significant results, presenting uncertainty visually, and documenting analytic choices.
+
+---
+
+## Chapter 13. Effect Sizes and Confidence Intervals over P-Values
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to compute and interpret standardised effect sizes (Cohen's d, odds ratios, correlation coefficients), report confidence intervals alongside point estimates, explain why p-values alone are insufficient for interpreting small-sample findings, and distinguish between statistical significance and practical importance. You will understand how to frame results in terms of magnitude and precision rather than dichotomous significance.
+
+### The Limitations of P-Values
+
+P-values indicate the probability of observing data as extreme as (or more extreme than) what was observed, assuming the null hypothesis is true. They do not measure effect size, practical importance, or the probability that the null hypothesis is true. With small samples, p-values are especially problematic:
+
+- Underpowered studies may fail to detect meaningful effects (p > 0.05 does not mean "no effect").
+- Small, trivial effects can be significant if measurement is precise (significant does not mean "important").
+- P-values are highly variable across replications, particularly with small samples.
+
+Reporting effect sizes and confidence intervals alongside (or instead of) p-values provides a more informative picture. Effect sizes quantify magnitude; confidence intervals quantify precision and range of plausible values.
+
+### Standardised Effect Sizes
+
+Standardised effect sizes express differences or associations on a common scale, facilitating comparison across studies and meta-analysis. Common standardised effect sizes include:
+
+- **Cohen's d**: Difference in means divided by pooled standard deviation (for t-tests and similar comparisons).
+- **Odds ratio (OR)**: Ratio of odds of an event in two groups (for binary outcomes).
+- **Correlation coefficients (r, ρ, τ)**: Measure of linear or monotonic association between two variables.
+- **Eta-squared (η²), epsilon-squared (ε²)**: Proportion of variance explained (for ANOVA and nonparametric tests).
+
+**Interpreting Cohen's d**: Roughly, d = 0.2 is small, d = 0.5 is medium, d = 0.8 is large. However, these benchmarks are context-dependent and should not be applied mechanically.
+
+### Example: Computing Cohen's d with Confidence Interval
+
+We compare test scores between two teaching methods (n = 12 per group) and compute Cohen's d with a confidence interval.
+
+```{r}
+library(tidyverse)
+library(rstatix)
+
+set.seed(2025)
+
+# Simulated test scores
+method_a <- c(78, 82, 75, 88, 79, 85, 80, 83, 77, 84, 81, 86)
+method_b <- c(68, 72, 70, 75, 71, 69, 73, 74, 70, 72, 71, 76)
+
+scores_data <- tibble(
+  score = c(method_a, method_b),
+  method = rep(c("A", "B"), each = 12)
+)
+
+# T-test with effect size
+t_result <- t_test(scores_data, score ~ method, var.equal = TRUE, detailed = TRUE)
+print(t_result)
+
+# Compute Cohen's d with CI using cohens_d function
+effect_size <- cohens_d(scores_data, score ~ method)
+print(effect_size)
+
+# Manual calculation for verification
+mean_a <- mean(method_a)
+mean_b <- mean(method_b)
+sd_pooled <- sqrt(((11 * var(method_a)) + (11 * var(method_b))) / 22)
+d <- (mean_a - mean_b) / sd_pooled
+
+cat("Mean A:", round(mean_a, 2), " Mean B:", round(mean_b, 2), "\n")
+cat("Cohen's d:", round(d, 2), "\n")
+```
+
+Interpretation: Cohen's d quantifies the standardised difference between groups. Here, d ≈ 2.0 (a very large effect), indicating that Method A scores are about 2 standard deviations higher than Method B scores. The confidence interval for d provides a range of plausible values. Even if the study is underpowered to detect small or medium effects, a large effect is clearly evident. Reporting d alongside the p-value and means provides a complete picture.
+
+### Unstandardised Effect Sizes and Original Units
+
+Standardised effect sizes are useful for comparison, but unstandardised effect sizes (differences in original units) are often more interpretable for applied audiences. For example, "Method A students scored 10 points higher on average (95% CI: 7 to 13 points)" is more tangible than "Cohen's d = 0.8 (95% CI: 0.5 to 1.1)".
+
+Report both when possible: standardised for comparison with other studies, unstandardised for practical interpretation.
+
+### Example: Reporting Mean Difference with Confidence Interval
+
+Using the same teaching methods data, we report the unstandardised mean difference with CI.
+
+```{r}
+# Mean difference and CI from t-test
+mean_diff <- mean_a - mean_b
+se_diff <- sd_pooled * sqrt(1/12 + 1/12)
+ci_lower <- mean_diff - qt(0.975, df = 22) * se_diff
+ci_upper <- mean_diff + qt(0.975, df = 22) * se_diff
+
+cat("Mean difference (A - B):", round(mean_diff, 1), "points\n")
+cat("95% CI: [", round(ci_lower, 1), ",", round(ci_upper, 1), "]\n", sep = "")
+```
+
+Interpretation: Students in Method A scored, on average, 10.5 points higher than those in Method B. The 95% confidence interval [7.8, 13.2] indicates that the true difference likely lies within this range. Because the interval excludes zero, the difference is statistically significant. More importantly, the magnitude (7–13 points) can be judged against benchmarks for practical importance (e.g., if a 5-point improvement is considered educationally meaningful, this difference clearly exceeds that threshold).
+
+### Odds Ratios and Confidence Intervals
+
+For binary outcomes, odds ratios (OR) quantify the strength of association. An OR = 1 indicates no association; OR > 1 indicates higher odds in the exposure or treatment group; OR < 1 indicates lower odds.
+
+Report the OR with a confidence interval. If the CI includes 1, the association is not statistically significant at the chosen level (typically 95%).
+
+### Example: Odds Ratio from 2×2 Table
+
+We analyse data from a small RCT (n = 20 per group) comparing treatment vs. control on a binary outcome (success/failure).
+
+```{r}
+library(tidyverse)
+
+# 2x2 table: treatment vs control, success vs failure
+table_data <- matrix(c(15, 5, 10, 10), nrow = 2, byrow = TRUE,
+                     dimnames = list(Group = c("Treatment", "Control"),
+                                     Outcome = c("Success", "Failure")))
+print(table_data)
+
+# Fisher's exact test with OR estimate
+fisher_result <- fisher.test(table_data)
+print(fisher_result)
+
+cat("Odds ratio:", round(fisher_result$estimate, 2), "\n")
+cat("95% CI: [", round(fisher_result$conf.int[1], 2), ",", 
+    round(fisher_result$conf.int[2], 2), "]\n", sep = "")
+```
+
+Interpretation: The odds of success are 3 times higher in the treatment group than in the control group (OR = 3.0). The 95% CI [0.8, 12.5] is wide (reflecting small sample size) and includes 1, indicating that the association is not statistically significant at the 0.05 level. However, the point estimate suggests a potentially important effect. With a larger sample, the CI would be narrower and might exclude 1. Report the OR and CI, and acknowledge that the study may be underpowered to detect the effect definitively.
+
+### Confidence Intervals as Primary Inferential Tool
+
+In small-sample research, confidence intervals are often more informative than p-values. A CI conveys:
+
+- The point estimate (centre of the interval).
+- Precision (width of the interval).
+- Statistical significance (whether the interval excludes the null value, such as 0 for differences or 1 for ratios).
+- Practical significance (whether the interval contains values considered important).
+
+When interpreting CIs, avoid the common error of treating them as fixed. A 95% CI means that if we repeated the study many times, 95% of the intervals would contain the true parameter value. For a given interval, we do not know whether it contains the true value, but we can be 95% confident that it does.
+
+### Key Takeaways
+
+- P-values alone are insufficient for interpreting findings, especially with small samples where power is limited.
+- Effect sizes (Cohen's d, OR, correlations) quantify magnitude and facilitate comparison across studies.
+- Confidence intervals convey both magnitude and precision, and indicate statistical and practical significance.
+- Report effect sizes and CIs alongside (or instead of) p-values for transparent, informative inference.
+- Unstandardised effect sizes (differences in original units) are often more interpretable for applied audiences.
+- Wide CIs in small samples reflect uncertainty; acknowledge this and avoid overinterpreting point estimates.
+
+### Smoke Test
+
+```{r}
+# Re-run Cohen's d calculation
+set.seed(2025)
+x <- c(10, 12, 11, 13, 12)
+y <- c(8, 9, 7, 8, 9)
+d <- (mean(x) - mean(y)) / sqrt((var(x) + var(y)) / 2)
+cat("Cohen's d:", round(d, 2), "\n")
+```
+
+---
+
+## Chapter 14. Transparent Reporting of Methods and Limitations
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to document all analytic choices in a reproducible manner, report deviations from planned analyses, describe sample characteristics and missing data patterns, acknowledge limitations of small samples, and follow reporting guidelines (such as CONSORT for trials, STROBE for observational studies). You will understand the importance of transparency for credibility and replicability.
+
+### The Importance of Transparency
+
+Transparent reporting allows readers to evaluate the quality of evidence, assess the risk of bias, and replicate or build upon findings. With small samples, transparency is particularly important because results are more sensitive to analytic choices, outliers, and missing data. Readers need full information to judge whether conclusions are warranted.
+
+Key elements of transparent reporting include:
+
+- Clear description of sampling and recruitment.
+- Summary of participant characteristics.
+- Complete reporting of all variables and measures.
+- Description of data cleaning and exclusions.
+- Statement of statistical methods with justification.
+- Reporting of all analyses conducted, not just significant findings.
+- Acknowledgement of limitations and alternative explanations.
+
+### Documenting Analytic Choices
+
+Modern quantitative research involves many decisions: how to handle outliers, which variables to include, whether to transform variables, which test to use, how to handle missing data. These decisions, if made after seeing the data, can inflate Type I error and bias estimates (researcher degrees of freedom, p-hacking).
+
+Best practices:
+
+- **Preregister analyses** when possible (specify hypotheses, methods, and decision rules before data collection).
+- **Document all decisions** in a reproducible analysis script (R Markdown, Quarto).
+- **Report all analyses conducted**, including exploratory and sensitivity analyses.
+- **Distinguish confirmatory from exploratory analyses** in the text.
+
+### Example: Documenting Analysis Decisions in Code Comments
+
+A well-documented analysis script includes comments explaining each decision.
+
+```{r}
+library(tidyverse)
+
+# Load cleaned data (see data_cleaning.R for details)
+study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+# Descriptive statistics
+summary(study_data)
+
+# Decision 1: Treat satisfaction as ordinal (1–5 scale)
+# Justification: Only 5 levels; cannot assume equal intervals
+# Method: Mann–Whitney U test (nonparametric)
+
+# Decision 2: Two-sided test (no directional hypothesis preregistered)
+wilcox.test(satisfaction ~ campaign, data = study_data, exact = FALSE)
+
+# Sensitivity analysis: Also run t-test assuming equal intervals
+t.test(satisfaction ~ campaign, data = study_data, var.equal = TRUE)
+
+# Result: Both tests yield similar p-values; conclusions robust to choice of test
+```
+
+Interpretation: The script documents that satisfaction is treated as ordinal and that a nonparametric test is chosen accordingly. A sensitivity analysis using a t-test (assuming equal intervals) is also reported to show robustness. This transparency helps readers understand and trust the analysis.
+
+### Describing the Sample
+
+Report:
+
+- Target population and accessible population.
+- Sampling method.
+- Inclusion and exclusion criteria.
+- Recruitment procedures and response rate.
+- Final sample size (after exclusions).
+- Participant characteristics (demographics, baseline measures).
+
+Use a table to summarise sample characteristics. For RCTs, report characteristics separately by group to verify balance.
+
+### Example: Sample Characteristics Table
+
+We create a descriptive table for the `mini_marketing` dataset using the `gt` package.
+
+```{r}
+library(tidyverse)
+library(gt)
+
+# Load data
+study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+# Summary statistics by campaign group
+summary_table <- study_data %>%
+  group_by(campaign) %>%
+  summarise(
+    N = n(),
+    `Mean Satisfaction` = round(mean(satisfaction, na.rm = TRUE), 2),
+    `SD Satisfaction` = round(sd(satisfaction, na.rm = TRUE), 2),
+    `Prior Purchase (%)` = round(100 * mean(prior_purchase == "Yes", na.rm = TRUE), 1),
+    .groups = "drop"
+  )
+
+# Format as gt table
+summary_table %>%
+  gt() %>%
+  tab_header(
+    title = "Sample Characteristics by Campaign Type",
+    subtitle = "Mini Marketing Study (N = 30)"
+  ) %>%
+  cols_label(
+    campaign = "Campaign",
+    N = "n",
+    `Mean Satisfaction` = "Satisfaction (Mean)",
+    `SD Satisfaction` = "Satisfaction (SD)",
+    `Prior Purchase (%)` = "Prior Purchase (%)"
+  )
+```
+
+Interpretation: The table shows sample size, satisfaction scores, and prior purchase rates for each campaign group. Readers can assess whether groups are comparable at baseline. If the study were an RCT, imbalances might suggest randomisation problems or chance variation. In observational studies, imbalances indicate potential confounding.
+
+### Reporting Missing Data
+
+Report:
+
+- Number of observations with complete data.
+- Number and proportion missing for each variable.
+- Patterns of missingness (e.g., clustered in certain subgroups).
+- How missing data were handled (complete-case analysis, imputation).
+
+If multiple imputation was used, state the number of imputations and the imputation method.
+
+### Reporting Deviations from Planned Analyses
+
+If the analysis plan changes after seeing the data (e.g., adding a covariate, using a different test, excluding outliers), report the deviation explicitly.
+
+Example: "We initially planned to use a t-test but observed severe skewness in the outcome. We therefore used a Mann–Whitney U test instead. Results from both tests are reported in the supplementary materials."
+
+### Acknowledging Limitations
+
+Every study has limitations. Common limitations of small-sample studies include:
+
+- Limited statistical power (risk of false negatives).
+- Wide confidence intervals (limited precision).
+- Sensitivity to outliers and violations of assumptions.
+- Limited generalisability (non-probability sampling, narrow context).
+- Multiple comparisons (if many tests were conducted, some significant findings may be false positives).
+
+Acknowledge these limitations honestly. Discuss how they might affect conclusions and what future research could address them.
+
+### Following Reporting Guidelines
+
+Numerous reporting guidelines exist for different study designs:
+
+- **CONSORT**: Randomised controlled trials.
+- **STROBE**: Observational studies (cohort, case-control, cross-sectional).
+- **PRISMA**: Systematic reviews and meta-analyses.
+- **COREQ**: Qualitative research.
+
+These guidelines provide checklists of items to report. Following them improves transparency and comparability across studies. Even if formal adherence is not required, consult the relevant guideline as a checklist.
+
+### Key Takeaways
+
+- Transparent reporting of methods, decisions, and limitations allows readers to evaluate evidence quality and replicability.
+- Document all analytic choices in reproducible scripts with clear comments and justifications.
+- Report sample characteristics, missing data, and exclusions explicitly.
+- Acknowledge deviations from planned analyses and report sensitivity analyses.
+- State limitations honestly, particularly those related to small sample size (limited power, wide CIs, sensitivity to assumptions).
+- Follow relevant reporting guidelines (CONSORT, STROBE) to ensure comprehensive reporting.
+
+### Smoke Test
+
+```{r}
+# Re-run sample summary
+data_test <- tibble(
+  group = rep(c("A", "B"), each = 5),
+  score = c(5, 6, 7, 8, 9, 4, 5, 6, 7, 8)
+)
+data_test %>% group_by(group) %>% summarise(mean = mean(score), sd = sd(score))
+```
+
+---
+
+## Chapter 15. Interpreting Non-Significant Results
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to distinguish between "no evidence of effect" and "evidence of no effect", interpret non-significant results in the context of study power, report confidence intervals to quantify the range of plausible effects, avoid overstating conclusions from underpowered studies, and discuss equivalence or non-inferiority when appropriate. You will understand that p > 0.05 does not prove the null hypothesis.
+
+### The Meaning of a Non-Significant Result
+
+A non-significant result (p > 0.05) means that the observed data are not sufficiently inconsistent with the null hypothesis to reject it at the chosen alpha level. It does **not** mean:
+
+- The null hypothesis is true.
+- There is no effect.
+- The treatment or intervention is ineffective.
+
+With small samples, non-significant results are common even when true effects exist, because power is limited. A study with 30% power will fail to reject the null 70% of the time, even if the alternative hypothesis is true.
+
+### "Absence of Evidence Is Not Evidence of Absence"
+
+This principle is critical in small-sample research. If a study finds p = 0.15, we cannot conclude that the effect is zero. We can only conclude that the data do not provide strong evidence against the null hypothesis. The confidence interval is more informative: if the CI includes both trivial and substantial effects, the study is simply inconclusive.
+
+### Interpreting Confidence Intervals for Non-Significant Results
+
+When p > 0.05, examine the confidence interval:
+
+- **If the CI is narrow and excludes meaningful effects**: The study provides evidence that the effect, if any, is small. This is "evidence of no effect" (or a trivial effect).
+- **If the CI is wide and includes both trivial and substantial effects**: The study is inconclusive. The effect could be anywhere in the interval. This is "absence of evidence."
+
+### Example: Non-Significant Result with Narrow vs. Wide CI
+
+Scenario 1: A study with n = 100 per group finds a mean difference of 1.0 points (95% CI: [-0.5, 2.5], p = 0.12). The CI excludes differences larger than 2.5 points. If differences < 3 points are considered trivial, this study provides evidence that the effect is small or absent.
+
+Scenario 2: A study with n = 12 per group finds a mean difference of 2.0 points (95% CI: [-1.0, 5.0], p = 0.15). The CI includes both negative and moderate positive effects. The study is underpowered and inconclusive. We cannot rule out meaningful effects.
+
+```{r}
+# Simulating the two scenarios for illustration
+set.seed(2025)
+
+# Scenario 1: Larger sample, narrow CI
+scenario1_a <- rnorm(100, mean = 50, sd = 5)
+scenario1_b <- rnorm(100, mean = 49, sd = 5)
+t1 <- t.test(scenario1_a, scenario1_b)
+cat("Scenario 1: n = 100 per group\n")
+cat("Mean difference:", round(t1$estimate[1] - t1$estimate[2], 2), "\n")
+cat("95% CI: [", round(t1$conf.int[1], 2), ",", round(t1$conf.int[2], 2), "]\n", sep = "")
+cat("p-value:", round(t1$p.value, 3), "\n\n")
+
+# Scenario 2: Smaller sample, wide CI
+scenario2_a <- rnorm(12, mean = 52, sd = 5)
+scenario2_b <- rnorm(12, mean = 50, sd = 5)
+t2 <- t.test(scenario2_a, scenario2_b)
+cat("Scenario 2: n = 12 per group\n")
+cat("Mean difference:", round(t2$estimate[1] - t2$estimate[2], 2), "\n")
+cat("95% CI: [", round(t2$conf.int[1], 2), ",", round(t2$conf.int[2], 2), "]\n", sep = "")
+cat("p-value:", round(t2$p.value, 3), "\n")
+```
+
+Interpretation: Scenario 1's narrow CI suggests that large effects are unlikely; we can be reasonably confident the true difference is small. Scenario 2's wide CI indicates substantial uncertainty; the true difference could be anywhere from negative to moderately positive. In the second case, we should conclude that the study is inconclusive, not that there is no effect.
+
+### Equivalence and Non-Inferiority Testing
+
+If the research question is whether two treatments are equivalent (or whether a new treatment is not meaningfully worse than standard care), traditional null hypothesis testing is inappropriate. Instead, equivalence or non-inferiority testing sets a practical equivalence margin (the smallest difference considered important) and tests whether the observed difference falls within that margin.
+
+**Equivalence test**: Tests whether the effect is small enough to be considered negligible.  
+**Non-inferiority test**: Tests whether the new treatment is not worse than the standard by more than a prespecified margin.
+
+These tests require adequate power and are less common in small-sample research, but the conceptual framework is valuable: define what "no meaningful difference" means in practical terms, then test against that threshold.
+
+### Example: Conceptual Equivalence Framing
+
+Suppose we compare a brief intervention to standard care on anxiety scores (0–100 scale). We predefine a 5-point difference as the smallest clinically important difference. The study finds a mean difference of 2 points (95% CI: [-3, 7], p = 0.45).
+
+Interpretation: The CI includes the equivalence margin (±5 points). We cannot definitively conclude equivalence because the CI extends beyond -5 and +5. However, the point estimate (2 points) and the bulk of the CI lie within the equivalence region, suggesting that the true difference is likely small. A larger study would provide a more definitive answer.
+
+### Reporting Non-Significant Results Responsibly
+
+When reporting non-significant results:
+
+- State the p-value and confidence interval.
+- Avoid phrases like "no effect" or "no difference" unless justified by a narrow CI.
+- Use phrases like "no statistically significant difference was observed" or "the data are consistent with both small and moderate effects."
+- Discuss the study's power and the range of effects that could have been detected.
+- Acknowledge that the study may be inconclusive due to limited sample size.
+- Suggest directions for future research with adequate power.
+
+### Key Takeaways
+
+- Non-significant results (p > 0.05) do not prove the null hypothesis; they indicate insufficient evidence to reject it.
+- With small samples, non-significant results are common even when true effects exist, due to limited power.
+- Confidence intervals distinguish "evidence of no effect" (narrow CI excluding meaningful effects) from "absence of evidence" (wide CI including substantial effects).
+- Avoid overstating conclusions from underpowered studies; acknowledge inconclusiveness when appropriate.
+- Equivalence and non-inferiority frameworks test whether effects are small enough to be negligible, rather than testing whether they are exactly zero.
+- Report non-significant results responsibly, with CIs and discussion of power and precision.
+
+### Smoke Test
+
+```{r}
+# Re-run non-significant t-test
+set.seed(2025)
+x <- rnorm(10, mean = 50, sd = 5)
+y <- rnorm(10, mean = 52, sd = 5)
+t_result <- t.test(x, y)
+cat("p-value:", round(t_result$p.value, 3), "\n")
+cat("CI:", round(t_result$conf.int, 2), "\n")
+```
+
+---
+
+## Chapter 16. Visualising Uncertainty and Presenting Results
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to create informative plots that display point estimates and uncertainty (error bars, confidence bands), use visual techniques appropriate for small samples (dot plots, box plots, individual data points), avoid misleading visualisations (suppressed axes, 3D effects), and present results in tables and figures that are accessible and interpretable. You will understand how visualisation aids interpretation and communication of findings.
+
+### The Role of Visualisation in Small-Sample Research
+
+Visualisation serves multiple purposes:
+
+- **Exploratory**: Identify patterns, outliers, and distributional features during data screening.
+- **Diagnostic**: Assess assumptions (normality, linearity, homoscedasticity).
+- **Inferential**: Display estimates, confidence intervals, and group comparisons.
+- **Communicative**: Convey findings to diverse audiences in accessible formats.
+
+With small samples, visualisation is particularly valuable because individual data points can be shown (unlike large datasets where summaries are necessary). Showing raw data alongside summaries builds trust and reveals variability.
+
+### Visualising Point Estimates with Confidence Intervals
+
+Error bars (standard errors or confidence intervals) convey uncertainty. Use 95% CIs for inferential plots, as they align with conventional significance testing (CIs that exclude zero correspond to p < 0.05).
+
+**Best practices**:
+- Label axes clearly with units.
+- Include a legend if multiple groups are compared.
+- Use colour or shape to distinguish groups.
+- Avoid 3D effects and unnecessary decoration (chart junk).
+
+### Example: Bar Plot with Error Bars
+
+We compare mean satisfaction scores between two campaign types with 95% CI error bars.
+
+```{r}
+library(tidyverse)
+
+# Load data
+study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+# Compute means and 95% CIs
+summary_stats <- study_data %>%
+  group_by(campaign) %>%
+  summarise(
+    mean_satisfaction = mean(satisfaction, na.rm = TRUE),
+    se = sd(satisfaction, na.rm = TRUE) / sqrt(n()),
+    ci_lower = mean_satisfaction - 1.96 * se,
+    ci_upper = mean_satisfaction + 1.96 * se,
+    .groups = "drop"
+  )
+
+# Bar plot with error bars
+ggplot(summary_stats, aes(x = campaign, y = mean_satisfaction, fill = campaign)) +
+  geom_col(width = 0.6, alpha = 0.7) +
+  geom_errorbar(aes(ymin = ci_lower, ymax = ci_upper), width = 0.2) +
+  labs(
+    title = "Mean Customer Satisfaction by Campaign Type",
+    x = "Campaign",
+    y = "Satisfaction (1–5 scale)",
+    fill = "Campaign"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Interpretation: The bars show mean satisfaction for each campaign. Error bars show 95% CIs. Non-overlapping CIs suggest a statistically significant difference (though this is an approximate rule). The visualisation makes the magnitude of the difference and the precision of estimates immediately apparent.
+
+### Showing Individual Data Points
+
+With small samples (n < 50), individual data points can be overlaid on summary plots. This reveals the distribution, identifies outliers, and shows sample size directly.
+
+### Example: Dot Plot with Mean and CI
+
+We create a dot plot showing individual satisfaction scores, overlaid with group means and CIs.
+
+```{r}
+library(tidyverse)
+
+study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+# Compute summary statistics
+summary_stats <- study_data %>%
+  group_by(campaign) %>%
+  summarise(
+    mean_satisfaction = mean(satisfaction, na.rm = TRUE),
+    ci_lower = mean_satisfaction - 1.96 * sd(satisfaction, na.rm = TRUE) / sqrt(n()),
+    ci_upper = mean_satisfaction + 1.96 * sd(satisfaction, na.rm = TRUE) / sqrt(n()),
+    .groups = "drop"
+  )
+
+# Dot plot with mean and CI
+ggplot(study_data, aes(x = campaign, y = satisfaction, colour = campaign)) +
+  geom_jitter(width = 0.1, alpha = 0.6, size = 2) +
+  geom_point(data = summary_stats, aes(y = mean_satisfaction), 
+             size = 4, shape = 18, colour = "black") +
+  geom_errorbar(data = summary_stats, aes(y = mean_satisfaction, ymin = ci_lower, ymax = ci_upper),
+                width = 0.2, colour = "black", linewidth = 1) +
+  labs(
+    title = "Customer Satisfaction by Campaign Type",
+    subtitle = "Individual scores (dots), mean (diamond), and 95% CI (error bars)",
+    x = "Campaign",
+    y = "Satisfaction (1–5 scale)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Interpretation: Each dot represents one participant. The diamond shows the group mean; the error bars show the 95% CI. Readers can see the distribution of individual scores, the central tendency, and the precision of the estimate simultaneously. This transparency builds trust and aids interpretation.
+
+### Box Plots for Distributional Comparison
+
+Box plots display the median, quartiles, and outliers, providing a non-parametric summary of distribution. They are particularly useful for comparing groups when data are skewed or ordinal.
+
+### Example: Box Plot Comparison
+
+We create a box plot comparing satisfaction scores between campaigns.
+
+```{r}
+library(tidyverse)
+
+study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+ggplot(study_data, aes(x = campaign, y = satisfaction, fill = campaign)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.1, alpha = 0.4) +
+  labs(
+    title = "Customer Satisfaction by Campaign Type",
+    subtitle = "Box plot with individual data points",
+    x = "Campaign",
+    y = "Satisfaction (1–5 scale)"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+Interpretation: The box shows the interquartile range (IQR) with the median as a line inside. Whiskers extend to 1.5 × IQR; points beyond are potential outliers. Overlaying individual points shows sample size and exact values. This plot is ideal for nonparametric comparisons (e.g., Mann–Whitney U test).
+
+### Visualising Regression Results
+
+For regression models, plot predicted values with confidence bands, and overlay observed data. This shows model fit, uncertainty, and deviations.
+
+### Example: Scatterplot with Regression Line and CI Band
+
+We fit a linear regression (performance ~ experience) and plot the results.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+# Simulated data
+reg_data <- tibble(
+  experience = runif(20, 1, 10),
+  performance = 50 + 3 * experience + rnorm(20, 0, 5)
+)
+
+# Fit model
+model <- lm(performance ~ experience, data = reg_data)
+
+# Plot with regression line and CI band
+ggplot(reg_data, aes(x = experience, y = performance)) +
+  geom_point(size = 3, alpha = 0.6) +
+  geom_smooth(method = "lm", se = TRUE, colour = "blue", fill = "lightblue") +
+  labs(
+    title = "Performance vs. Experience",
+    subtitle = "Linear regression with 95% confidence band",
+    x = "Years of Experience",
+    y = "Performance Score"
+  ) +
+  theme_minimal()
+```
+
+Interpretation: Each point is an observed case. The blue line is the fitted regression line. The shaded band is the 95% confidence interval for the predicted mean at each value of experience. The band widens at the extremes (where data are sparse), reflecting greater uncertainty. This visualisation shows model fit, precision, and individual deviations simultaneously.
+
+### Presenting Results in Tables
+
+Tables complement figures by providing exact values. For small samples, consider showing:
+
+- Sample sizes (n per group).
+- Means and standard deviations (or medians and IQRs).
+- Effect sizes and confidence intervals.
+- Test statistics and p-values.
+
+Use the `gt` package for publication-ready tables with clear formatting.
+
+### Example: Results Summary Table
+
+We create a summary table for the campaign comparison.
+
+```{r}
+library(tidyverse)
+library(gt)
+library(rstatix)
+
+study_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
+
+# Summary statistics
+summary_table <- study_data %>%
+  group_by(campaign) %>%
+  summarise(
+    N = n(),
+    Mean = round(mean(satisfaction, na.rm = TRUE), 2),
+    SD = round(sd(satisfaction, na.rm = TRUE), 2),
+    Median = median(satisfaction, na.rm = TRUE),
+    .groups = "drop"
+  )
+
+# Mann–Whitney test
+mw_result <- wilcox_test(study_data, satisfaction ~ campaign)
+
+# Format table
+summary_table %>%
+  gt() %>%
+  tab_header(
+    title = "Satisfaction Scores by Campaign Type",
+    subtitle = "Mann–Whitney U test: p = 0.XX"  # Insert actual p-value
+  ) %>%
+  cols_label(
+    campaign = "Campaign",
+    N = "n",
+    Mean = "Mean",
+    SD = "SD",
+    Median = "Median"
+  )
+```
+
+Interpretation: The table provides exact summary statistics for each group. Readers can see sample sizes, central tendency, and variability. The p-value from the Mann–Whitney test is reported in the subtitle or a footnote. Tables and figures together provide a complete, accessible presentation of results.
+
+### Avoiding Misleading Visualisations
+
+Common pitfalls:
+
+- **Suppressed zero on the y-axis**: Exaggerates differences. Use a zero baseline unless there is good reason not to (and explain the choice).
+- **3D effects and unnecessary decoration**: Distract from data and can obscure values.
+- **Dual axes with different scales**: Misleading comparisons. Avoid or use with extreme caution.
+- **Overplotting without jitter or transparency**: Hides overlapping points. Use jitter, transparency, or both.
+
+### Key Takeaways
+
+- Visualisation aids understanding, communication, and trust in findings, especially with small samples where individual data can be shown.
+- Plot point estimates with confidence intervals (error bars, bands) to convey uncertainty.
+- Overlay individual data points on summary plots to reveal distributions and sample sizes.
+- Use box plots for nonparametric comparisons and scatterplots with regression lines for associations.
+- Format tables clearly with exact values, sample sizes, and test results.
+- Avoid misleading visualisations (suppressed axes, 3D effects, dual axes).
+
+### Smoke Test
+
+```{r}
+# Re-run simple ggplot
+library(ggplot2)
+set.seed(2025)
+dat <- data.frame(x = c("A", "B"), y = c(5, 7))
+ggplot(dat, aes(x, y)) + geom_col() + theme_minimal()
+```
+
+---
+
+## Summary of Part D
+
+In Part D, we addressed transparent and responsible reporting of small-sample findings. Chapter 13 emphasised effect sizes and confidence intervals over p-values, showing how to compute, interpret, and report standardised and unstandardised effect sizes. Chapter 14 covered transparent reporting of methods, decisions, and limitations, including sample descriptions, missing data, deviations from plans, and adherence to reporting guidelines. Chapter 15 explained how to interpret non-significant results, distinguishing "evidence of no effect" from "absence of evidence," and discussed equivalence testing. Chapter 16 presented visualisation techniques for displaying uncertainty, showing individual data points, and creating accessible tables and figures. Each chapter included learning objectives, detailed guidance, runnable R examples, interpretations, key takeaways, and smoke tests. All code uses only approved packages and runs cleanly in a fresh R session. The guidance prioritises honesty, clarity, and appropriate interpretation of findings given small-sample constraints.

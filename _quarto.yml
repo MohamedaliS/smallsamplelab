@@ -1,0 +1,48 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Quantitative Analysis with Small Samples"
+  subtitle: "A Practical Guide for Students and Early-Career Researchers"
+  author: "Compiled Guide"
+  date: today
+  chapters:
+    - index.qmd
+    - part: "Part A: Foundations"
+      chapters:
+        - chapters/part-a-foundations.qmd
+    - part: "Part B: Data Collection and Preparation"
+      chapters:
+        - chapters/part-b-data-collection.qmd
+    - part: "Part C: Analysis Methods"
+      chapters:
+        - chapters/part-c-analysis-methods.qmd
+    - part: "Part D: Reporting and Interpretation"
+      chapters:
+        - chapters/part-d-reporting.qmd
+    - part: "Part E: Worked Projects"
+      chapters:
+        - chapters/part-e-worked-projects.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    code-fold: false
+    code-tools: true
+    self-contained: false
+  docx:
+    toc: true
+    number-sections: true
+    highlight-style: github
+
+execute:
+  warning: false
+  message: false
+  cache: false

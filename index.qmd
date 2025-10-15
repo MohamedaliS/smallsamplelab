@@ -1,0 +1,69 @@
+# Preface {.unnumbered}
+
+This book addresses a common challenge in applied research: how to conduct rigorous quantitative analysis when sample sizes are small. Whether you are studying remote communities, rare clinical conditions, or exploratory projects with limited resources, the principles and tools in this guide will help you make sound inferences from modest datasets.
+
+## Who This Book Is For
+
+This book is written for undergraduates, taught masters students, and early-career PhD researchers who regularly work with samples of approximately 10 to 100 observations. It is particularly relevant for those conducting research in Small Island Developing States (SIDS) and similar contexts where large samples may be impractical or impossible.
+
+## What You Will Learn
+
+You will learn to:
+
+- Recognise when small-sample methods are necessary and appropriate.
+- Apply exact tests, resampling methods, and rank-based procedures.
+- Fit regression models with penalised or Bayesian techniques when classical approaches fail.
+- Use multi-criteria decision-making (MCDM) tools for structured evaluation with limited cases.
+- Report results transparently, with appropriate uncertainty quantification.
+
+All methods are implemented in R using a curated set of packages. Every code example is designed to run cleanly in a fresh R session, and datasets are small enough to inspect and understand directly.
+
+## Structure of the Book
+
+**Part A: Foundations** introduces the rationale for small-sample research and how to frame research questions that suit limited data.
+
+**Part B: Data Collection and Preparation** covers sampling strategies, measurement quality, and data checks tailored to small studies.
+
+**Part C: Analysis Methods** presents the core toolkit: exact and resampling tests, nonparametric methods, penalised and Bayesian regression, and MCDM techniques.
+
+**Part D: Reporting and Interpretation** discusses how to communicate findings, handle uncertainty, and document analytic choices.
+
+**Part E: Worked Projects** offers complete case studies that integrate multiple methods from earlier chapters.
+
+## Software and Packages
+
+All analyses use R (version 4.0 or later) and Quarto for reproducible reporting. The following R packages are required:
+
+- **tidyverse**: data manipulation and visualisation
+- **rstatix**: common statistical tests with tidy output
+- **boot**: bootstrap resampling
+- **exact2x2**: exact tests for 2×2 tables
+- **logistf**: Firth-penalised logistic regression
+- **gt**: publication-ready tables
+- **performance**: model diagnostics
+- **psych**: reliability and factor analysis
+- **DescTools**: miscellaneous descriptive and test functions
+- **brms** (optional): Bayesian regression with Stan
+
+You can install all required packages by running:
+
+```r
+install.packages(c("tidyverse", "rstatix", "boot", "exact2x2", 
+                   "logistf", "gt", "performance", "psych", 
+                   "DescTools", "brms"))
+```
+
+## Conventions
+
+- British English spelling and punctuation are used throughout.
+- Code chunks include `library()` calls so each example can be run independently.
+- Random number generation uses `set.seed(2025)` for reproducibility.
+- File paths are relative to the project root.
+
+## Acknowledgements
+
+This guide draws on the work of many contributors to small-sample methodology. Core references include Van de Schoot and Miočević (2020), Davison and Hinkley (1997), Good (2005), Conover (1999), Firth (1993), Harrell (2015), Hosmer, Lemeshow and Sturdivant (2013), and Shan (2018). Full citations appear in the reference list.
+
+---
+
+You are encouraged to work through the chapters in order, running the code examples in your own R environment. The datasets and helper functions referenced in the text are provided in the `data/` and `R/` directories of this project.

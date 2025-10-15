@@ -1,0 +1,620 @@
+# Part B: Data Collection and Preparation
+
+This part addresses practical challenges in collecting and preparing data for small-sample studies. We cover sampling strategies that maximise information with limited resources, measurement quality and scale development, data screening and diagnostic checks, and handling missing data transparently.
+
+---
+
+## Chapter 9. Sampling Strategies for Small Studies
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to select appropriate sampling methods given resource constraints and population characteristics, understand the trade-offs between probability and purposive sampling, calculate minimum detectable effects given sample size limitations, and justify sample sizes transparently. You will recognise when small samples are sufficient and when they are not.
+
+### The Tension Between Ideal and Feasible Sample Sizes
+
+Most power analysis guides assume that researchers can achieve conventionally adequate sample sizes (n ≥ 30 per group for t-tests, 10–15 events per predictor for regression). In practice, resource constraints, rare populations, and ethical considerations often make these targets unattainable. Rather than abandoning research in such contexts, we should adopt methods suited to smaller samples and report findings with appropriate caveats.
+
+Transparent reporting of sampling rationale, achieved sample size, and power or precision estimates helps readers judge the strength of evidence. Researchers should distinguish between studies designed to test specific hypotheses (which require adequate power) and exploratory studies that generate hypotheses or provide preliminary effect estimates (which can proceed with modest samples).
+
+### Probability Sampling with Small Samples
+
+Probability sampling (simple random sampling, stratified sampling, cluster sampling) ensures that every unit has a known, non-zero probability of selection. This supports generalisation to the target population and enables design-based inference. However, probability sampling requires a sampling frame and may be logistically complex or expensive.
+
+With small samples, probability sampling can still be valuable, but estimates will have wide confidence intervals. Stratified sampling (dividing the population into strata and sampling proportionally or disproportionally from each) can improve precision by ensuring representation of key subgroups.
+
+**When to use**: Accessible sampling frame, desire for generalisability, resources permit random selection, even if total sample size is modest.
+
+### Example: Stratified Sampling Calculation
+
+Suppose we are surveying employees in a small organisation with 120 total staff: 60 in Department A, 40 in Department B, 20 in Department C. We can afford to survey 30 employees. Proportional stratified sampling ensures each department is represented in proportion to its size.
+
+```{r}
+library(tidyverse)
+
+# Population strata
+strata <- tibble(
+  Department = c("A", "B", "C"),
+  Population_N = c(60, 40, 20),
+  Proportion = Population_N / sum(Population_N)
+)
+
+# Total sample size
+total_sample <- 30
+
+# Allocate sample proportionally
+strata <- strata %>%
+  mutate(
+    Sample_n = round(Proportion * total_sample),
+    Sampling_Fraction = Sample_n / Population_N
+  )
+
+print(strata)
+
+cat("\nTotal sample allocated:", sum(strata$Sample_n), "\n")
+```
+
+Interpretation: Proportional allocation ensures that each department contributes to the sample in proportion to its population size. Department A, being the largest, provides 15 respondents; Department C, the smallest, provides 5. This approach yields unbiased estimates for the overall population. If precision for small strata is a concern, disproportionate allocation (oversampling small strata) can be used, though this requires weighting in analysis.
+
+### Purposive and Convenience Sampling
+
+Purposive (judgmental) sampling selects units based on researcher judgement of their informativeness or representativeness. Convenience sampling selects units that are easily accessible. Neither method supports probabilistic generalisation, but both are common in small-sample research where probability sampling is infeasible.
+
+Findings from purposive or convenience samples should be interpreted cautiously and presented as preliminary or context-specific. Replication in independent samples strengthens confidence.
+
+**When to use**: No sampling frame available, exploratory research, pilot studies, rare or hard-to-reach populations, tight resource constraints.
+
+### Quota Sampling
+
+Quota sampling (a form of purposive sampling) selects units to match known population characteristics (such as age, gender, or occupation distribution). It mimics stratified sampling but without random selection within strata. Quota sampling can improve representativeness compared to convenience sampling, though it remains non-probabilistic.
+
+**When to use**: Known population characteristics to match, desire for balanced sample composition, probability sampling infeasible.
+
+### Power and Precision with Small Samples
+
+Statistical power is the probability of detecting a true effect of a given size. With small samples, power is limited, meaning that even if a meaningful effect exists, the study may fail to detect it (high Type II error rate). Researchers should conduct power analyses before data collection to understand what effects are detectable given sample size constraints.
+
+If the achieved sample size is smaller than desired, report the minimum detectable effect (MDE): the smallest effect the study can detect with specified power (typically 80%) and alpha (typically 0.05). This helps readers judge whether the study could have detected effects of practical importance.
+
+### Example: Power Calculation for a Small Study
+
+We plan a study comparing two groups with n = 12 per group. We compute power to detect a medium effect size (Cohen's d = 0.5) using a two-sample t-test.
+
+```{r}
+# Power calculation using pwr package (if available)
+# If not installed, use approximations or manual calculation
+if (requireNamespace("pwr", quietly = TRUE)) {
+  library(pwr)
+  
+  power_result <- pwr.t.test(n = 12, d = 0.5, sig.level = 0.05, 
+                              type = "two.sample", alternative = "two.sided")
+  print(power_result)
+  
+  cat("\nWith n = 12 per group, power to detect d = 0.5 is:", 
+      round(power_result$power, 2), "\n")
+  
+  # What effect size is detectable with 80% power?
+  mde_result <- pwr.t.test(n = 12, power = 0.80, sig.level = 0.05,
+                           type = "two.sample", alternative = "two.sided")
+  cat("Minimum detectable effect (80% power):", round(mde_result$d, 2), "\n")
+} else {
+  cat("Install 'pwr' package to run power calculations.\n")
+}
+```
+
+Interpretation: With 12 participants per group, power to detect a medium effect (d = 0.5) is modest (approximately 30–40%). To achieve 80% power, we would need to detect a larger effect (d ≈ 1.2, a very large effect). This illustrates the limitation of small samples for hypothesis testing. If the true effect is small or medium, the study is underpowered. Researchers should acknowledge this limitation and interpret non-significant results cautiously (absence of evidence is not evidence of absence).
+
+### Justifying Small Sample Sizes
+
+When sample sizes are constrained, justify them transparently:
+
+- State the target population and accessible population.
+- Describe sampling method and rationale.
+- Report planned and achieved sample sizes.
+- Provide power or precision estimates (confidence interval widths).
+- Acknowledge limitations and interpret findings accordingly.
+- Frame the study as exploratory or preliminary if appropriate.
+
+### Key Takeaways
+
+- Probability sampling supports generalisation but may be infeasible with small samples or rare populations.
+- Stratified sampling can improve precision by ensuring representation of key subgroups.
+- Purposive and convenience sampling are common in small-sample research but limit generalisability.
+- Quota sampling balances sample composition without requiring random selection.
+- Power analyses reveal what effects are detectable given sample size; small samples have limited power for detecting small or medium effects.
+- Transparent reporting of sampling methods, achieved sample sizes, and power or precision estimates is essential for interpreting small-sample findings.
+
+### Smoke Test
+
+```{r}
+# Re-run stratified allocation
+departments <- c(60, 40, 20)
+total_n <- 30
+allocation <- round((departments / sum(departments)) * total_n)
+print(allocation)
+```
+
+---
+
+## Chapter 10. Measurement Quality and Scale Development
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to assess content validity and face validity for new measurement instruments, pilot test scales with small samples, compute item-level descriptive statistics and inter-item correlations, identify problematic items (low discrimination, ceiling/floor effects), and refine scales iteratively. You will understand the limitations of psychometric analyses with small samples and when to prioritise qualitative feedback over quantitative indices.
+
+### The Challenge of Measurement in Small Studies
+
+Many small-sample studies rely on brief, custom-developed measurement instruments. Standard scale development protocols (large pilot studies, factor analysis, item response theory) require hundreds of observations. With small samples, researchers must balance the need for reliable, valid measurement with practical constraints.
+
+Short scales (3–5 items) can be internally consistent and valid if items are carefully chosen. Pilot testing with qualitative feedback (cognitive interviews, think-aloud protocols) can identify ambiguous wording, response biases, and cultural appropriateness. Quantitative pilot data (even with n ≈ 20–30) can reveal extreme floor or ceiling effects, items with no variance, and obvious inconsistencies.
+
+### Content and Face Validity
+
+Content validity refers to whether items comprehensively and appropriately represent the construct being measured. Face validity refers to whether items appear relevant and appropriate to respondents. Both are assessed through expert review and respondent feedback, not statistical tests.
+
+**When to assess**: During scale development, before quantitative pilot testing. Involves domain experts and representatives of the target population.
+
+### Steps for Scale Development with Small Samples
+
+1. **Define the construct clearly**: What are you measuring? What are its dimensions or facets?
+2. **Generate candidate items**: Write more items than needed (e.g., 10–15 items for a final 5-item scale).
+3. **Expert review**: Ask domain experts to rate item relevance, clarity, and representativeness.
+4. **Cognitive interviews**: Ask a few respondents (n = 5–10) to complete the scale and think aloud, explaining their interpretations and any confusion.
+5. **Quantitative pilot**: Administer the scale to a small sample (n = 20–40) and compute item statistics.
+6. **Item analysis**: Identify problematic items (low variance, weak correlations with total score, ceiling/floor effects).
+7. **Refine and re-test**: Remove or revise problematic items and retest if resources permit.
+
+### Example: Item Analysis for a Pilot Scale
+
+We pilot a 5-item job satisfaction scale with n = 25 employees. Each item uses a 1–7 Likert response.
+
+```{r}
+library(tidyverse)
+library(psych)
+
+set.seed(2025)
+
+# Simulated pilot data: 25 respondents, 5 items
+pilot_data <- tibble(
+  respondent = 1:25,
+  item1 = sample(3:7, 25, replace = TRUE, prob = c(0.1, 0.2, 0.3, 0.25, 0.15)),
+  item2 = sample(2:7, 25, replace = TRUE, prob = c(0.1, 0.15, 0.25, 0.25, 0.15, 0.1)),
+  item3 = sample(4:7, 25, replace = TRUE, prob = c(0.2, 0.3, 0.3, 0.2)),  # restricted range
+  item4 = sample(1:7, 25, replace = TRUE),
+  item5 = sample(2:7, 25, replace = TRUE, prob = c(0.15, 0.2, 0.25, 0.2, 0.15, 0.05))
+)
+
+# Item descriptive statistics
+item_stats <- pilot_data %>%
+  select(starts_with("item")) %>%
+  summarise(across(everything(), list(
+    mean = mean,
+    sd = sd,
+    min = min,
+    max = max
+  ))) %>%
+  pivot_longer(everything(), names_to = c("item", ".value"), names_sep = "_")
+
+print(item_stats)
+
+# Inter-item correlations
+items_only <- select(pilot_data, starts_with("item"))
+cor_matrix <- cor(items_only)
+print(round(cor_matrix, 2))
+
+# Item-total correlations (corrected for item overlap)
+item_total <- psych::alpha(items_only)$item.stats
+print(item_total)
+```
+
+Interpretation: Examine item means and standard deviations. Items with very high or low means and small SDs may have ceiling or floor effects (most respondents give the same response). Item 3 has a restricted range (4–7), which may indicate a ceiling effect. Inter-item correlations should be positive and moderate (0.3–0.7). Very low correlations suggest an item does not measure the same construct; very high correlations suggest redundancy. The corrected item-total correlation (r.drop) indicates how well each item correlates with the total score excluding itself. Values below 0.3 suggest weak items that could be removed.
+
+### Identifying Problematic Items
+
+- **Low variance**: If an item has very small SD (e.g., < 1.0 on a 1–7 scale), most respondents are giving the same answer. The item may be too extreme, too obvious, or poorly worded.
+- **Weak item-total correlation**: Items with corrected item-total correlations below 0.3 do not discriminate well and may be measuring something different.
+- **Floor or ceiling effects**: If most responses cluster at the low or high end, the item cannot differentiate among respondents.
+- **Negative correlations**: If an item correlates negatively with the total or with other items, it may be reverse-coded incorrectly or measuring an opposite construct.
+
+### Refining the Scale
+
+Based on item analysis, revise or remove problematic items. For example, if Item 3 shows a ceiling effect and Item 4 has weak item-total correlation, consider removing them. Compute alpha for the revised scale.
+
+```{r}
+# Revised scale: remove item3 and item4
+revised_items <- select(pilot_data, item1, item2, item5)
+alpha_revised <- psych::alpha(revised_items)
+print(alpha_revised)
+
+cat("Cronbach's alpha for revised 3-item scale:", round(alpha_revised$total$raw_alpha, 3), "\n")
+```
+
+Interpretation: The revised scale may have higher alpha if problematic items are removed. However, removing items also reduces scale length, which can lower alpha. The goal is a balance: retain enough items for adequate reliability, but remove items that degrade validity or add no information.
+
+### Qualitative Feedback and Cognitive Interviews
+
+With very small samples (n < 20), quantitative item analysis is unreliable. Qualitative methods (cognitive interviews, focus groups) are more informative. Ask respondents:
+
+- What does each item mean to you?
+- Were any items confusing, ambiguous, or difficult to answer?
+- Are the response options appropriate?
+- Are any items culturally inappropriate or offensive?
+
+This feedback can prevent major problems before larger-scale data collection.
+
+### Key Takeaways
+
+- Measurement quality is critical in small-sample research; unreliable measures reduce power and bias estimates.
+- Content and face validity are assessed through expert review and respondent feedback, not statistics.
+- Pilot testing with small samples (n ≈ 20–40) can identify problematic items through item-level descriptive statistics and inter-item correlations.
+- Items with low variance, weak item-total correlations, or ceiling/floor effects should be revised or removed.
+- Qualitative methods (cognitive interviews) are valuable when quantitative sample sizes are too small for psychometric analysis.
+- Iterative refinement and re-testing improve scale quality, even when resources are limited.
+
+### Smoke Test
+
+```{r}
+# Re-run item statistics
+set.seed(2025)
+items_test <- data.frame(
+  i1 = sample(1:5, 15, replace = TRUE),
+  i2 = sample(1:5, 15, replace = TRUE),
+  i3 = sample(1:5, 15, replace = TRUE)
+)
+cor(items_test)
+```
+
+---
+
+## Chapter 11. Data Screening and Diagnostic Checks
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to detect outliers, check distributional assumptions, identify data entry errors, assess linearity and homoscedasticity in regression contexts, and document data cleaning decisions transparently. You will understand how small samples amplify the impact of outliers and anomalies, and when robust methods or transformations are warranted.
+
+### Why Data Screening Matters More with Small Samples
+
+A single outlier can dominate a mean, distort a correlation, or violate regression assumptions when samples are small. Data entry errors (typos, misplaced decimals, incorrect codes) are harder to detect with fewer observations. Distributional assumptions (normality, homoscedasticity) are harder to verify with small samples, yet violations have greater consequences.
+
+Systematic data screening before analysis helps identify problems early. Document all cleaning and transformation decisions in a reproducible script. Report descriptive statistics, missingness patterns, and any deviations from planned analyses.
+
+### Detecting Outliers
+
+Outliers are observations that are unusually large or small relative to the rest of the data. They may represent legitimate extreme values, data entry errors, or individuals from a different population. With small samples, outliers can have disproportionate influence on results.
+
+**Methods for detecting outliers**:
+- Visual inspection: boxplots, histograms, scatterplots.
+- Numerical criteria: values beyond 1.5 × IQR from the quartiles (Tukey's fences), or standardised scores (z-scores) beyond ±3.
+- Influence diagnostics: Cook's distance, leverage in regression.
+
+**When to remove outliers**: Only if there is clear evidence of data entry error or that the observation does not belong to the target population. Document the rationale and report results with and without outliers.
+
+### Example: Outlier Detection with Boxplots and Z-Scores
+
+We examine a small dataset of customer wait times (n = 20) and check for outliers.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+# Simulated wait times (most between 5–15 minutes, one outlier at 45)
+wait_times <- c(7, 9, 8, 11, 10, 12, 8, 9, 10, 11, 13, 9, 10, 12, 8, 11, 10, 9, 45, 10)
+
+wait_data <- tibble(observation = 1:20, wait_time = wait_times)
+
+# Boxplot
+ggplot(wait_data, aes(y = wait_time)) +
+  geom_boxplot(fill = "lightblue") +
+  labs(title = "Boxplot of Wait Times", y = "Wait Time (minutes)") +
+  theme_minimal()
+
+# Identify outliers using 1.5*IQR rule
+Q1 <- quantile(wait_times, 0.25)
+Q3 <- quantile(wait_times, 0.75)
+IQR_val <- IQR(wait_times)
+lower_fence <- Q1 - 1.5 * IQR_val
+upper_fence <- Q3 + 1.5 * IQR_val
+
+outliers <- wait_data %>%
+  filter(wait_time < lower_fence | wait_time > upper_fence)
+
+print(outliers)
+
+# Z-scores
+wait_data <- wait_data %>%
+  mutate(z_score = (wait_time - mean(wait_time)) / sd(wait_time))
+
+extreme <- wait_data %>%
+  filter(abs(z_score) > 3)
+
+print(extreme)
+```
+
+Interpretation: The boxplot visually flags observation 19 (wait time = 45 minutes) as an outlier. The IQR-based rule and z-score criterion both identify this observation. Before removing it, investigate: Is this a data entry error? Could a customer have genuinely waited 45 minutes due to an unusual circumstance? If it is an error, remove it. If it is genuine but atypical, consider reporting results with and without the outlier, or use robust methods (median, rank-based tests) that are less sensitive to extremes.
+
+### Checking Normality
+
+Many parametric tests assume normally distributed data (or residuals). With small samples, normality is hard to verify formally. Visual checks (histograms, Q-Q plots) are more informative than statistical tests (Shapiro–Wilk), which have low power with small n.
+
+If data are clearly skewed or have heavy tails, consider:
+- Nonparametric methods (rank-based tests).
+- Transformations (log, square root) to reduce skewness.
+- Robust methods (trimmed means, bootstrap).
+
+### Example: Q-Q Plot for Normality Assessment
+
+We check whether a small sample of test scores (n = 18) is approximately normally distributed.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+# Simulated test scores (approximately normal)
+test_scores <- round(rnorm(18, mean = 70, sd = 10))
+
+# Q-Q plot
+qqnorm(test_scores, main = "Q-Q Plot of Test Scores")
+qqline(test_scores, col = "red")
+
+# Shapiro-Wilk test
+shapiro_result <- shapiro.test(test_scores)
+print(shapiro_result)
+
+cat("Shapiro-Wilk p-value:", round(shapiro_result$p.value, 3), "\n")
+```
+
+Interpretation: In a Q-Q plot, points should lie approximately on the diagonal line if data are normally distributed. Deviations at the tails indicate skewness or heavy tails. The Shapiro–Wilk test provides a p-value; p > 0.05 suggests no strong evidence against normality. However, with small samples, the test has low power (may not detect departures) and high variability (can reject normality by chance). Use Q-Q plots as the primary diagnostic, supplemented by the test.
+
+### Linearity and Homoscedasticity in Regression
+
+Linear regression assumes a linear relationship between predictors and outcome, and constant variance of residuals (homoscedasticity). Scatterplots of residuals vs. fitted values help assess these assumptions.
+
+**What to look for**:
+- Linearity: Residuals should be randomly scattered around zero with no clear pattern. Curved patterns suggest non-linearity.
+- Homoscedasticity: Residual spread should be constant across fitted values. Funnel shapes suggest heteroscedasticity (variance changes with fitted values).
+
+### Example: Regression Diagnostics
+
+We fit a simple linear regression (outcome ~ predictor) with n = 20 and check diagnostic plots.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+# Simulated data
+reg_data <- tibble(
+  x = runif(20, 1, 10),
+  y = 3 + 2 * x + rnorm(20, 0, 2)
+)
+
+# Fit linear model
+model <- lm(y ~ x, data = reg_data)
+summary(model)
+
+# Diagnostic plots
+par(mfrow = c(2, 2))
+plot(model)
+par(mfrow = c(1, 1))
+
+# Residuals vs fitted
+plot(model$fitted.values, model$residuals, 
+     xlab = "Fitted Values", ylab = "Residuals",
+     main = "Residuals vs Fitted")
+abline(h = 0, col = "red")
+```
+
+Interpretation: The "Residuals vs Fitted" plot should show random scatter around zero. Patterns (curves, funnels) indicate problems. The Q-Q plot of residuals assesses normality of errors. The "Scale-Location" plot checks homoscedasticity (should be flat). The "Residuals vs Leverage" plot identifies influential observations (high Cook's distance). With small samples, a single influential point can dominate. Consider removing it if it is an error, or report sensitivity analyses with and without it.
+
+### Identifying Data Entry Errors
+
+Look for:
+- Values outside plausible ranges (e.g., age = 150, Likert response = 8 on a 1–7 scale).
+- Inconsistent codes (e.g., gender coded as 1/2 in some rows, M/F in others).
+- Duplicate records (same participant ID appearing twice).
+- Improbable combinations (e.g., primary school student with 20 years of work experience).
+
+Cross-check data against source documents or re-contact participants if errors are suspected.
+
+### Documenting Data Cleaning
+
+Maintain a data cleaning script that:
+- Reads raw data.
+- Flags potential outliers, errors, or inconsistencies.
+- Applies corrections or exclusions with justifications.
+- Produces a cleaned dataset for analysis.
+
+Report the number of observations excluded and reasons. Provide summary statistics for the cleaned data.
+
+### Key Takeaways
+
+- Data screening is critical with small samples, where single observations can distort results.
+- Use visual diagnostics (boxplots, scatterplots, Q-Q plots) to detect outliers, assess normality, and check regression assumptions.
+- Remove outliers only with clear justification (data entry error, out-of-scope observation); report results with and without.
+- Normality tests (Shapiro–Wilk) have limited power with small samples; rely primarily on visual checks.
+- Regression diagnostics (residual plots, leverage, Cook's distance) identify influential observations and assumption violations.
+- Document all data cleaning decisions in reproducible scripts and report exclusions transparently.
+
+### Smoke Test
+
+```{r}
+# Re-run outlier detection
+set.seed(2025)
+x <- c(5, 6, 7, 8, 5, 6, 7, 20)  # 20 is an outlier
+Q1 <- quantile(x, 0.25)
+Q3 <- quantile(x, 0.75)
+IQR_val <- IQR(x)
+upper_fence <- Q3 + 1.5 * IQR_val
+x[x > upper_fence]
+```
+
+---
+
+## Chapter 12. Handling Missing Data in Small Samples
+
+### Learning Objectives
+
+By the end of this chapter, you will be able to describe patterns of missingness (MCAR, MAR, MNAR), apply simple imputation methods (mean imputation, last observation carried forward) with caution, understand when multiple imputation is feasible and when it is not, and report missing data transparently. You will recognise the limitations of missing data methods with very small samples and when complete-case analysis may be preferable.
+
+### The Challenge of Missing Data in Small Samples
+
+Missing data are common in applied research. Participants skip survey questions, drop out of longitudinal studies, or provide incomplete records. With large samples, modern methods (multiple imputation, full information maximum likelihood) can handle substantial missingness without excessive bias. With small samples, however, missing data pose severe problems. Even a few missing observations can substantially reduce effective sample size and statistical power.
+
+Missing data methods rely on large-sample asymptotics and may be unstable or inappropriate when samples are very small (n < 30) or missingness is extensive (> 20%). In such cases, prevention (minimise missingness through careful design) and transparency (report missingness patterns and sensitivity analyses) are more important than sophisticated imputation.
+
+### Types of Missingness
+
+- **MCAR (Missing Completely At Random)**: Missingness is unrelated to any observed or unobserved variables. For example, a survey page is randomly skipped due to a software glitch. MCAR is rare in practice.
+- **MAR (Missing At Random)**: Missingness is related to observed variables but not to the missing values themselves. For example, older participants are more likely to skip a technology question, but conditional on age, missingness is random. Most missing data methods assume MAR.
+- **MNAR (Missing Not At Random)**: Missingness is related to the unobserved values themselves. For example, individuals with high depression scores are more likely to drop out of a study. MNAR is the most problematic and requires sensitivity analyses or models for the missingness mechanism.
+
+### Describing Missingness Patterns
+
+Before handling missing data, describe the pattern:
+
+- How many observations have missing values on each variable?
+- Are missing values concentrated in certain individuals or certain variables?
+- Is missingness related to observed variables (compare characteristics of complete vs. incomplete cases)?
+
+### Example: Summarising Missing Data
+
+We examine a small dataset (n = 25) with missing values on two variables.
+
+```{r}
+library(tidyverse)
+
+set.seed(2025)
+
+# Simulated dataset with missing values
+study_data <- tibble(
+  participant = 1:25,
+  age = sample(20:60, 25, replace = TRUE),
+  satisfaction = sample(c(3:7, NA), 25, replace = TRUE, prob = c(0.15, 0.2, 0.25, 0.2, 0.15, 0.05)),
+  performance = c(sample(50:90, 20, replace = TRUE), rep(NA, 5))
+)
+
+# Count missing values per variable
+missing_summary <- study_data %>%
+  summarise(across(everything(), ~ sum(is.na(.))))
+
+print(missing_summary)
+
+# Proportion missing
+prop_missing <- study_data %>%
+  summarise(across(everything(), ~ mean(is.na(.))))
+
+print(prop_missing)
+
+# Compare complete vs incomplete cases
+study_data <- study_data %>%
+  mutate(complete = complete.cases(study_data))
+
+complete_vs_incomplete <- study_data %>%
+  group_by(complete) %>%
+  summarise(mean_age = mean(age, na.rm = TRUE), .groups = "drop")
+
+print(complete_vs_incomplete)
+```
+
+Interpretation: The summary shows that `satisfaction` has 1–2 missing values and `performance` has 5 missing values (20% of the sample). If complete and incomplete cases differ systematically (e.g., incomplete cases are older), missingness may be MAR or MNAR. If they are similar, missingness may be closer to MCAR. With 20% missingness and n = 25, only 20 cases remain in a complete-case analysis (listwise deletion), reducing power substantially.
+
+### Complete-Case (Listwise Deletion) Analysis
+
+The simplest approach is to analyse only cases with complete data on all variables of interest. This is valid if missingness is MCAR and the reduction in sample size is tolerable. However, it can introduce bias if missingness is MAR or MNAR, and it wastes information.
+
+**When to use**: Missingness is minimal (< 5%), or MCAR is plausible, or imputation methods are infeasible due to very small sample size.
+
+### Mean Imputation (Not Recommended)
+
+Mean imputation replaces missing values with the variable mean. This approach artificially reduces variance and distorts correlations. It is generally not recommended, especially with small samples where each imputed value has disproportionate impact.
+
+**When to use**: Rarely. Only if missingness is trivial (1–2 values in a large dataset) and for descriptive purposes only (not inference).
+
+### Last Observation Carried Forward (LOCF)
+
+In longitudinal studies, LOCF replaces missing follow-up values with the last observed value for that individual. This assumes no change after the last observation, which is often unrealistic. LOCF can bias estimates and is not generally recommended.
+
+**When to use**: Rarely. Only if the assumption of no change is plausible, and alternatives are infeasible.
+
+### Multiple Imputation (Caution with Small Samples)
+
+Multiple imputation (MI) generates several plausible imputed datasets, analyses each separately, and pools results to account for imputation uncertainty. MI is the gold standard for handling missing data in large samples. However, MI requires sufficient data to estimate imputation models reliably. With very small samples (n < 30) or many missing values (> 20%), MI can be unstable or yield implausible imputations.
+
+**When to use**: Moderate sample sizes (n ≥ 30), missingness not too extensive (< 20%), MAR assumption plausible.
+
+### Example: Multiple Imputation with mice (Caution)
+
+We apply MI to the dataset with missing `satisfaction` and `performance` values. Given the small sample (n = 25) and 20% missingness, interpret results cautiously.
+
+```{r}
+# Multiple imputation requires the 'mice' package
+if (requireNamespace("mice", quietly = TRUE)) {
+  library(mice)
+  
+  # Remove 'complete' indicator variable before imputation
+  impute_data <- study_data %>% select(participant, age, satisfaction, performance)
+  
+  # Perform multiple imputation (m = 5 imputations)
+  set.seed(2025)
+  imp <- mice(impute_data, m = 5, method = "pmm", printFlag = FALSE)
+  
+  # Check imputed values
+  print(imp)
+  
+  # Example analysis: regress performance on age and satisfaction
+  fit <- with(imp, lm(performance ~ age + satisfaction))
+  pooled <- pool(fit)
+  summary(pooled)
+  
+} else {
+  cat("Install 'mice' package to run multiple imputation.\n")
+  cat("With very small samples, MI may be unstable; consider complete-case analysis.\n")
+}
+```
+
+Interpretation: MI generates plausible values for missing data based on observed relationships. The pooled results combine estimates across imputations, with standard errors adjusted for imputation uncertainty. However, with n = 25 and 20% missingness, the imputation model is estimated from limited data, and results may be unstable. Compare MI results to complete-case analysis; if they differ substantially, report both and acknowledge uncertainty.
+
+### Sensitivity Analyses
+
+When missingness is substantial or MNAR is suspected, conduct sensitivity analyses:
+
+- Compare complete-case results to imputed results.
+- Vary assumptions about the missing data mechanism (e.g., impute extreme values to simulate worst-case scenarios).
+- Report results under multiple scenarios and discuss implications.
+
+### Preventing Missing Data
+
+The best approach to missing data is prevention:
+
+- Design clear, concise instruments.
+- Minimise respondent burden.
+- Follow up with participants who miss appointments or skip questions.
+- Pilot test procedures to identify confusing or burdensome items.
+- Build rapport and trust with participants.
+
+### Key Takeaways
+
+- Missing data reduce effective sample size and can bias estimates, particularly with small samples.
+- Describe missingness patterns (proportion missing, complete vs. incomplete case characteristics) before choosing a method.
+- Complete-case analysis is simple and valid if missingness is minimal or MCAR, but wastes information and loses power.
+- Mean imputation and LOCF are not recommended; they distort variance and correlations.
+- Multiple imputation is the gold standard with adequate samples (n ≥ 30, missingness < 20%) but may be unstable with very small samples.
+- Sensitivity analyses compare results under different assumptions about the missing data mechanism.
+- Prevention through careful study design is the best strategy for minimising missing data.
+
+### Smoke Test
+
+```{r}
+# Re-run missing data summary
+set.seed(2025)
+x <- c(5, 6, NA, 8, 7, NA, 9)
+sum(is.na(x))
+mean(is.na(x))
+```
+
+---
+
+## Summary of Part B
+
+In Part B, we addressed practical challenges in collecting and preparing data for small-sample studies. Chapter 9 covered sampling strategies (probability, stratified, purposive, quota sampling) and power analyses to understand detectability given sample size constraints. Chapter 10 discussed measurement quality and scale development, including item analysis, cognitive interviews, and reliability assessment with short scales. Chapter 11 presented data screening and diagnostic checks (outlier detection, normality assessment, regression diagnostics) to identify problems before analysis. Chapter 12 addressed missing data patterns, simple and advanced imputation methods, and the importance of transparency and prevention. Each chapter included learning objectives, method descriptions, runnable R examples, interpretations, key takeaways, and smoke tests. All code uses only approved packages and runs cleanly in a fresh R session. The guidance emphasises transparency, caution, and appropriate method selection given small-sample constraints.
