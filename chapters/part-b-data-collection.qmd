@@ -171,6 +171,38 @@ When sample sizes are constrained, justify them transparently:
 - Acknowledge limitations and interpret findings accordingly.
 - Frame the study as exploratory or preliminary if appropriate.
 
+### Sample Size Planning Flowchart
+
+```{mermaid}
+flowchart TD
+  A[Define research question] --> B[Specify primary outcome and test]
+  B --> C[Determine minimally important effect]
+  C --> D{Effect size from...}
+  D -->|Pilot data| E[Use observed effect]
+  D -->|Literature| F[Use meta-analytic estimate]
+  D -->|Stakeholder| G[Use practical threshold]
+  E --> H[Conduct power analysis]
+  F --> H
+  G --> H
+  H --> I{Achieve n for 80% power?}
+  I -->|Yes| J[Proceed with confirmatory study]
+  I -->|No| K[Consider alternatives]
+  K --> L[Paired/within design?]
+  K --> M[More sensitive outcome?]
+  K --> N[Continuous vs. binary?]
+  K --> O[Bayesian with priors?]
+  K --> P[Reframe as exploratory pilot]
+  L --> Q[Recalculate power]
+  M --> Q
+  N --> Q
+  O --> Q
+  P --> R[Document limitations]
+  J --> S[Pre-register plan]
+  Q --> I
+```
+
+**Interpretation:** This flowchart guides researchers through sample size planning, showing decision points and alternatives when the target sample size is not feasible.
+
 ### Key Takeaways
 
 - Probability sampling supports generalisation but may be infeasible with small samples or rare populations.
@@ -623,24 +655,30 @@ glimpse(study_data)
 ```
 
 ### Testing the MCAR Assumption
-
-Little's MCAR test evaluates whether missingness is consistent with the MCAR mechanism. The test compares observed means across missing-data patterns; a large p-value suggests MCAR is plausible, whereas a small p-value indicates that missingness likely depends on observed data (i.e., not MCAR). With very small samples the test has limited power, so interpret results alongside descriptive checks.
+Little's MCAR test evaluates whether missingness is consistent with the MCAR mechanism. The test compares observed means across missing-data patterns; a large p-value suggests MCAR is plausible, whereas a small p-value indicates that missingness likely depends on observed data (i.e., not MCAR).
 
 ```{r}
 #| label: part-b-chunk-15
-# Little's MCAR test using the BaylorEdPsych package
-if (requireNamespace("BaylorEdPsych", quietly = TRUE)) {
-  library(BaylorEdPsych)
-  mcar_result <- LittleMCAR(study_data %>% select(age, satisfaction, performance))
-  mcar_result$ChiSquare
-  mcar_result$df
-  mcar_result$p.value
-} else {
-  cat("Install 'BaylorEdPsych' to run Little's MCAR test; with very small samples, complement the test with descriptive checks.\n")
-}
+# Test if data are Missing Completely At Random (MCAR)
+library(naniar)
+
+# Little's MCAR test
+mcar_test(study_data)
+
+# Interpretation:
+# p > 0.05: Data consistent with MCAR (missingness random)
+# p < 0.05: Evidence against MCAR (missingness not random)
+
+# Visualise missing data patterns
+gg_miss_var(study_data, show_pct = TRUE)
+vis_miss(study_data)
 ```
 
-Interpretation: A non-significant p-value (e.g., p > 0.05) supports the MCAR assumption. However, with small *n*, the test may fail to detect systematic missingness, so combine it with substantive reasoning and comparisons of observed covariates between complete and incomplete cases.
+Little's MCAR test assesses whether missing data patterns are completely random. However, with small samples (n < 50), this test has low power and should be supplemented with:
+
+1. Visual inspection of missingness patterns
+2. Comparison of complete vs. incomplete cases
+3. Domain knowledge about likely mechanisms
 
 ### Example: Summarising Missing Data
 

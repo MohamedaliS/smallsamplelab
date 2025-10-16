@@ -596,6 +596,46 @@ Bayesian methods naturally quantify uncertainty and remain well-defined with sma
 > **Always inspect diagnostics.** After fitting a Bayesian model, verify that $
 \hat{R} < 1.01$ for all parameters, effective sample size ratios exceed 0.1 (ideally > 0.5), and there are no divergent transitions. Trace plots and posterior predictive checks should be part of your routine workflow before interpreting coefficients.
 
+#### Essential MCMC Diagnostics
+
+**Always check these before trusting Bayesian results:**
+
+1. **R-hat < 1.01**: Indicates chains have converged
+  - If R-hat > 1.01: Increase iterations or add chains
+
+2. **ESS > 400** (or ESS ratio > 0.1): Adequate effective samples
+  - If low: Increase iterations or adjust `adapt_delta`
+
+3. **Trace plots**: Should look like "hairy caterpillars"
+  - Trends or stickiness indicate problems
+
+4. **Posterior predictive checks**: Simulated data should match observed values
+  - Use `pp_check()` to visualise fit
+
+**Red flags:**
+- Divergent transition warnings
+- Tree depth exceeded messages
+- Very wide posterior intervals (possible underfitting)
+
+**When diagnostics fail:**
+- Increase iterations: `iter = 4000`, `warmup = 2000`
+- Increase chains: `chains = 4`
+- Adjust sampler: `control = list(adapt_delta = 0.95)`
+- Check for prior–data conflict
+
+::: {.callout-important}
+## MCMC Diagnostic Checklist
+
+Before interpreting Bayesian results:
+- [ ] All R-hat values < 1.01
+- [ ] All ESS > 400 (or ESS ratio > 0.1)
+- [ ] No divergent transitions
+- [ ] Trace plots show good mixing
+- [ ] Posterior predictive check shows reasonable fit
+
+If any check fails, do not trust the results.
+:::
+
 ### Example: Bayesian Linear Regression with brms
 
 We model customer satisfaction scores (continuous, 1–10 scale) based on wait time and staff friendliness ratings. With only 18 observations, classical regression has limited precision.
@@ -636,96 +676,36 @@ bayes_fit <- brm(
   silent = 2
 )
 
-cat(strrep("=", 60), "\n")
-cat("MCMC DIAGNOSTIC CHECKS (Essential for Small Samples)\n")
-cat(strrep("=", 60), "\n\n")
+# MCMC Diagnostics
+cat("\n=== MCMC DIAGNOSTICS ===\n")
 
-# 1. R-hat values (should be < 1.01)
-cat("1. Convergence Diagnostics (R-hat):\n")
-rhat_values <- rhat(bayes_fit)
-cat("   R-hat for wait_time:", round(rhat_values["b_wait_time"], 4), "\n")
-cat("   R-hat for friendliness:", round(rhat_values["b_friendliness"], 4), "\n")
-cat("   R-hat for sigma:", round(rhat_values["sigma"], 4), "\n")
-if (all(rhat_values < 1.01, na.rm = TRUE)) {
-  cat("   ✅ All R-hat < 1.01: Chains converged\n\n")
+# 1. Check R-hat (convergence)
+rhat_vals <- rhat(bayes_fit)
+cat("R-hat values (should be < 1.01):\n")
+print(rhat_vals[1:5])
+
+if (all(rhat_vals < 1.01, na.rm = TRUE)) {
+  cat("OK: All R-hat < 1.01, chains converged\n")
 } else {
-  cat("   ⚠️  Some R-hat ≥ 1.01: Check convergence\n\n")
+  cat("WARNING: Some R-hat >= 1.01, check convergence\n")
 }
 
-# 2. Effective Sample Size
-cat("2. Effective Sample Size (ESS):\n")
-ess_values <- neff_ratio(bayes_fit)
-cat("   ESS ratio for wait_time:", round(ess_values["b_wait_time"], 3), "\n")
-cat("   ESS ratio for friendliness:", round(ess_values["b_friendliness"], 3), "\n")
-if (all(ess_values > 0.1, na.rm = TRUE)) {
-  cat("   ✅ All ESS ratios > 0.1: Adequate sampling\n\n")
+# 2. Check Effective Sample Size
+ess_vals <- neff_ratio(bayes_fit)
+cat("\nEffective sample size ratio (should be > 0.1):\n")
+print(ess_vals[1:5])
+
+if (all(ess_vals > 0.1, na.rm = TRUE)) {
+  cat("OK: ESS ratios adequate\n")
 } else {
-  cat("   ⚠️  Some ESS ratios < 0.1: Increase iterations\n\n")
+  cat("WARNING: Low ESS detected, consider more iterations\n")
 }
 
-# 3. Posterior summary with interpretation guidance
-cat("3. Posterior Summary:\n")
-post_summary <- summary(bayes_fit)
-print(post_summary)
+# 3. Posterior predictive check
+pp_check(bayes_fit, ndraws = 50)
 
-cat("\n4. Interpretation Guidance:\n")
-cat("   • 95% Credible Intervals exclude zero = 'significant'\n")
-cat("   • Estimate = posterior mean (or median)\n")
-cat("   • Est.Error = posterior standard deviation\n")
-cat("   • For wait_time: Each additional minute wait decreases\n")
-cat("     satisfaction by ~X points (see coefficient)\n\n")
-
-# 5. Posterior predictive check (visual)
-cat("5. Posterior Predictive Check:\n")
-cat("   Compare observed data to simulated data from model\n")
-cat("   Good fit: distributions overlap\n\n")
-
-pp_check(bayes_fit, ndraws = 50) +
-  labs(
-    title = "Posterior Predictive Check",
-    subtitle = "Dark line = observed data, Light lines = simulated data"
-  ) +
-  theme_minimal()
-
-# 6. Trace plots (visual MCMC diagnostic)
-cat("6. Trace Plots (Visual MCMC diagnostic):\n")
-cat("   Good: 'hairy caterpillars'—chains mix well\n")
-cat("   Bad: Trends, stickiness, or divergent chains\n\n")
-
-plot(bayes_fit, regex_pars = "^b_", ask = FALSE)
-
-# 7. Practical recommendations
-cat(strrep("=", 60), "\n")
-cat("BEST PRACTICES FOR SMALL-SAMPLE BAYESIAN ANALYSIS\n")
-cat(strrep("=", 60), "\n\n")
-cat("✅ DO:\n")
-cat("   1. Always check R-hat < 1.01\n")
-cat("   2. Ensure ESS > 400 (or ESS ratio > 0.1)\n")
-cat("   3. Use weakly informative priors (avoid flat priors)\n")
-cat("   4. Run ≥4 chains to detect non-convergence\n")
-cat("   5. Report priors explicitly in methods\n")
-cat("   6. Use posterior predictive checks\n\n")
-
-cat("⚠️  DON'T:\n")
-cat("   1. Trust results without checking diagnostics\n")
-cat("   2. Use very informative priors without justification\n")
-cat("   3. Report only p-values (use full posterior)\n")
-cat("   4. Ignore divergent transitions warnings\n\n")
-
-# 8. Reporting template
-cat(strrep("=", 60), "\n")
-cat("REPORTING TEMPLATE\n")
-cat(strrep("=", 60), "\n\n")
-cat("We fitted a Bayesian linear regression using weakly\n")
-cat("informative priors (Normal(0,5) for slopes, Normal(6,3)\n")
-cat("for intercept, Exponential(1) for sigma). Four chains of\n")
-cat("2000 iterations (1000 warmup) were run. All R-hat values\n")
-cat("were < 1.01, indicating convergence. Effective sample\n")
-cat("sizes exceeded 400 for all parameters. Posterior predictive\n")
-cat("checks showed good model fit.\n\n")
-cat("The posterior mean for wait_time was X (95% CrI: [a, b]),\n")
-cat("indicating that each additional minute of wait time\n")
-cat("decreased satisfaction by approximately X points.\n\n")
+# Posterior summary for reporting
+summary(bayes_fit)
 ```
 
 Interpretation: The posterior summary provides estimates (posterior means or medians), standard errors (posterior standard deviations), and credible intervals (Bayesian analogue of confidence intervals). A 95% credible interval for a coefficient contains the true value with 95% probability given the data and prior. Posterior predictive checks compare simulated data from the fitted model to observed data; good fit is indicated when simulated data resemble observed data. The `brms` package uses Stan for efficient Markov chain Monte Carlo (MCMC) sampling.
@@ -775,23 +755,36 @@ bayes_logit <- brm(
   silent = 2
 )
 
+# MCMC Diagnostics
+cat("\n=== MCMC DIAGNOSTICS ===\n")
+
+# 1. Check R-hat (convergence)
+rhat_vals <- rhat(bayes_logit)
+cat("R-hat values (should be < 1.01):\n")
+print(rhat_vals[1:5])
+
+if (all(rhat_vals < 1.01, na.rm = TRUE)) {
+  cat("OK: All R-hat < 1.01, chains converged\n")
+} else {
+  cat("WARNING: Some R-hat >= 1.01, check convergence\n")
+}
+
+# 2. Check Effective Sample Size
+ess_vals <- neff_ratio(bayes_logit)
+cat("\nEffective sample size ratio (should be > 0.1):\n")
+print(ess_vals[1:5])
+
+if (all(ess_vals > 0.1, na.rm = TRUE)) {
+  cat("OK: ESS ratios adequate\n")
+} else {
+  cat("WARNING: Low ESS detected, consider more iterations\n")
+}
+
+# 3. Posterior predictive check
+pp_check(bayes_logit, ndraws = 50, type = "bars")
+
+# Posterior summary for reporting
 summary(bayes_logit)
-
-# Diagnostics mirrored from linear model workflow
-rhat_logit <- rhat(bayes_logit)
-ess_logit <- neff_ratio(bayes_logit)
-
-cat("R-hat (satisfaction):", round(rhat_logit["b_satisfaction"], 4), "\n")
-cat("R-hat (salary_level):", round(rhat_logit["b_salary_level"], 4), "\n")
-cat("R-hat (Intercept):", round(rhat_logit["b_Intercept"], 4), "\n")
-cat("ESS ratio (satisfaction):", round(ess_logit["b_satisfaction"], 3), "\n")
-cat("ESS ratio (salary_level):", round(ess_logit["b_salary_level"], 3), "\n")
-
-# Posterior predictive check
-pp_check(bayes_logit, type = "bars", ndraws = 50)
-
-# Trace plots for key parameters
-plot(bayes_logit, regex_pars = "^b_", ask = FALSE)
 ```
 
 Interpretation: Coefficients are on the log-odds scale. Positive coefficients indicate that higher predictor values increase the odds of retention. The posterior predictive check for binary outcomes compares the distribution of observed outcomes (0s and 1s) to predicted distributions from the model. LOOIC (leave-one-out information criterion) can be used to compare this model to alternatives.
@@ -887,6 +880,34 @@ cat("95% CI:",
 ```
 
 Interpretation: Alpha quantifies the proportion of variance in scale scores attributable to the true score. Higher alpha indicates stronger internal consistency. The confidence interval reflects sampling uncertainty; with small samples, the interval may be wide. If alpha is below 0.70, consider whether items truly measure a single construct or whether the scale is too heterogeneous. The `psych` package also reports "alpha if item deleted", showing how alpha would change if each item were removed; this helps identify problematic items.
+
+### Standard Error of Measurement (SEM)
+
+The SEM quantifies measurement precision—how much individual scores vary due to measurement error.
+
+**Formula**: $\text{SEM} = \text{SD} \times \sqrt{1 - \text{reliability}}$
+
+```{r}
+#| label: part-c-sem
+# Example: Test with SD = 10, Cronbach's alpha = 0.75
+scale_SD <- 10
+cronbach_alpha <- 0.75
+
+SEM <- scale_SD * sqrt(1 - cronbach_alpha)
+cat("SEM =", round(SEM, 2), "points\n")
+
+# Confidence interval for individual scores
+# 95% CI: observed score ± 1.96 × SEM
+CI_width <- 1.96 * SEM
+cat("95% CI width: ±", round(CI_width, 1), "points\n")
+```
+
+**Interpretation**: With SEM = 5 points, an individual's true score likely falls within ±10 points of their observed score (95% CI). This helps judge whether observed changes are genuine or merely measurement error.
+
+**Practical use**:
+- Minimum detectable change = $1.96 \times \text{SEM} \times \sqrt{2} \approx 14$ points
+- Changes smaller than this could be measurement error
+- SEM increases as reliability decreases
 
 ### McDonald's Omega
 

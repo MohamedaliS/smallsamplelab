@@ -148,6 +148,8 @@ print(kw_result)
 
 > **Multiplicity reminder:** When screening several potential moderators (e.g., age group, prior purchase, loyalty status), apply a multiplicity adjustment such as Holm–Bonferroni or control the false discovery rate. This keeps the overall Type I error in check, especially when exploratory subgroup tests proliferate.
 
+> **Simpson's paradox watch-out:** Aggregated results can reverse when stratified if subgroup sizes differ markedly. Check whether the direction of effects is consistent across strata before drawing overall conclusions.
+
 ### Visualisation: Interaction Plot
 
 We create a plot showing mean satisfaction by campaign and prior purchase status.
@@ -518,6 +520,8 @@ ggplot(process_data, aes(x = before, y = after)) +
 ```
 
 **Interpretation**: Mean defects decreased from approximately 4.5 to 3.0 per batch (mean change ≈ -1.5). Most points lie below the diagonal line, indicating improvement. A few units show no change or slight increases. The scatterplot suggests a general downward trend but some variability.
+
+> **Regression to the mean reminder:** Units with unusually high defect counts at baseline often show improvement on subsequent measurements purely through natural fluctuation. Include a control group or multiple pre-intervention observations whenever feasible to distinguish true intervention effects from regression towards the mean.
 
 ### Primary Analysis: Wilcoxon Signed-Rank Test
 
