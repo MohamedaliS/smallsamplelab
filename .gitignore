@@ -51,3 +51,5 @@ Desktop.ini
 
 # Output files from validation
 extracted_code.R
+
+**/*.quarto_ipynb
