@@ -22,6 +22,49 @@ Reporting effect sizes and confidence intervals alongside (or instead of) p-valu
 
 **Interpreting Cohen's d**: Roughly, d = 0.2 is small, d = 0.5 is medium, d = 0.8 is large. However, these benchmarks are context-dependent and should not be applied mechanically.
 
+### Context-Specific Effect Size Benchmarks
+
+Cohen's generic benchmarks (d = 0.2/0.5/0.8) should be interpreted cautiously. Effect sizes vary by context:
+
+```{r}
+#| label: part-d-effect-size-table
+#| echo: false
+library(tidyverse)
+library(gt)
+
+effect_size_guide <- tibble(
+  Domain = c(
+    "Psychological interventions",
+    "Educational interventions",
+    "Medical treatments",
+    "Customer satisfaction",
+    "Process improvements"
+  ),
+  Small = c("d = 0.2", "d = 0.1", "OR = 1.2", "d = 0.2", "5% change"),
+  Medium = c("d = 0.5", "d = 0.3", "OR = 2.0", "d = 0.5", "10-20% change"),
+  Large = c("d = 0.8", "d = 0.6", "OR = 4.0", "d = 0.8", ">25% change"),
+  Reference = c(
+    "Lipsey & Wilson (1993) [@lipsey1993]",
+    "Kraft (2020) [@kraft2020]",
+    "Chen et al. (2010) [CITATION NEEDED]",
+    "Industry standards",
+    "Domain-specific"
+  )
+)
+
+effect_size_guide %>%
+  gt() %>%
+  tab_header(
+    title = "Domain-Specific Effect Size Benchmarks"
+  ) %>%
+  cols_label(
+    Domain = "Research Domain",
+    Reference = "Source"
+  )
+```
+
+**Key principle**: Always compare your effect size to domain-specific benchmarks, not generic rules. What is "small" in education may be "large" in medicine.
+
 ### Example: Computing Cohen's d with Confidence Interval
 
 We compare test scores between two teaching methods (n = 12 per group) and compute Cohen's d with a confidence interval.
@@ -317,116 +360,139 @@ Every study has limitations. Common limitations of small-sample studies include:
 
 Acknowledge these limitations honestly. Discuss how they might affect conclusions and what future research could address them.
 
-### Handling Multiple Comparisons
+### Handling Multiple Comparisons in Small Samples
 
-When conducting multiple statistical tests within a single study, the probability of at least one false positive (Type I error) increases with the number of tests. If $k$ independent tests are each conducted at $\alpha = 0.05$, the family-wise error rate (FWER) is approximately
-$$\text{FWER} \approx 1 - (1 - \alpha)^k.$$
-For example, 5 tests yield FWER ≈ 0.23, 10 tests ≈ 0.40, and 20 tests ≈ 0.64.
+When conducting multiple statistical tests, the probability of Type I error increases. With $k$ independent tests at $\alpha = 0.05$:
+- Family-wise error rate (FWER) $\approx 1 - (1 - \alpha)^k$
+- For 5 tests: roughly 23% chance of at least one false positive
+- For 10 tests: roughly 40% chance
 
-**When to correct**: multiple outcomes or endpoints, subgroup analyses, post-hoc pairwise comparisons after omnibus tests, repeated time-points, or broad exploratory screens.
+#### When to Correct
+- Multiple outcomes or subgroups
+- Post-hoc pairwise comparisons
+- Exploratory analyses with many variables
 
-**When correction may be relaxed**: independent research questions reported separately, clearly labelled exploratory analyses, hierarchical/Bayesian models that regularise, or when the focus is on estimation (effect sizes and confidence intervals).
-
-#### Common adjustment methods
-
-1. **Bonferroni** (conservative FWER control): $\alpha_\text{adjusted} = \alpha / k$.
+#### Common Methods
+1. **Bonferroni**: $\alpha_\text{adjusted} = \alpha / k$ (most conservative)
+2. **Holm–Bonferroni**: Sequential step-down procedure
+3. **Benjamini–Hochberg (FDR)**: Controls the false discovery rate
 
 ```{r}
-#| label: part-d-chunk-08
-library(tidyverse)
-
+#| label: part-d-mc-adjustments
+# Example with multiple p-values
 p_values <- c(0.01, 0.03, 0.08, 0.15, 0.25)
-results <- tibble(
-  Test = seq_along(p_values),
-  Original_p = p_values,
-  Bonferroni_p = p.adjust(p_values, method = "bonferroni"),
-  Sig_Original = Original_p < 0.05,
-  Sig_Bonferroni = Bonferroni_p < 0.05
-)
-results
+
+# Bonferroni
+p.adjust(p_values, method = "bonferroni")
+
+# Holm (less conservative)
+p.adjust(p_values, method = "holm")
+
+# FDR control
+p.adjust(p_values, method = "fdr")
 ```
 
-2. **Holm–Bonferroni** (step-down, more powerful than Bonferroni).
+#### Reporting Template
+"We tested effects in three subgroups. After Holm–Bonferroni correction, only Group A showed a significant difference (adjusted p = 0.03)."
 
-```{r}
-#| label: part-d-chunk-09
-results <- results %>%
-  mutate(
-    Holm_p = p.adjust(Original_p, method = "holm"),
-    Sig_Holm = Holm_p < 0.05
-  )
-results
+#### Small Sample Considerations
+With limited power, strict corrections can eliminate all findings. Consider:
+- Pre-specify primary versus exploratory outcomes
+- Report both corrected and uncorrected p-values
+- Emphasise effect sizes and confidence intervals
+
+#### Key Takeaways
+- State the number of tests conducted
+- Report the correction method used
+- Distinguish confirmatory from exploratory analyses
+- With small samples, confidence intervals often communicate more than corrected p-values
+
+### Pre-Registration for Small-Sample Studies
+
+Pre-registration involves documenting your hypotheses, methods, and analysis plan before data collection or analysis. This is especially important for small samples because:
+
+- Limited power increases temptation for p-hacking
+- Results are more sensitive to analytic choices
+- Multiple testing is common (searching for effects)
+- Post-hoc storytelling is easier with small samples
+
+#### What to Pre-Register
+
+**Minimum requirements:**
+1. Research questions and hypotheses (primary versus secondary)
+2. Sample size with justification
+3. Statistical tests planned for each hypothesis
+4. Handling of outliers, missing data, and covariates
+5. Multiple comparison corrections (if applicable)
+
+#### Pre-Registration Template
+
+```markdown
+# Study: [Title]
+
+## Research Questions
+**Primary (Confirmatory)**: [Specific testable question]
+**Secondary (Exploratory)**: [Additional questions]
+
+## Hypotheses  
+H1: [Specific, directional if appropriate]
+
+## Design
+- Sample size: n = [X] ([justification])
+- Randomisation: [method]
+- Inclusion/exclusion: [criteria]
+
+## Variables
+- Primary outcome: [measure and scoring]
+- Predictors: [list]
+- Covariates: [list with justification]
+
+## Analysis Plan
+- Primary test: [specific test]
+- Assumptions: [how checked, what if violated]
+- Outliers: [definition and handling]
+- Missing data: [approach]
+- Alpha level: [value]
+- Multiple comparisons: [correction method]
+
+## Decision Rules
+- Support for H1 requires: [p-value AND effect size criteria]
 ```
 
-3. **Benjamini–Hochberg (FDR control)** for exploratory screens accepting a small proportion of false positives.
+#### Where to Pre-Register
 
-```{r}
-#| label: part-d-chunk-10
-results <- results %>%
-  mutate(
-    FDR_p = p.adjust(Original_p, method = "fdr"),
-    Sig_FDR = FDR_p < 0.05
-  )
-results
+1. **Open Science Framework** (osf.io) – free, time-stamped
+2. **AsPredicted** (aspredicted.org) – simple, nine questions
+3. **Registered Reports** – journal format with in-principle acceptance
+
+#### Handling Deviations
+
+Deviations are acceptable if reported transparently:
+
+```markdown
+**Deviations from Pre-Registration:**
+1. Sample size: Planned n = 40, achieved n = 36 due to [reason]
+2. Primary test: Switched from t-test to Mann–Whitney due to severe skewness (skew = 2.4)
+3. Additional analysis: Added baseline covariate per reviewer request (post-hoc, clearly labelled)
 ```
 
-#### Practical strategies for small samples
+#### Benefits for Small Samples
 
-- **Pre-specify primary vs. secondary outcomes** and correct only confirmatory tests; label others exploratory.
-- **Use omnibus tests first** (e.g., Kruskal–Wallis) and only follow with pairwise tests if the omnibus result is significant.
-- **Report both corrected and uncorrected p-values** alongside effect sizes and CIs.
-- **Limit ad-hoc testing**; consider multilevel or Bayesian models when exploring many related hypotheses.
+- Protects against p-hacking accusations
+- Separates confirmatory from exploratory analyses
+- Improves study design through upfront planning
+- Facilitates transparent reporting
 
-```{r}
-#| label: part-d-chunk-11
-library(rstatix)
-
-set.seed(2025)
-data_multi <- tibble(
-  group = rep(c("A", "B", "C"), each = 10),
-  score = c(rnorm(10, 5, 1), rnorm(10, 6, 1), rnorm(10, 7, 1))
-)
-
-kruskal_test(data_multi, score ~ group)
-
-pairwise <- dunn_test(data_multi, score ~ group, p.adjust.method = "none")
-pairwise <- pairwise %>%
-  mutate(
-    p_bonf = p.adjust(p, method = "bonferroni"),
-    p_holm = p.adjust(p, method = "holm"),
-    p_fdr = p.adjust(p, method = "fdr")
-  )
-pairwise
-```
-
-**Worked example (Project 1 revisit).** Screening three moderators without correction inflates Type I error; applying Holm control keeps the family-wise error near 5%.
-
-```{r}
-#| label: part-d-chunk-12
-library(tidyverse)
-library(rstatix)
-
-marketing_data <- read_csv("data/mini_marketing.csv", show_col_types = FALSE)
-
-tests <- list(
-  "Age 18-34" = wilcox_test(filter(marketing_data, age_group == "18-34"), satisfaction ~ campaign),
-  "Prior Purchase: Yes" = wilcox_test(filter(marketing_data, prior_purchase == "Yes"), satisfaction ~ campaign),
-  "Age 35-54" = wilcox_test(filter(marketing_data, age_group == "35-54"), satisfaction ~ campaign)
-)
-
-p_vals <- map_dbl(tests, "p")
-holm_adj <- p.adjust(p_vals, method = "holm")
-
-tibble(
-  Subgroup = names(p_vals),
-  Original_p = round(p_vals, 3),
-  Holm_p = round(holm_adj, 3),
-  Sig_Original = Original_p < 0.05,
-  Sig_Holm = Holm_p < 0.05
-)
-```
-
-**Reporting template**: “We evaluated campaign effects across three pre-specified subgroups. Holm-adjusted p-values controlled the family-wise error (only age 18–34 remained significant; adjusted p = 0.03). Other subgroup findings are exploratory until replicated.”
+::: {.callout-tip}
+## Pre-Registration Checklist
+- [ ] Hypotheses specific and testable
+- [ ] Sample size justified
+- [ ] All variables operationally defined  
+- [ ] Statistical tests specified
+- [ ] Outlier/missing data plans stated
+- [ ] Multiple comparison approach stated
+- [ ] Time-stamped before analysis
+:::
 
 ### Following Reporting Guidelines
 
