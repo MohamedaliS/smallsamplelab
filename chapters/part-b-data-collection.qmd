@@ -8,7 +8,29 @@ This part addresses practical challenges in collecting and preparing data for sm
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to select appropriate sampling methods given resource constraints and population characteristics, understand the trade-offs between probability and purposive sampling, calculate minimum detectable effects given sample size limitations, and justify sample sizes transparently. You will recognise when small samples are sufficient and when they are not.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the trade-offs between probability and purposive sampling
+- ✓ Understand the relationship between sample size, power, and detectable effects
+- ✓ Recognize when small samples are sufficient vs. inadequate
+- ✓ Distinguish between sampling for generalizability vs. mechanism testing
+
+**Practical Skills**
+- ✓ Select appropriate sampling methods given resource and population constraints
+- ✓ Calculate minimum detectable effects for planned sample sizes
+- ✓ Implement stratified sampling to improve precision with small n
+- ✓ Design sequential and adaptive sampling strategies
+
+**Critical Evaluation**
+- ✓ Assess the tension between ideal and feasible sample sizes
+- ✓ Evaluate whether purposive sampling is appropriate for research aims
+- ✓ Critique sampling justifications in published small-sample studies
+
+**Application**
+- ✓ Justify sample sizes transparently in research proposals
+- ✓ Design sampling plans that maximize information with limited resources
+- ✓ Report sampling procedures and achieved samples with appropriate caveats
 
 ### The Tension Between Ideal and Feasible Sample Sizes
 
@@ -203,6 +225,142 @@ flowchart TD
 
 **Interpretation:** This flowchart guides researchers through sample size planning, showing decision points and alternatives when the target sample size is not feasible.
 
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of sampling strategies from Chapter 9. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** A researcher uses a "rule of thumb" of n=30 per group for all studies. What is the primary problem with this approach?
+
+A. n=30 is always too small  
+B. Sample size should depend on effect size, power, and research question—not arbitrary rules  
+C. n=30 is always too large  
+D. Rules of thumb are always correct
+
+---
+
+**Q2.** Stratified sampling is most useful when:
+
+A. The population is homogeneous  
+B. You want to ensure representation of key subgroups that differ on the outcome  
+C. Random selection is impossible  
+D. Sample size exceeds 1,000
+
+---
+
+**Q3.** Power analysis reveals you need n=50 per group, but only n=20 is feasible. What should you do?
+
+A. Abandon the study  
+B. Proceed, but report the study as exploratory/pilot and calculate minimum detectable effect (MDE)  
+C. Proceed and claim the same statistical power  
+D. Ignore power entirely
+
+---
+
+**Q4.** Which sampling method allows probabilistic generalization to a target population?
+
+A. Convenience sampling  
+B. Purposive sampling  
+C. Simple random sampling  
+D. Snowball sampling
+
+---
+
+**Q5.** Quota sampling differs from stratified sampling in that:
+
+A. It uses random selection within strata  
+B. It matches population proportions but does not use random selection  
+C. It requires a sampling frame  
+D. It is always more accurate
+
+---
+
+**Q6.** A study with n=15 per group has 30% power to detect d=0.5. The researcher should report:
+
+A. "The study was adequately powered"  
+B. "The study was underpowered to detect medium effects; only large effects (d≥1.0) could be reliably detected"  
+C. "Power is irrelevant with small samples"  
+D. "Non-significant results prove no effect exists"
+
+---
+
+**Q7.** The finite population correction (FPC) is relevant when:
+
+A. Sampling with replacement from an infinite population  
+B. Sampling without replacement from a small, known population (e.g., N=100)  
+C. Sample size exceeds population size  
+D. Using convenience sampling
+
+---
+
+**Q8.** Sequential sampling allows researchers to:
+
+A. Collect all data simultaneously  
+B. Stop early if interim results show sufficient precision or evidence  
+C. Ignore power analysis  
+D. Change hypotheses after seeing data
+
+---
+
+**Q9.** A convenience sample from one university is used to test a new teaching method. Which statement is TRUE?
+
+A. Results generalize to all universities  
+B. Results are context-specific and require replication  
+C. Convenience sampling is never acceptable  
+D. Results are as valid as random sampling
+
+---
+
+**Q10.** Minimum Detectable Effect (MDE) refers to:
+
+A. The smallest effect that exists in the population  
+B. The smallest effect the study can detect with specified power (e.g., 80%)  
+C. The p-value threshold  
+D. The confidence interval width
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Sample size should depend on effect size, power, and research question—not arbitrary rules. A small effect requires larger n; a large effect can be detected with smaller n. The chapter emphasizes: "Rather than abandoning research in such contexts, we should adopt methods suited to smaller samples and report findings with appropriate caveats."
+
+**Q2. Answer: B**  
+*Explanation*: Stratified sampling divides the population into strata and ensures each stratum is represented. This improves precision when strata differ on the outcome. The chapter states: "Stratified sampling (dividing the population into strata and sampling proportionally or disproportionally from each) can improve precision by ensuring representation of key subgroups."
+
+**Q3. Answer: B**  
+*Explanation*: Proceed, but report the study as exploratory/pilot and calculate minimum detectable effect (MDE). Transparency about power limitations is essential. The chapter recommends: "If the achieved sample size is smaller than desired, report the minimum detectable effect (MDE)."
+
+**Q4. Answer: C**  
+*Explanation*: Simple random sampling (and other probability sampling methods) ensures every unit has a known, non-zero probability of selection, supporting generalization. The chapter states: "Probability sampling...ensures that every unit has a known, non-zero probability of selection. This supports generalisation to the target population."
+
+**Q5. Answer: B**  
+*Explanation*: Quota sampling matches population proportions but does not use random selection within strata. It "mimics stratified sampling but without random selection within strata." This makes it non-probabilistic.
+
+**Q6. Answer: B**  
+*Explanation*: With 30% power for d=0.5, the study can only reliably detect large effects (d≥1.0, which has ~80% power with n=15). The chapter emphasizes transparent reporting: "Researchers should conduct power analyses before data collection to understand what effects are detectable."
+
+**Q7. Answer: B**  
+*Explanation*: FPC adjusts required sample size when sampling without replacement from a small, finite population. The chapter explains: "When sampling without replacement from a small, known population, the variance of estimates decreases...The finite population correction (FPC) adjusts the required sample size accordingly."
+
+**Q8. Answer: B**  
+*Explanation*: Sequential sampling allows stopping early based on pre-specified decision rules if interim results show sufficient precision or evidence. The chapter describes: "sequential designs allow researchers to review interim results and decide whether to continue sampling."
+
+**Q9. Answer: B**  
+*Explanation*: Convenience samples are context-specific and require replication. The chapter states: "Findings from purposive or convenience samples should be interpreted cautiously and presented as preliminary or context-specific. Replication in independent samples strengthens confidence."
+
+**Q10. Answer: B**  
+*Explanation*: MDE is the smallest effect the study can detect with specified power (typically 80%) and alpha (typically 0.05). The chapter defines it: "the minimum detectable effect (MDE): the smallest effect the study can detect with specified power."
+
+:::
+
+---
+
 ### Key Takeaways
 
 - Probability sampling supports generalisation but may be infeasible with small samples or rare populations.
@@ -229,7 +387,29 @@ print(allocation)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to assess content validity and face validity for new measurement instruments, pilot test scales with small samples, compute item-level descriptive statistics and inter-item correlations, identify problematic items (low discrimination, ceiling/floor effects), and refine scales iteratively. You will understand the limitations of psychometric analyses with small samples and when to prioritise qualitative feedback over quantitative indices.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the distinctions between content, construct, and criterion validity
+- ✓ Understand reliability theory and sources of measurement error
+- ✓ Recognize the limitations of psychometric analyses with small samples
+- ✓ Distinguish quantitative vs. qualitative approaches to scale validation
+
+**Practical Skills**
+- ✓ Pilot test scales and collect qualitative feedback with small samples
+- ✓ Compute item-level statistics (means, SDs, correlations) in R
+- ✓ Calculate internal consistency (Cronbach's α) and interpret appropriately
+- ✓ Identify problematic items using discrimination and ceiling/floor effects
+
+**Critical Evaluation**
+- ✓ Assess when sample sizes are adequate for factor analysis vs. when to defer
+- ✓ Evaluate the trade-off between brief scales (fewer items) and reliability
+- ✓ Critique whether items have content validity for the intended construct
+
+**Application**
+- ✓ Design iterative scale refinement processes with limited samples
+- ✓ Report scale properties transparently (including small-sample limitations)
+- ✓ Prioritize qualitative feedback over unstable quantitative indices when appropriate
 
 ### The Challenge of Measurement in Small Studies
 
@@ -354,6 +534,136 @@ With very small samples (n < 20), quantitative item analysis is unreliable. Qual
 
 This feedback can prevent major problems before larger-scale data collection.
 
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 10 Questions
+
+**Q1.** What is the primary advantage of using qualitative methods (cognitive interviews) over quantitative methods when pilot testing scales with very small samples (n < 20)?
+
+A) Cognitive interviews provide more statistical power  
+B) Qualitative feedback can identify ambiguous wording and cultural issues without requiring statistical reliability  
+C) Quantitative item analysis is too expensive  
+D) Cognitive interviews automatically calculate Cronbach's alpha
+
+---
+
+**Q2.** In Lawshe's Content Validity Ratio (CVR), if 8 experts are consulted and 6 judge an item as "essential," what is the CVR?
+
+A) 0.25  
+B) 0.50  
+C) 0.75  
+D) 1.00
+
+---
+
+**Q3.** What does a "ceiling effect" in item analysis indicate?
+
+A) Most respondents give the lowest possible response  
+B) Most respondents give the highest possible response  
+C) The item has perfect reliability  
+D) The item correlates negatively with the total score
+
+---
+
+**Q4.** Which corrected item-total correlation threshold typically indicates that an item discriminates poorly and should be considered for removal?
+
+A) Above 0.7  
+B) Between 0.3 and 0.7  
+C) Below 0.3  
+D) Exactly 0.5
+
+---
+
+**Q5.** What does content validity assess?
+
+A) Whether items comprehensively and appropriately represent the construct being measured  
+B) Whether the scale has high Cronbach's alpha  
+C) Whether factor analysis confirms a one-dimensional structure  
+D) Whether the scale predicts future behavior
+
+---
+
+**Q6.** Why might short scales (3–5 items) have lower Cronbach's alpha than longer scales, even if items are well-chosen?
+
+A) Short scales always measure different constructs  
+B) Cronbach's alpha is mathematically influenced by the number of items—fewer items tend to yield lower alpha  
+C) Short scales cannot be reliable  
+D) Respondents don't take short scales seriously
+
+---
+
+**Q7.** In pilot testing with small samples (n ≈ 20–30), what is the primary limitation of conducting factor analysis?
+
+A) Factor analysis requires specialized software  
+B) Factor analysis requires hundreds of observations for stable results; small samples yield unstable loadings  
+C) Factor analysis only works with 7-point Likert scales  
+D) Factor analysis cannot handle missing data
+
+---
+
+**Q8.** If an item correlates negatively with the total score and with other items, what is the most likely explanation?
+
+A) The item has high content validity  
+B) The item may be reverse-coded incorrectly or measuring an opposite construct  
+C) The sample size is too large  
+D) The item has a ceiling effect
+
+---
+
+**Q9.** What is the primary purpose of asking domain experts to rate item relevance and clarity during scale development?
+
+A) To calculate test-retest reliability  
+B) To establish content validity by ensuring items appropriately represent the construct  
+C) To compute inter-item correlations  
+D) To determine the optimal sample size for the study
+
+---
+
+**Q10.** In the example of the 5-item job satisfaction scale, Item 3 had a restricted range (responses only from 4–7 on a 1–7 scale). What does this suggest?
+
+A) Item 3 has perfect reliability  
+B) Item 3 may have a ceiling effect, limiting its ability to differentiate among respondents  
+C) Item 3 should be kept because high scores are desirable  
+D) The sample size should be increased to 1,000
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. B)** "With very small samples (n < 20), quantitative item analysis is unreliable. Qualitative methods (cognitive interviews, focus groups) are more informative."  
+Cognitive interviews reveal ambiguous wording and cultural issues without requiring the large samples needed for statistical reliability indices.
+
+**A2. B)** CVR = (6 - 8/2) / (8/2) = (6 - 4) / 4 = 2/4 = 0.50.  
+"A CVR of 0.50 indicates that 75% of experts deemed the item essential."
+
+**A3. B)** "If most responses cluster at the low or high end, the item cannot differentiate among respondents."  
+A ceiling effect occurs when most respondents give the highest possible response, limiting discrimination.
+
+**A4. C)** "The corrected item-total correlation (r.drop) indicates how well each item correlates with the total score excluding itself. Values below 0.3 suggest weak items that could be removed."  
+Items with r.drop < 0.3 discriminate poorly and are candidates for removal.
+
+**A5. A)** "Content validity refers to whether items comprehensively and appropriately represent the construct being measured."  
+Content validity is assessed through expert review, not statistical tests.
+
+**A6. B)** "Removing items also reduces scale length, which can lower alpha."  
+Cronbach's alpha is mathematically influenced by the number of items—shorter scales tend to have lower alpha even if items are equally good.
+
+**A7. B)** "Standard scale development protocols (large pilot studies, factor analysis, item response theory) require hundreds of observations."  
+Factor analysis requires large samples (typically 200+) for stable results; small samples yield unreliable factor loadings.
+
+**A8. B)** "If an item correlates negatively with the total or with other items, it may be reverse-coded incorrectly or measuring an opposite construct."  
+Negative correlations suggest coding errors or conceptual misalignment with the scale.
+
+**A9. B)** "Content validity refers to whether items comprehensively and appropriately represent the construct being measured... assessed through expert review and respondent feedback."  
+Expert ratings establish content validity by confirming items represent the construct appropriately.
+
+**A10. B)** "Item 3 has a restricted range (4–7), which may indicate a ceiling effect."  
+Restricted ranges (especially at the high end) indicate ceiling effects that limit the item's ability to differentiate among respondents.
+
+:::
+
 ### Key Takeaways
 
 - Measurement quality is critical in small-sample research; unreliable measures reduce power and bias estimates.
@@ -383,7 +693,29 @@ cor(items_test)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to detect outliers, check distributional assumptions, identify data entry errors, assess linearity and homoscedasticity in regression contexts, and document data cleaning decisions transparently. You will understand how small samples amplify the impact of outliers and anomalies, and when robust methods or transformations are warranted.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain how small samples amplify the impact of outliers and anomalies
+- ✓ Understand univariate vs. multivariate outlier detection approaches
+- ✓ Recognize the assumptions underlying common diagnostic tests
+- ✓ Distinguish data entry errors from legitimate extreme values
+
+**Practical Skills**
+- ✓ Detect outliers using z-scores, boxplots, and Mahalanobis distance in R
+- ✓ Assess normality with Q-Q plots, Shapiro-Wilk tests, and visual diagnostics
+- ✓ Check linearity and homoscedasticity in regression models
+- ✓ Calculate leverage and Cook's D to identify influential observations
+
+**Critical Evaluation**
+- ✓ Assess when outlier removal is justified vs. when it constitutes manipulation
+- ✓ Evaluate the trade-off between retaining data vs. meeting assumptions
+- ✓ Critique data screening decisions in published small-sample studies
+
+**Application**
+- ✓ Document data cleaning decisions transparently with decision rules
+- ✓ Choose between robust methods, transformations, or outlier exclusion
+- ✓ Report sensitivity analyses showing results with/without outliers
 
 ### Why Data Screening Matters More with Small Samples
 
@@ -583,6 +915,136 @@ Maintain a data cleaning script that:
 
 Report the number of observations excluded and reasons. Provide summary statistics for the cleaned data.
 
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 11 Questions
+
+**Q1.** Why are outliers particularly problematic in small-sample research?
+
+A) They are easier to detect visually  
+B) They can have disproportionate influence on results due to the limited number of observations  
+C) Small samples always have more outliers than large samples  
+D) Outliers are impossible to detect with small samples
+
+---
+
+**Q2.** What is the primary advantage of Mahalanobis distance over univariate outlier detection methods?
+
+A) It is faster to compute  
+B) It measures how far an observation lies from the multivariate centre, accounting for covariances among variables  
+C) It only works with large samples  
+D) It automatically removes all outliers
+
+---
+
+**Q3.** According to Tukey's fences method, an observation is flagged as a potential outlier if it falls:
+
+A) Within 1.5 × IQR from the quartiles  
+B) Beyond ±2 standard deviations from the mean  
+C) Beyond 1.5 × IQR from the quartiles  
+D) Exactly at the median
+
+---
+
+**Q4.** Why are visual diagnostics (Q-Q plots, boxplots) preferred over formal normality tests (Shapiro–Wilk) for small samples?
+
+A) Visual diagnostics are more statistically rigorous  
+B) Normality tests have low power with small samples and may not detect departures; visual checks provide more insight  
+C) Normality tests are too expensive  
+D) Visual diagnostics automatically calculate p-values
+
+---
+
+**Q5.** In a regression diagnostic plot of "Residuals vs Fitted Values," what does a funnel-shaped pattern indicate?
+
+A) Perfect homoscedasticity  
+B) Heteroscedasticity—residual variance changes with fitted values  
+C) Normality of residuals  
+D) High collinearity among predictors
+
+---
+
+**Q6.** What does Cook's distance measure in regression diagnostics?
+
+A) The distance between two data points  
+B) The influence of each observation on the regression coefficients; high values indicate influential observations  
+C) The correlation between predictors  
+D) The degree of multicollinearity
+
+---
+
+**Q7.** When should an outlier be removed from analysis?
+
+A) Always, because outliers are bad  
+B) Never, because all data points are valuable  
+C) Only if there is clear evidence of data entry error or the observation does not belong to the target population  
+D) Whenever it makes the results statistically significant
+
+---
+
+**Q8.** What is an example of a data entry error that should be flagged during data screening?
+
+A) A participant with a high test score  
+B) A Likert response of 8 on a 1–7 scale  
+C) A missing value in a survey  
+D) A participant who completed all questions
+
+---
+
+**Q9.** Why is documenting data cleaning decisions in a reproducible script important?
+
+A) It allows others to verify exclusions and understand how the cleaned dataset was produced  
+B) It makes the analysis run faster  
+C) It is required by all statistical software  
+D) It prevents missing data from occurring
+
+---
+
+**Q10.** In a Q-Q plot, if the points deviate substantially from the diagonal line at the tails, what does this suggest?
+
+A) The data are perfectly normally distributed  
+B) The data may have skewness or heavy tails  
+C) The sample size is too large  
+D) There are no outliers present
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. B)** "With small samples, outliers can have disproportionate influence on results."  
+A single extreme value in a sample of 15 can drastically shift means, correlations, and regression slopes.
+
+**A2. B)** "Mahalanobis distance measures how far an observation lies from the multivariate centre, accounting for covariances among variables."  
+Univariate rules may miss cases that are unusual only when variables are considered jointly.
+
+**A3. C)** "Values beyond 1.5 × IQR from the quartiles (Tukey's fences)."  
+The lower fence is Q1 - 1.5×IQR; the upper fence is Q3 + 1.5×IQR.
+
+**A4. B)** "With small samples, normality is hard to verify formally. Visual checks (histograms, Q-Q plots) are more informative than statistical tests (Shapiro–Wilk), which have low power with small n."  
+Normality tests may not detect departures or may reject normality by chance with small samples; Q-Q plots provide direct visual evidence.
+
+**A5. B)** "Funnel shapes suggest heteroscedasticity (variance changes with fitted values)."  
+Homoscedasticity (constant variance) is violated when residual spread increases or decreases with fitted values.
+
+**A6. B)** "Cook's distance [identifies] influential observations."  
+High Cook's distance indicates that removing the observation would substantially change the regression coefficients.
+
+**A7. C)** "Only if there is clear evidence of data entry error or that the observation does not belong to the target population. Document the rationale and report results with and without outliers."  
+Removing outliers to achieve desired results is unethical; only remove when justified.
+
+**A8. B)** "Values outside plausible ranges (e.g., age = 150, Likert response = 8 on a 1–7 scale)."  
+A response of 8 on a 1–7 scale is impossible and indicates a data entry error.
+
+**A9. A)** "Maintain a data cleaning script that: Reads raw data, flags potential outliers, errors, or inconsistencies, applies corrections or exclusions with justifications, produces a cleaned dataset for analysis."  
+Reproducible documentation allows verification and transparency.
+
+**A10. B)** "Deviations at the tails indicate skewness or heavy tails."  
+Points departing from the diagonal at the extremes suggest the distribution has tails that are heavier or lighter than a normal distribution.
+
+:::
+
 ### Key Takeaways
 
 - Data screening is critical with small samples, where single observations can distort results.
@@ -612,7 +1074,29 @@ x[x > upper_fence]
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to describe patterns of missingness (MCAR, MAR, MNAR), apply simple imputation methods (mean imputation, last observation carried forward) with caution, understand when multiple imputation is feasible and when it is not, and report missing data transparently. You will recognise the limitations of missing data methods with very small samples and when complete-case analysis may be preferable.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the distinctions between MCAR, MAR, and MNAR mechanisms
+- ✓ Understand why complete-case analysis can introduce bias
+- ✓ Recognize the theoretical foundations of multiple imputation (Rubin's rules)
+- ✓ Understand the limitations of imputation methods with very small samples
+
+**Practical Skills**
+- ✓ Diagnose missingness patterns using visualization and tests in R
+- ✓ Implement multiple imputation using the `mice` package
+- ✓ Pool parameter estimates and standard errors across imputed datasets
+- ✓ Generate diagnostic plots (trace plots, convergence checks) for MICE
+
+**Critical Evaluation**
+- ✓ Assess when multiple imputation is feasible vs. when complete-case is preferable
+- ✓ Evaluate the plausibility of MAR assumptions in research contexts
+- ✓ Critique missing data handling approaches in published small-sample studies
+
+**Application**
+- ✓ Report missing data patterns and mechanisms transparently
+- ✓ Choose appropriate imputation strategies given sample size and missingness
+- ✓ Conduct sensitivity analyses comparing complete-case vs. imputed results
 
 ### The Challenge of Missing Data in Small Samples
 
@@ -717,6 +1201,71 @@ The simplest approach is to analyse only cases with complete data on all variabl
 
 **When to use**: Missingness is minimal (< 5%), or MCAR is plausible, or imputation methods are infeasible due to very small sample size.
 
+::: {.callout-warning}
+## ⚠️ Common Misconception: "Listwise Deletion Is Always Safe if Missingness Is Random"
+
+**Myth**: "If I check for MCAR and the test is non-significant, listwise deletion is unbiased."
+
+**Reality**: Even when missingness is **truly MCAR**, listwise deletion **loses power** and can introduce bias if you have multiple variables with independent missing patterns.
+
+**Demonstration**:
+```{r}
+#| label: part-b-misconception-1
+set.seed(2025)
+
+# Generate complete data: n=50, correlation between x and y = 0.6
+n <- 50
+x <- rnorm(n, 50, 10)
+y <- 0.6 * x + rnorm(n, 0, 8)
+
+# True correlation (no missing data)
+true_cor <- cor(x, y)
+cat("True correlation (complete data):", round(true_cor, 3), "\n\n")
+
+# Introduce MCAR missingness (20% on x, 20% on y, independently)
+x_missing <- x
+y_missing <- y
+x_missing[sample(1:n, 10)] <- NA  # 20% missing
+y_missing[sample(1:n, 10)] <- NA  # 20% missing
+
+# Listwise deletion: only cases with both x and y
+complete_cases <- complete.cases(x_missing, y_missing)
+cat("Complete cases:", sum(complete_cases), "/", n, "(", 
+    round(100 * mean(complete_cases), 1), "%)\n\n")
+
+# Correlation with listwise deletion
+listwise_cor <- cor(x_missing[complete_cases], y_missing[complete_cases])
+cat("Correlation (listwise deletion):", round(listwise_cor, 3), "\n")
+
+# Power loss
+cat("\n→ Lost", n - sum(complete_cases), "cases (", 
+    round(100 * (1 - mean(complete_cases)), 1), "% of data)\n")
+cat("→ Correlation estimate is based on n =", sum(complete_cases), 
+    "instead of n = 50\n")
+cat("→ Standard error is", round(sqrt(1/sum(complete_cases)) / sqrt(1/n), 2), 
+    "times larger\n")
+```
+
+**Why this matters:**
+
+1. **Power loss**: With 20% missing on x and 20% on y (independent), you lose ~36% of cases
+   - Formula: (1 - p_x) × (1 - p_y) = 0.8 × 0.8 = 0.64 → 64% remain, 36% lost
+2. **Multiple variables compound**: With 5 variables each 15% missing, you keep only 44% of cases
+3. **Bias can still occur**: If missingness is MAR (not MCAR), listwise deletion is biased
+
+**Lesson**: 
+
+- **MCAR does NOT mean listwise deletion is optimal**—it's still wasteful
+- Use **multiple imputation** even with MCAR if missingness > 10%
+- With small samples (n < 50), losing even 20% of cases is catastrophic for power
+
+**When listwise deletion is actually safe:**
+
+- Missingness < 5% on any variable
+- n is large enough that losing cases doesn't hurt power
+- You've verified MCAR (not just MAR) AND documented the power loss
+:::
+
 ### Mean Imputation (Not Recommended)
 
 Mean imputation replaces missing values with the variable mean. This approach artificially reduces variance and distorts correlations. It is generally not recommended, especially with small samples where each imputed value has disproportionate impact.
@@ -768,6 +1317,50 @@ if (requireNamespace("mice", quietly = TRUE)) {
 
 Interpretation: MI generates plausible values for missing data based on observed relationships. The pooled results combine estimates across imputations, with standard errors adjusted for imputation uncertainty. However, with n = 25 and 20% missingness, the imputation model is estimated from limited data, and results may be unstable. Compare MI results to complete-case analysis; if they differ substantially, report both and acknowledge uncertainty.
 
+### Checking Convergence of Multiple Imputation
+
+When using `mice`, always check whether the imputation algorithm has converged. Poor convergence means the imputed values may not be stable, especially with small samples or complex missing data patterns.
+
+**Key diagnostics:**
+
+1. **Trace plots**: Plot imputed values across iterations for each variable. Lines should mix well without trends.
+2. **Strip plots**: Display distributions of observed (blue) vs. imputed (red) values. Distributions should be similar if MAR holds.
+
+```{r}
+#| label: part-b-chunk-17-diagnostics
+# Convergence diagnostics for mice imputation
+if (requireNamespace("mice", quietly = TRUE) && exists("imp")) {
+  library(mice)
+  
+  # Trace plots: check convergence across iterations
+  # Each line represents one imputed dataset; should be well-mixed
+  plot(imp, c("satisfaction", "performance"))
+  
+  # Strip plots: compare observed (blue) vs imputed (red) values
+  # Distributions should be similar under MAR
+  stripplot(imp, satisfaction + performance ~ .imp, pch = 20, cex = 1.2)
+  
+  cat("\n=== Convergence Check ===\n")
+  cat("✓ Trace plots: Lines should mix well without systematic trends\n")
+  cat("✓ Strip plots: Imputed (red) should resemble observed (blue) distributions\n")
+  cat("✓ If convergence looks poor, increase iterations: mice(..., maxit = 20)\n\n")
+  
+} else {
+  cat("mice imputation object not found; run the previous chunk first.\n")
+}
+```
+
+**What to look for:**
+
+- **Trace plots**: Each imputation should show relatively stable values across iterations. If you see upward or downward trends, the algorithm hasn't converged. Solution: increase `maxit` (default is 5).
+- **Strip plots**: The distribution of imputed values (red) should be similar to observed values (blue). Large differences suggest the imputation model may not fit well or MNAR may be present.
+
+**With small samples (n < 30)**, convergence can be slower and more sensitive to model specification. If diagnostics show problems, consider:
+
+- Simplifying the imputation model (use predictive mean matching with fewer predictors)
+- Increasing iterations (`maxit = 20` or more)
+- Comparing to complete-case analysis as a sensitivity check
+
 ### Sensitivity Analyses
 
 When missingness is substantial or MNAR is suspected, conduct sensitivity analyses:
@@ -785,6 +1378,447 @@ The best approach to missing data is prevention:
 - Follow up with participants who miss appointments or skip questions.
 - Pilot test procedures to identify confusing or burdensome items.
 - Build rapport and trust with participants.
+
+---
+
+## Chapter 12.5. Assessing Multiple Imputation Quality
+
+### Learning Objectives
+
+By the end of this section, you will understand how to diagnose the quality of multiple imputation models. You will learn to check convergence, compare imputed vs. observed distributions, assess sensitivity to the number of imputations (m), and interpret diagnostic plots. These skills ensure that your imputed datasets are appropriate for downstream analyses.
+
+### Why Imputation Diagnostics Matter
+
+Multiple imputation (MI) is not a "black box" procedure. The quality of imputed values depends on:
+
+1. **Model specification**: Are the imputation models correctly specified (e.g., predictive mean matching, logistic regression for binary variables)?
+2. **Convergence**: Have the iterative algorithms stabilised?
+3. **Plausibility**: Do imputed values resemble the observed data distribution?
+4. **Sensitivity to m**: Are pooled estimates stable across different numbers of imputations?
+
+**Failure to check diagnostics** can lead to:
+
+- Biased parameter estimates
+- Incorrect standard errors
+- Imputed values outside plausible ranges
+- Overconfidence in results
+
+### Diagnostic 1: Convergence Checks
+
+The `mice` algorithm uses **iterative chained equations**: it cycles through variables, updating imputations based on the current values of other variables. Convergence occurs when these iterations stabilise (no systematic trends).
+
+#### Trace Plots
+
+Trace plots show the mean and SD of imputed values across iterations for each variable. **Good convergence** looks like:
+
+- Lines are "noisy" (random fluctuation)
+- No systematic trends (upward or downward drift)
+- Multiple chains (from different imputations) intermingle
+
+```{r}
+#| label: part-b-mi-diag-1
+library(mice)
+library(tidyverse)
+
+# Simulate data with missing values
+set.seed(2025)
+mi_data <- tibble(
+  age = c(25, 32, NA, 45, 29, NA, 38, 41, 27, 35, NA, 42, 30, 28, 39),
+  satisfaction = c(4, 5, 3, NA, 4, 5, NA, 4, 5, 3, 4, NA, 5, 4, 3),
+  income = c(35, 50, 42, 60, NA, 55, 48, NA, 40, 52, 45, 58, NA, 38, 49)
+)
+
+# Multiple imputation with more iterations to demonstrate convergence
+imp <- mice(mi_data, m = 5, maxit = 20, seed = 2025, print = FALSE)
+
+# Plot trace lines for all variables
+plot(imp, c("age", "satisfaction", "income"))
+```
+
+**Interpretation**:
+
+- **Ideal**: Lines fluctuate randomly around a stable mean (like a "fuzzy caterpillar")
+- **Problem**: Lines show trends (increasing or decreasing over iterations) → **increase `maxit`**
+- **Problem**: Lines are smooth or separated by chain → **check imputation model specification**
+
+#### Checking Specific Variables
+
+If you have many variables, focus on those with the most missingness:
+
+```{r}
+#| label: part-b-mi-diag-2
+# Focus on specific variables with high missingness
+plot(imp, "age")
+```
+
+**When to increase iterations**:
+
+- If you see trends in the first 10–20 iterations, try `maxit = 50` or `maxit = 100`
+- Modern guidance: `maxit = 20–50` is usually sufficient for MCAR/MAR data
+
+### Diagnostic 2: Imputed vs. Observed Distributions
+
+Imputed values should **resemble** the observed data distribution (but not be identical). Large discrepancies suggest model misspecification.
+
+#### Density Plots
+
+```{r}
+#| label: part-b-mi-diag-3
+# Compare density plots: blue = observed, red = imputed
+densityplot(imp)
+```
+
+**Interpretation**:
+
+- **Good**: Imputed (red) and observed (blue) distributions overlap substantially
+- **Red flag**: Imputed values are all at one value (e.g., the mean) → model too restrictive (try `method = "pmm"` for predictive mean matching)
+- **Red flag**: Imputed values fall far outside observed range → model misspecified (e.g., using linear imputation for bounded variables)
+
+#### Strip Plots (Univariate)
+
+Strip plots show individual imputed values (red) alongside observed values (blue):
+
+```{r}
+#| label: part-b-mi-diag-4
+# Strip plots for each variable
+stripplot(imp, age ~ .imp, pch = 20, cex = 1.5)
+```
+
+**Interpretation**:
+
+- Imputed values (red dots) should "fill in" gaps in the observed data (blue dots)
+- Look for outliers: Are any imputed values far outside the observed range?
+
+### Diagnostic 3: Sensitivity to m (Number of Imputations)
+
+The number of imputations (m) affects the precision of pooled estimates. With more imputations, pooled estimates become more stable and standard errors more accurate.
+
+#### Rule of Thumb for m
+
+- **Fraction of missing information (FMI)** determines required m:
+  - FMI < 10%: m = 5–10 sufficient
+  - FMI = 10–30%: m = 20 recommended
+  - FMI > 30%: m = 50–100 may be needed
+
+- **White, Royston, and Wood (2011)** suggest: $m \geq 100 \times \text{FMI}$
+
+#### Testing Sensitivity
+
+```{r}
+#| label: part-b-mi-diag-5
+# Simulate larger dataset for demonstration
+set.seed(2025)
+mi_data_large <- tibble(
+  age = sample(c(25:50, NA), 50, replace = TRUE, prob = c(rep(0.03, 26), 0.22)),
+  income = sample(c(30:70, NA), 50, replace = TRUE, prob = c(rep(0.024, 41), 0.02)),
+  satisfaction = sample(c(1:5, NA), 50, replace = TRUE, prob = c(rep(0.18, 5), 0.1))
+)
+
+# Impute with varying m
+imp_m5 <- mice(mi_data_large, m = 5, maxit = 20, seed = 2025, print = FALSE)
+imp_m20 <- mice(mi_data_large, m = 20, maxit = 20, seed = 2025, print = FALSE)
+imp_m50 <- mice(mi_data_large, m = 50, maxit = 20, seed = 2025, print = FALSE)
+
+# Fit model and pool results
+fit_m5 <- with(imp_m5, lm(satisfaction ~ age + income))
+fit_m20 <- with(imp_m20, lm(satisfaction ~ age + income))
+fit_m50 <- with(imp_m50, lm(satisfaction ~ age + income))
+
+pooled_m5 <- pool(fit_m5)
+pooled_m20 <- pool(fit_m20)
+pooled_m50 <- pool(fit_m50)
+
+# Compare coefficient estimates and SEs
+compare_m <- tibble(
+  m = c(5, 20, 50),
+  age_coef = c(
+    summary(pooled_m5)$estimate[2],
+    summary(pooled_m20)$estimate[2],
+    summary(pooled_m50)$estimate[2]
+  ),
+  age_se = c(
+    summary(pooled_m5)$std.error[2],
+    summary(pooled_m20)$std.error[2],
+    summary(pooled_m50)$std.error[2]
+  )
+)
+
+print(compare_m)
+```
+
+**Interpretation**:
+
+- **Coefficients** should be similar across m (small differences are expected due to Monte Carlo error)
+- **Standard errors** should stabilize as m increases
+- If estimates change substantially (e.g., > 10% difference in coefficients), use larger m
+
+#### When to Use Larger m
+
+- **High missingness** (> 20%): Use m ≥ 20
+- **Small samples** (n < 50): Larger m reduces Monte Carlo error
+- **Sensitive analyses** (e.g., clinical trials): Use m ≥ 50 for conservative inference
+
+### Diagnostic 4: Checking Imputation Model Assumptions
+
+#### Inspect Imputation Methods
+
+```{r}
+#| label: part-b-mi-diag-6
+# Check which imputation methods were used
+imp$method
+```
+
+**Common methods**:
+
+- `pmm`: Predictive mean matching (robust, preserves distribution)
+- `norm`: Bayesian linear regression (assumes normality)
+- `logreg`: Logistic regression (for binary variables)
+- `polyreg`: Multinomial logistic regression (for categorical variables)
+
+**Best practice**: Use `pmm` for continuous variables unless you have strong reasons to assume normality.
+
+#### Check Predictor Matrix
+
+```{r}
+#| label: part-b-mi-diag-7
+# See which variables predict each other
+imp$predictorMatrix
+```
+
+**Interpretation**:
+
+- Rows = variables to impute
+- Columns = predictor variables
+- `1` = use as predictor, `0` = do not use
+
+**Modify if needed**:
+
+```{r}
+#| label: part-b-mi-diag-8
+#| eval: false
+
+# Example: Exclude a variable from predicting another
+pred <- imp$predictorMatrix
+pred["age", "satisfaction"] <- 0  # Don't use satisfaction to predict age
+
+# Re-run imputation with modified predictor matrix
+imp_modified <- mice(mi_data, m = 5, predictorMatrix = pred, print = FALSE)
+```
+
+### Diagnostic 5: Fraction of Missing Information (FMI)
+
+The FMI quantifies how much uncertainty is introduced by imputation. It is automatically reported by `pool()`:
+
+```{r}
+#| label: part-b-mi-diag-9
+# Pool results and examine FMI
+pooled_result <- pool(fit_m20)
+summary(pooled_result)
+```
+
+**Columns to examine**:
+
+- **fmi**: Fraction of missing information for each coefficient
+- **lambda**: Proportion of total variance due to missingness
+
+**Interpretation**:
+
+- **FMI < 0.10**: Low missing information; m = 5–10 sufficient
+- **FMI = 0.10–0.30**: Moderate; use m = 20–50
+- **FMI > 0.30**: High; consider whether MI is appropriate (may need m = 50–100)
+
+### Example: Full Diagnostic Workflow
+
+```{r}
+#| label: part-b-mi-diag-10
+# Step 1: Describe missingness
+library(naniar)
+miss_var_summary(mi_data_large)
+
+# Step 2: Perform MI with adequate m and maxit
+imp_final <- mice(mi_data_large, m = 20, maxit = 30, seed = 2025, print = FALSE)
+
+# Step 3: Check convergence
+plot(imp_final, c("age", "income", "satisfaction"))
+
+# Step 4: Compare distributions
+densityplot(imp_final)
+
+# Step 5: Fit model and pool
+fit_final <- with(imp_final, lm(satisfaction ~ age + income))
+pooled_final <- pool(fit_final)
+
+# Step 6: Check FMI
+summary(pooled_final)
+
+# Step 7: Report results
+cat("Pooled regression results (m = 20 imputations):\n")
+summary(pooled_final)
+```
+
+### Red Flags and Troubleshooting
+
+| **Problem** | **Symptom** | **Solution** |
+|-------------|-------------|--------------|
+| **Non-convergence** | Trace plots show trends | Increase `maxit` (try 50–100) |
+| **Imputed values at one value** | Density plot shows spike | Use `method = "pmm"` instead of `norm` |
+| **Imputed values out of range** | Strip plot shows outliers | Check variable type (e.g., use `logreg` for binary) |
+| **Unstable estimates across m** | Coefficients vary > 10% | Increase m (try 50–100) |
+| **High FMI (> 0.50)** | Large uncertainty | Consider whether MI is appropriate; may need auxiliary variables or accept wider CIs |
+| **Separation warnings (logistic regression)** | Model fails to converge | Use penalized imputation methods or increase sample size |
+
+### Reporting MI Diagnostics
+
+When reporting MI results, include:
+
+1. **Missingness pattern**: "Three variables had missing data (age: 20%, income: 18%, satisfaction: 10%)"
+2. **Imputation model**: "We used predictive mean matching with m = 20 imputations and maxit = 30"
+3. **Convergence**: "Trace plots showed convergence after 20 iterations (see Supplementary Figure S1)"
+4. **Plausibility**: "Imputed values were visually consistent with observed distributions (density plots in Supplementary Figure S2)"
+5. **Sensitivity**: "Results were stable across m = 5, 20, and 50 imputations (coefficient differences < 5%)"
+6. **FMI**: "Fraction of missing information ranged from 0.12 to 0.25, indicating moderate impact of missingness"
+
+### Key Takeaways
+
+- **Convergence checks** (trace plots) ensure the imputation algorithm has stabilised; increase `maxit` if trends are visible
+- **Density and strip plots** compare imputed vs. observed distributions; imputed values should resemble observed data
+- **Number of imputations (m)** should match the fraction of missing information: m ≥ 20 for FMI = 10–30%
+- **Sensitivity analyses** test whether results are stable across different values of m
+- **Fraction of Missing Information (FMI)** quantifies uncertainty from imputation; FMI > 0.30 suggests high impact
+- **Red flags**: Imputed values at one value, outliers, non-convergence, unstable estimates → revise imputation model
+- **Transparency**: Report convergence, plausibility checks, and sensitivity analyses in supplementary materials
+
+---
+
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 12 Questions
+
+**Q1.** What is the difference between MCAR (Missing Completely At Random) and MAR (Missing At Random)?
+
+A) MCAR means no data are missing; MAR means some data are missing  
+B) MCAR means missingness is unrelated to any variables; MAR means missingness is related to observed variables but not the missing values themselves  
+C) MCAR and MAR are identical terms  
+D) MCAR applies to small samples; MAR applies to large samples
+
+---
+
+**Q2.** Why is mean imputation (replacing missing values with the variable mean) generally not recommended?
+
+A) It requires specialized software  
+B) It artificially reduces variance and distorts correlations  
+C) It only works with categorical variables  
+D) It is too computationally expensive
+
+---
+
+**Q3.** If you have 20% missingness on variable X and 20% missingness on variable Y (independently), approximately what percentage of cases will be lost with listwise deletion?
+
+A) 20%  
+B) 36%  
+C) 40%  
+D) 64%
+
+---
+
+**Q4.** What does MNAR (Missing Not At Random) mean?
+
+A) Missingness is unrelated to any variables  
+B) Missingness is related to observed variables only  
+C) Missingness is related to the unobserved (missing) values themselves  
+D) Missing data occur randomly due to software errors
+
+---
+
+**Q5.** What is the primary limitation of using multiple imputation with very small samples (n < 30)?
+
+A) Multiple imputation cannot handle small samples  
+B) The imputation model is estimated from limited data and may be unstable or yield implausible values  
+C) Multiple imputation requires at least 1,000 observations  
+D) Multiple imputation only works with MNAR data
+
+---
+
+**Q6.** In multiple imputation diagnostics, what do trace plots check?
+
+A) The distribution of imputed values  
+B) Whether the imputation algorithm has converged (stabilized) across iterations  
+C) The correlation between variables  
+D) The sample size required for analysis
+
+---
+
+**Q7.** When comparing imputed (red) vs. observed (blue) distributions in density plots, what is a "red flag"?
+
+A) The distributions overlap substantially  
+B) Imputed values fall far outside the observed range or all cluster at one value  
+C) Both distributions are normally distributed  
+D) The imputed values have slightly different means
+
+---
+
+**Q8.** What is the rule of thumb for choosing the number of imputations (m) based on the fraction of missing information (FMI)?
+
+A) Always use m = 5 regardless of FMI  
+B) Use m ≥ 100 × FMI (e.g., FMI = 0.20 requires m ≥ 20)  
+C) Use m = 1000 for all analyses  
+D) m should equal the sample size
+
+---
+
+**Q9.** What does Little's MCAR test evaluate?
+
+A) Whether the sample size is adequate  
+B) Whether missingness is consistent with the MCAR mechanism by comparing observed means across missing-data patterns  
+C) Whether multiple imputation has converged  
+D) Whether variables are normally distributed
+
+---
+
+**Q10.** Why is prevention the best approach to missing data?
+
+A) Prevention is cheaper than imputation software  
+B) Even sophisticated imputation methods have limitations and cannot fully recover information lost to missingness; prevention avoids the problem  
+C) Prevention is only relevant for large samples  
+D) Multiple imputation cannot handle any missing data
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. B)** "MCAR (Missing Completely At Random): Missingness is unrelated to any observed or unobserved variables... MAR (Missing At Random): Missingness is related to observed variables but not to the missing values themselves."  
+MCAR is a stricter assumption where missingness is completely random, while MAR allows missingness to depend on observed data.
+
+**A2. B)** "Mean imputation replaces missing values with the variable mean. This approach artificially reduces variance and distorts correlations."  
+By replacing all missing values with the mean, you reduce the variability in the data and bias correlation estimates downward.
+
+**A3. B)** "With 20% missing on x and 20% on y (independent), you lose ~36% of cases—Formula: (1 - p_x) × (1 - p_y) = 0.8 × 0.8 = 0.64 → 64% remain, 36% lost"  
+When missingness patterns are independent, the compound effect removes (1 - 0.8 × 0.8) = 36% of cases.
+
+**A4. C)** "MNAR (Missing Not At Random): Missingness is related to the unobserved values themselves."  
+For example, individuals with high depression scores being more likely to drop out of a study.
+
+**A5. B)** "With very small samples (n < 30) or many missing values (> 20%), MI can be unstable or yield implausible imputations."  
+The imputation model requires sufficient data to estimate relationships reliably; very small samples provide limited information.
+
+**A6. B)** "Trace plots show the mean and SD of imputed values across iterations for each variable... Convergence occurs when these iterations stabilise."  
+Good convergence shows random fluctuation without systematic trends (upward or downward drift).
+
+**A7. B)** "Imputed values fall far outside observed range → model misspecified... Imputed values are all at one value (e.g., the mean) → model too restrictive."  
+Large discrepancies between imputed and observed distributions suggest problems with the imputation model specification.
+
+**A8. B)** "White, Royston, and Wood (2011) suggest: m ≥ 100 × FMI"  
+For example, if FMI = 0.20 (20% missing information), you should use m ≥ 20 imputations.
+
+**A9. B)** "Little's MCAR test evaluates whether missingness is consistent with the MCAR mechanism. The test compares observed means across missing-data patterns."  
+A large p-value suggests MCAR is plausible; a small p-value indicates missingness likely depends on observed data.
+
+**A10. B)** "The best approach to missing data is prevention... Pilot test procedures to identify confusing or burdensome items. Build rapport and trust with participants."  
+No imputation method can fully recover the information lost to missingness, so preventing missing data through good design is always preferable.
+
+:::
 
 ### Key Takeaways
 

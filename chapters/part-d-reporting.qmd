@@ -8,11 +8,29 @@ This part addresses how to communicate findings from small-sample studies transp
 
 ### Learning Objectives
 
-- Underpowered studies may fail to detect meaningful effects (p > 0.05 does not mean "no effect").
-- Small, trivial effects can be significant if measurement is precise (significant does not mean "important").
-- P-values are highly variable across replications, particularly with small samples.
+By the end of this chapter, you will be able to:
 
-Reporting effect sizes and confidence intervals alongside (or instead of) p-values provides a more informative picture. Effect sizes quantify magnitude; confidence intervals quantify precision and range of plausible values.
+**Conceptual Understanding**
+- ✓ Explain why p-values are insufficient for inference with small samples
+- ✓ Understand the relationship between effect sizes, power, and sample size
+- ✓ Recognize that p > 0.05 does not mean "no effect" in underpowered studies
+- ✓ Distinguish statistical significance from practical importance
+
+**Practical Skills**
+- ✓ Compute standardized effect sizes (Cohen's d, r, η²) in R
+- ✓ Calculate confidence intervals for effect sizes using `effectsize` package
+- ✓ Interpret confidence intervals for magnitude and precision
+- ✓ Report effect sizes in APA format with appropriate decimal places
+
+**Critical Evaluation**
+- ✓ Assess the variability of p-values across replications with small n
+- ✓ Evaluate whether observed effects are practically meaningful
+- ✓ Critique studies that report p-values without effect sizes
+
+**Application**
+- ✓ Emphasize effect size estimation over hypothesis testing in reports
+- ✓ Use confidence intervals to communicate uncertainty transparently
+- ✓ Design studies to estimate effect sizes with adequate precision
 
 
 - **Cohen's d**: Difference in means divided by pooled standard deviation (for t-tests and similar comparisons).
@@ -193,6 +211,118 @@ In small-sample research, confidence intervals are often more informative than p
 
 When interpreting CIs, avoid the common error of treating them as fixed. A 95% CI means that if we repeated the study many times, 95% of the intervals would contain the true parameter value. For a given interval, we do not know whether it contains the true value, but we can be 95% confident that it does.
 
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of effect sizes and confidence intervals from Chapter 13. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** Cohen's d = 0.5 means:
+
+A. 50% of the effect is significant  
+B. The means differ by 0.5 standard deviations  
+C. The p-value is 0.50  
+D. 50% of participants improved
+
+---
+
+**Q2.** Why report effect sizes alongside p-values?
+
+A. Effect sizes are unnecessary if p<0.05  
+B. Effect sizes quantify magnitude; p-values only indicate whether an effect is statistically distinguishable from zero  
+C. Effect sizes replace p-values entirely  
+D. Effect sizes are only for large samples
+
+---
+
+**Q3.** An odds ratio (OR) of 3.5 means:
+
+A. The outcome occurs 3.5 times more frequently in the exposed group  
+B. The odds of the outcome are 3.5 times higher in the exposed group  
+C. 3.5% have the outcome  
+D. The p-value is 0.35
+
+---
+
+**Q4.** A study reports: "d = 0.8, 95% CI [0.2, 1.4], p=0.01." What is the most important information here?
+
+A. The p-value (0.01) proves the effect is real  
+B. The combination: large effect (d=0.8), plausible range [0.2, 1.4], and statistical significance  
+C. Only the p-value matters  
+D. The CI is irrelevant if p<0.05
+
+---
+
+**Q5.** With n=10 per group, a "statistically significant" effect (p=0.04) with d=0.15 suggests:
+
+A. The effect is practically important  
+B. The effect is tiny; significance is likely spurious or due to chance  
+C. Large sample size caused significance  
+D. The effect is definitely real
+
+---
+
+**Q6.** Number Needed to Treat (NNT) = 5 means:
+
+A. 5% of patients benefit  
+B. Five patients must receive treatment for one additional patient to benefit (vs. control)  
+C. The treatment costs $5  
+D. Five treatments are required per patient
+
+---
+
+**Q7.** Which statement about effect size benchmarks (d=0.2 small, 0.5 medium, 0.8 large) is TRUE?
+
+A. They apply universally across all fields  
+B. They are context-dependent guidelines; "small" in education may be "large" in medicine  
+C. They are mandatory cutoffs  
+D. They were proven mathematically
+
+---
+
+**Q8.** A CI for a mean difference is [−2, 8]. What can we conclude?
+
+A. The effect is significant  
+B. The effect is not significant because the CI includes zero  
+C. The study is inconclusive; plausible effects range from small negative to moderate positive  
+D. The null hypothesis is true
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Cohen's d is the standardized mean difference: (Mean₁ - Mean₂) / pooled SD. d = 0.5 indicates a half-standard-deviation difference between groups—conventionally considered a "medium" effect. This is the fundamental definition of Cohen's d discussed throughout the chapter.
+
+**Q2. Answer: B**  
+*Explanation*: Statistical significance (p<0.05) depends on sample size and can occur with trivial effects if n is large, or fail to detect meaningful effects if n is small. Effect sizes convey practical importance independent of sample size. The chapter's Key Takeaways state: "P-values alone are insufficient for interpreting findings, especially with small samples where power is limited."
+
+**Q3. Answer: B**  
+*Explanation*: OR compares odds, not proportions. OR=3.5 means the odds (probability of outcome / probability of no outcome) are 3.5 times higher in one group. This differs from risk ratios. Understanding the distinction between odds and risk is crucial for interpreting logistic regression results.
+
+**Q4. Answer: B**  
+*Explanation*: All three components matter: effect size (magnitude), CI (precision/range of plausible values), and p-value (evidence against null). Together they provide a complete picture. The chapter emphasizes: "Report effect sizes and CIs alongside (or instead of) p-values for transparent, informative inference."
+
+**Q5. Answer: B**  
+*Explanation*: d=0.15 is a very small effect. With small n, statistical significance can arise from sampling variability. The effect is probably not practically meaningful. The CI would reveal whether larger effects are plausible. This illustrates why effect size matters even when p<0.05.
+
+**Q6. Answer: B**  
+*Explanation*: NNT = 1 / (Risk_Treatment - Risk_Control). NNT=5 means treating 5 patients yields one extra success compared to control. Lower NNT = more effective intervention. NNT provides an intuitive clinical interpretation of treatment effects.
+
+**Q7. Answer: B**  
+*Explanation*: Cohen's benchmarks are conventions, not laws. Effect size importance depends on context: d=0.2 might be trivial in a lab study but meaningful for a low-cost public health intervention affecting millions. The chapter explicitly discusses "Context-Specific Effect Size Benchmarks" and states: "Always compare your effect size to domain-specific benchmarks, not generic rules."
+
+**Q8. Answer: C**  
+*Explanation*: A CI including zero indicates non-significance at the corresponding α level (usually 0.05). However, the interval includes both negative effects (−2) and substantial positive effects (8), indicating uncertainty, not proof of no effect. The chapter warns: "Wide CIs in small samples reflect uncertainty; acknowledge this and avoid overinterpreting point estimates."
+
+:::
+
+---
+
 ### Key Takeaways
 
 - P-values alone are insufficient for interpreting findings, especially with small samples where power is limited.
@@ -220,7 +350,29 @@ cat("Cohen's d:", round(d, 2), "\n")
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to document all analytic choices in a reproducible manner, report deviations from planned analyses, describe sample characteristics and missing data patterns, acknowledge limitations of small samples, and follow reporting guidelines (such as CONSORT for trials, STROBE for observational studies). You will understand the importance of transparency for credibility and replicability.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain why transparency is critical for small-sample research credibility
+- ✓ Understand the role of reporting guidelines (CONSORT, STROBE, PRISMA)
+- ✓ Recognize how analytic flexibility can lead to spurious findings
+- ✓ Distinguish planned from post-hoc exploratory analyses
+
+**Practical Skills**
+- ✓ Document all data processing and analytic choices in reproducible scripts
+- ✓ Report sample characteristics with flow diagrams (participant enrollment)
+- ✓ Describe missing data patterns and handling methods
+- ✓ Create supplementary materials with full analytic details
+
+**Critical Evaluation**
+- ✓ Assess whether published studies adequately report methods and limitations
+- ✓ Evaluate deviations from preregistered analysis plans
+- ✓ Critique selective reporting of favorable results (p-hacking, HARKing)
+
+**Application**
+- ✓ Follow appropriate reporting checklists for study designs
+- ✓ Report all analyses conducted (not just statistically significant ones)
+- ✓ Acknowledge small-sample limitations with appropriate cautions
 
 ### The Importance of Transparency
 
@@ -505,6 +657,82 @@ Numerous reporting guidelines exist for different study designs:
 
 These guidelines provide checklists of items to report. Following them improves transparency and comparability across studies. Even if formal adherence is not required, consult the relevant guideline as a checklist.
 
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of transparent reporting from Chapter 14. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** Which should be reported when documenting a small-sample study?
+
+A. Only significant results  
+B. All analyses conducted, including non-significant findings  
+C. Only the primary analysis  
+D. Results can be selectively reported
+
+---
+
+**Q2.** A study planned to use a t-test but switched to Mann-Whitney after seeing skewed data. How should this be reported?
+
+A. Don't mention the change  
+B. Report only the Mann-Whitney result  
+C. "We planned a t-test but observed severe skewness (skew=2.4), so used Mann-Whitney. Sensitivity: t-test yields similar p-value."  
+D. Pretend Mann-Whitney was always planned
+
+---
+
+**Q3.** What is "p-hacking"?
+
+A. Illegally accessing data  
+B. Trying multiple analyses/subgroups until finding p<0.05, then reporting only that result  
+C. Using permutation tests  
+D. Adjusting for multiple comparisons
+
+---
+
+**Q4.** Pre-registration helps prevent:
+
+A. Sample size limitations  
+B. Researcher degrees of freedom (flexibility in analysis choices) leading to false positives  
+C. Missing data  
+D. Measurement error
+
+---
+
+**Q5.** A study with n=15 per group finds p=0.12. The limitation section should state:
+
+A. "The result is not significant, proving no effect exists"  
+B. "The study was underpowered to detect small-to-medium effects; findings are inconclusive"  
+C. "The sample size was adequate"  
+D. Nothing—non-significant results need no discussion
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Transparent reporting requires documenting all planned analyses, exploratory analyses, and sensitivity checks—not just significant findings. Selective reporting inflates Type I error across the literature. The chapter emphasizes: "Transparent reporting of methods, decisions, and limitations allows readers to evaluate evidence quality and replicability."
+
+**Q2. Answer: C**  
+*Explanation*: Deviations from plans should be documented with justification. Reporting both analyses (planned and adapted) demonstrates robustness and transparency. The Key Takeaways state: "Acknowledge deviations from planned analyses and report sensitivity analyses."
+
+**Q3. Answer: B**  
+*Explanation*: P-hacking (data dredging) involves exploring many analyses (different covariates, subgroups, outlier handling) until significance emerges, then selectively reporting the "successful" analysis. This inflates false positives. The chapter discusses how "limited power increases temptation for p-hacking" with small samples.
+
+**Q4. Answer: B**  
+*Explanation*: Pre-registration documents hypotheses and analysis plans before seeing data, preventing post-hoc decisions that capitalize on chance and inflate Type I error. The chapter explains: "Pre-registration involves documenting your hypotheses, methods, and analysis plan before data collection or analysis" to prevent "researcher degrees of freedom."
+
+**Q5. Answer: B**  
+*Explanation*: Small samples have limited power. Non-significance may reflect insufficient power rather than absence of effect. The limitations section should acknowledge this and discuss minimum detectable effects. The Key Takeaways emphasize: "State limitations honestly, particularly those related to small sample size (limited power, wide CIs, sensitivity to assumptions)."
+
+:::
+
+---
+
 ### Key Takeaways
 
 - Transparent reporting of methods, decisions, and limitations allows readers to evaluate evidence quality and replicability.
@@ -532,7 +760,29 @@ data_test %>% group_by(group) %>% summarise(mean = mean(score), sd = sd(score))
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to distinguish between "no evidence of effect" and "evidence of no effect", interpret non-significant results in the context of study power, report confidence intervals to quantify the range of plausible effects, avoid overstating conclusions from underpowered studies, and discuss equivalence or non-inferiority when appropriate. You will understand that p > 0.05 does not prove the null hypothesis.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the difference between "no evidence of effect" and "evidence of no effect"
+- ✓ Understand how low power affects interpretation of non-significant results
+- ✓ Recognize that p > 0.05 does not prove the null hypothesis
+- ✓ Distinguish traditional null hypothesis testing from equivalence testing
+
+**Practical Skills**
+- ✓ Interpret confidence intervals to assess plausible effect sizes
+- ✓ Conduct power analyses to determine detectable effect sizes
+- ✓ Perform equivalence tests using TOST (two one-sided tests) in R
+- ✓ Compute Bayes factors for evidence in favor of the null
+
+**Critical Evaluation**
+- ✓ Assess whether studies have adequate power to detect meaningful effects
+- ✓ Evaluate overstated conclusions from null results in underpowered studies
+- ✓ Critique claims of "no difference" without supporting equivalence evidence
+
+**Application**
+- ✓ Report non-significant results with confidence intervals and power context
+- ✓ Apply equivalence or non-inferiority testing when appropriate
+- ✓ Avoid dismissing potentially meaningful effects due to lack of significance
 
 ### The Meaning of a Non-Significant Result
 
@@ -613,6 +863,112 @@ When reporting non-significant results:
 - Acknowledge that the study may be inconclusive due to limited sample size.
 - Suggest directions for future research with adequate power.
 
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 15 Questions
+
+**Q1.** What does a non-significant result (p > 0.05) mean?
+
+A) The null hypothesis is true  
+B) There is no effect  
+C) The observed data are not sufficiently inconsistent with the null hypothesis to reject it at the chosen alpha level  
+D) The treatment is definitively ineffective
+
+---
+
+**Q2.** What does the phrase "absence of evidence is not evidence of absence" mean?
+
+A) Non-significant results prove there is no effect  
+B) A p-value > 0.05 does not prove the effect is zero; it only indicates insufficient evidence to reject the null  
+C) Sample size doesn't matter  
+D) All studies should be significant
+
+---
+
+**Q3.** A study finds p = 0.12 with a 95% CI of [-0.5, 2.5] points. If differences < 3 points are trivial, what can we conclude?
+
+A) The effect is definitely zero  
+B) The study is inconclusive  
+C) The study provides evidence that the effect is small or absent (narrow CI excluding meaningful effects)  
+D) We need to reject the alternative hypothesis
+
+---
+
+**Q4.** A study with n = 12 per group finds p = 0.15 with a 95% CI of [-1.0, 5.0] points. What does this indicate?
+
+A) The effect is definitely zero  
+B) The study is underpowered and inconclusive (wide CI includes both negative and moderate positive effects)  
+C) The treatment works perfectly  
+D) We should conclude there is no effect
+
+---
+
+**Q5.** Why are non-significant results particularly common in small-sample studies?
+
+A) Small samples are biased  
+B) With limited power, studies often fail to reject the null even when true effects exist  
+C) Small samples always have p > 0.05  
+D) Statistical tests don't work with small samples
+
+---
+
+**Q6.** What is an equivalence test designed to assess?
+
+A) Whether two treatments have exactly identical effects  
+B) Whether the effect is small enough to be considered negligible, relative to a predefined equivalence margin  
+C) Whether p < 0.05  
+D) Whether sample size is adequate
+
+---
+
+**Q7.** When reporting a non-significant result, which phrase is most appropriate?
+
+A) "There is no effect"  
+B) "The treatment doesn't work"  
+C) "No statistically significant difference was observed"  
+D) "We proved the null hypothesis"
+
+---
+
+**Q8.** A study with 30% power finds p = 0.25. What does this mean?
+
+A) The study will reject the null 70% of the time  
+B) The study will fail to reject the null 70% of the time, even if the alternative hypothesis is true  
+C) The effect is proven to be zero  
+D) The sample size was adequate
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. C)** "A non-significant result (p > 0.05) means that the observed data are not sufficiently inconsistent with the null hypothesis to reject it at the chosen alpha level."  
+Non-significant results do NOT mean the null is true or that there is no effect.
+
+**A2. B)** "If a study finds p = 0.15, we cannot conclude that the effect is zero. We can only conclude that the data do not provide strong evidence against the null hypothesis."  
+Failing to find evidence for an effect is not the same as finding evidence against an effect.
+
+**A3. C)** "If the CI is narrow and excludes meaningful effects: The study provides evidence that the effect, if any, is small."  
+The CI [−0.5, 2.5] excludes differences larger than 2.5 points, and differences < 3 are trivial, so this is evidence of no meaningful effect.
+
+**A4. B)** "The CI includes both negative and moderate positive effects. The study is underpowered and inconclusive. We cannot rule out meaningful effects."  
+Wide CIs indicate substantial uncertainty; the true difference could be anywhere in the interval.
+
+**A5. B)** "With small samples, non-significant results are common even when true effects exist, because power is limited. A study with 30% power will fail to reject the null 70% of the time."  
+Limited sample size reduces statistical power to detect true effects.
+
+**A6. B)** "Equivalence test: Tests whether the effect is small enough to be considered negligible."  
+Equivalence testing sets a practical equivalence margin and tests whether the observed difference falls within that margin.
+
+**A7. C)** "Use phrases like 'no statistically significant difference was observed' or 'the data are consistent with both small and moderate effects.'"  
+Avoid definitive statements about "no effect" unless justified by narrow confidence intervals.
+
+**A8. B)** "A study with 30% power will fail to reject the null 70% of the time, even if the alternative hypothesis is true."  
+Power is the probability of correctly rejecting a false null; low power means frequent failures to detect true effects.
+
+:::
+
 ### Key Takeaways
 
 - Non-significant results (p > 0.05) do not prove the null hypothesis; they indicate insufficient evidence to reject it.
@@ -641,7 +997,29 @@ cat("CI:", round(t_result$conf.int, 2), "\n")
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to create informative plots that display point estimates and uncertainty (error bars, confidence bands), use visual techniques appropriate for small samples (dot plots, box plots, individual data points), avoid misleading visualisations (suppressed axes, 3D effects), and present results in tables and figures that are accessible and interpretable. You will understand how visualisation aids interpretation and communication of findings.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the importance of visualizing uncertainty in small-sample contexts
+- ✓ Understand when to show individual data points vs. summary statistics
+- ✓ Recognize common visualization pitfalls (suppressed axes, 3D effects)
+- ✓ Distinguish error bars (SE, CI, SD) and when each is appropriate
+
+**Practical Skills**
+- ✓ Create informative plots with confidence intervals using `ggplot2`
+- ✓ Use dot plots, beeswarm plots, and box plots for small samples
+- ✓ Generate raincloud plots combining distributions, boxplots, and raw data
+- ✓ Format publication-ready figures with appropriate labels and legends
+
+**Critical Evaluation**
+- ✓ Assess whether visualizations accurately represent data and uncertainty
+- ✓ Evaluate misleading practices (truncated axes, inappropriate scales)
+- ✓ Critique over-reliance on bar charts hiding distributional features
+
+**Application**
+- ✓ Design figures that emphasize estimation over dichotomous testing
+- ✓ Present results accessibly for diverse audiences (technical and lay)
+- ✓ Use visualization to explore data and communicate findings transparently
 
 ### The Role of Visualisation in Small-Sample Research
 
@@ -886,6 +1264,136 @@ Common pitfalls:
 - **3D effects and unnecessary decoration**: Distract from data and can obscure values.
 - **Dual axes with different scales**: Misleading comparisons. Avoid or use with extreme caution.
 - **Overplotting without jitter or transparency**: Hides overlapping points. Use jitter, transparency, or both.
+
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 16 Questions
+
+**Q1.** Why is visualisation particularly valuable in small-sample research?
+
+A) Large datasets cannot be visualized  
+B) Individual data points can be shown alongside summaries, revealing variability and building trust  
+C) Visualisation eliminates the need for statistical tests  
+D) Small samples require 3D plots
+
+---
+
+**Q2.** What do 95% confidence interval error bars represent?
+
+A) The range containing all data points  
+B) The uncertainty around point estimates; CIs that exclude zero correspond to p < 0.05  
+C) The standard deviation  
+D) The sample size
+
+---
+
+**Q3.** What is the advantage of overlaying individual data points on summary plots (means or medians)?
+
+A) It makes the plot more colorful  
+B) It reveals the distribution, identifies outliers, and shows sample size directly  
+C) It is required by journal guidelines  
+D) It eliminates the need for error bars
+
+---
+
+**Q4.** In a regression plot with a confidence band, why does the band typically widen at the extremes?
+
+A) It's a plotting error  
+B) The band widens where data are sparse, reflecting greater uncertainty in predictions  
+C) The confidence band is always the same width  
+D) It indicates the sample size
+
+---
+
+**Q5.** What information does a box plot display?
+
+A) Only the mean  
+B) The median, quartiles (IQR), and outliers  
+C) Individual data points only  
+D) The correlation coefficient
+
+---
+
+**Q6.** Why should suppressed zero on the y-axis be avoided (or used with caution)?
+
+A) It saves space  
+B) It can exaggerate differences and mislead readers about the magnitude of effects  
+C) It is required by statistical standards  
+D) It improves visual appeal
+
+---
+
+**Q7.** What is "chart junk"?
+
+A) High-quality graphics  
+B) Unnecessary decoration (3D effects, excessive colors, ornaments) that distracts from data  
+C) Statistical error bars  
+D) Individual data points
+
+---
+
+**Q8.** When creating results tables, what essential information should be included?
+
+A) Only p-values  
+B) Sample sizes, means/medians, measures of variability (SD or IQR), confidence intervals, and test results  
+C) Only the mean values  
+D) Just the hypothesis
+
+---
+
+**Q9.** What does jittering accomplish in plots with many overlapping points?
+
+A) It removes outliers  
+B) It adds small random offsets to points to reveal overlapping observations  
+C) It changes the statistical significance  
+D) It increases sample size
+
+---
+
+**Q10.** In the dot plot example showing satisfaction scores, what does the diamond symbol represent?
+
+A) An outlier  
+B) The group mean  
+C) A missing value  
+D) The maximum value
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. B)** "With small samples, visualisation is particularly valuable because individual data points can be shown (unlike large datasets where summaries are necessary). Showing raw data alongside summaries builds trust and reveals variability."  
+Transparency about individual observations helps readers assess the evidence directly.
+
+**A2. B)** "Error bars (standard errors or confidence intervals) convey uncertainty. Use 95% CIs for inferential plots, as they align with conventional significance testing (CIs that exclude zero correspond to p < 0.05)."  
+95% CIs provide a visual representation of statistical significance.
+
+**A3. B)** "Each dot represents one participant... Readers can see the distribution of individual scores, the central tendency, and the precision of the estimate simultaneously."  
+Showing raw data reveals patterns that summary statistics alone cannot capture.
+
+**A4. B)** "The shaded band is the 95% confidence interval for the predicted mean at each value of experience. The band widens at the extremes (where data are sparse), reflecting greater uncertainty."  
+Uncertainty increases where there are fewer observations to constrain the model.
+
+**A5. B)** "Box plots display the median, quartiles, and outliers, providing a non-parametric summary of distribution."  
+The box shows the IQR (25th to 75th percentile), the line inside shows the median, and points beyond the whiskers are potential outliers.
+
+**A6. B)** "Suppressed zero on the y-axis: Exaggerates differences. Use a zero baseline unless there is good reason not to (and explain the choice)."  
+Not starting at zero can make small differences appear dramatically large.
+
+**A7. B)** "3D effects and unnecessary decoration: Distract from data and can obscure values."  
+Edward Tufte coined the term "chart junk" for non-data elements that reduce clarity.
+
+**A8. B)** "For small samples, consider showing: Sample sizes (n per group), means and standard deviations (or medians and IQRs), effect sizes and confidence intervals, test statistics and p-values."  
+Complete reporting allows readers to assess both statistical and practical significance.
+
+**A9. B)** "Overplotting without jitter or transparency: Hides overlapping points. Use jitter, transparency, or both."  
+Jittering adds small random noise to reveal how many points are stacked on top of each other.
+
+**A10. B)** "The diamond shows the group mean; the error bars show the 95% CI."  
+Different symbols (diamond vs. dot) help distinguish summary statistics from individual observations.
+
+:::
 
 ### Key Takeaways
 

@@ -8,11 +8,39 @@ This part establishes why small-sample research is important and how to frame re
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to explain why small samples are common in applied research, recognise the practical and ethical constraints that limit sample size, and identify contexts where small-sample methods are both necessary and appropriate. You will also understand the limitations of conventional large-sample approximations when applied to modest datasets.
+By the end of this chapter, you will be able to:
 
-### The Reality of Small Samples
+**Conceptual Understanding**
+- ✓ Explain why small samples are common in applied research settings
+- ✓ Identify practical, ethical, and logistical constraints that limit sample size
+- ✓ Understand how large-sample approximations fail with modest datasets
+- ✓ Recognize contexts where small-sample methods are necessary and appropriate
 
-Many textbooks assume that researchers can collect hundreds or thousands of observations. In practice, however, numerous research contexts yield small samples. Clinical studies of rare diseases, evaluations of pilot programmes, community-based participatory research, and studies in Small Island Developing States (SIDS) often involve fewer than 100 participants. Resource constraints, logistical barriers, and ethical considerations (such as minimising burden on vulnerable populations) make small samples the norm rather than the exception.
+**Practical Skills**
+- ✓ Calculate statistical power for different sample sizes
+- ✓ Create power curves to visualize sample size trade-offs
+- ✓ Distinguish between situations requiring small-sample vs large-sample methods
+
+**Critical Evaluation**
+- ✓ Assess when conventional parametric tests become unreliable
+- ✓ Evaluate the impact of outliers and assumption violations in small samples
+- ✓ Critique the "apologetic" framing of small-sample research
+
+**Application**
+- ✓ Justify research decisions when large samples are infeasible
+- ✓ Select appropriate statistical methods given sample size constraints
+- ✓ Communicate small-sample research findings with appropriate caveats
+
+### Why Small Samples Are Often Unavoidable
+
+Many textbooks assume that researchers can collect hundreds or thousands of observations. In practice, however, numerous research contexts yield small samples. Clinical studies of rare diseases, evaluations of pilot programmes, **classroom-based educational interventions**, community-based participatory research, and studies in Small Island Developing States (SIDS) often involve fewer than 100 participants. Resource constraints, logistical barriers, and ethical considerations (such as minimising burden on vulnerable populations) make small samples the norm rather than the exception.
+
+**Examples of small-sample contexts:**
+
+-   **Health sciences:** Clinical trials for rare diseases (n < 30), pilot studies testing feasibility before large RCTs, single-site hospital studies.
+-   **Education:** Evaluating a new teaching method in a single classroom (n = 15-25), assessing specialized programs for gifted/special education students, teacher professional development studies.
+-   **Business:** A/B tests in niche markets, customer satisfaction surveys for small businesses, startup product testing with limited users.
+-   **Social sciences:** Studies in remote communities, indigenous populations, or specialized occupational groups where the total accessible population is small.
 
 Despite their ubiquity, small samples are often treated as deficient or temporary. Researchers may apologise for limited data, or reviewers may demand larger samples without considering feasibility. This mindset overlooks the fact that many important questions can only be addressed with small datasets. Rather than apologising, researchers should select methods that are appropriate for the sample size at hand.
 
@@ -106,6 +134,142 @@ Interpretation: If the p-value is small (typically p < 0.05), we have evidence t
 - Exact tests, resampling methods, and rank-based procedures provide valid inferences without requiring large samples.
 - The choice of method should match the research question, the type of outcome, and the sample size actually available.
 
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of the key concepts from Chapter 1. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** A study with n=12 per group has 25% power to detect d=0.5. What does this mean?
+
+A. There is a 25% chance the treatment is effective  
+B. If the true effect is d=0.5, there is a 25% probability of detecting it (p<0.05)  
+C. The Type I error rate is 25%  
+D. 25% of participants will show the effect
+
+---
+
+**Q2.** Why might large-sample approximations fail with n=15?
+
+A. Computers cannot process small datasets  
+B. Sampling distributions may not be approximately normal  
+C. Effect sizes cannot be calculated  
+D. P-values are always incorrect
+
+---
+
+**Q3.** Which research question is MOST appropriate for n=20?
+
+A. "What are all factors that predict customer loyalty?" (testing 15 predictors)  
+B. "Is there a difference in satisfaction between two service approaches?"  
+C. "How do age, gender, income, education, and occupation interact to predict outcomes?"  
+D. "Can we build a machine learning model to predict customer behavior?"
+
+---
+
+**Q4.** A pilot study with n=8 finds a mean difference of 5 points (95% CI: [-2, 12], p=0.14). The correct interpretation is:
+
+A. There is no effect  
+B. The effect is exactly 5 points  
+C. The study is underpowered; effects from -2 to 12 points are plausible  
+D. The null hypothesis is proven true
+
+---
+
+**Q5.** Which outcome measure provides the MOST statistical information per observation?
+
+A. Binary (pass/fail)  
+B. Ordinal (grade A-F)  
+C. Continuous (test score 0-100)  
+D. All provide equal information
+
+---
+
+**Q6.** With n=10 per group, which statement about power is TRUE?
+
+A. Power is always 50% regardless of effect size  
+B. Power increases as the true effect size increases  
+C. Power is unrelated to sample size  
+D. Power cannot be calculated for small samples
+
+---
+
+**Q7.** A study finds p=0.048 with n=8 per group. Which concern is MOST valid?
+
+A. The result is definitely a false positive  
+B. With small n, results near the significance threshold should be interpreted cautiously  
+C. Small samples always produce spurious results  
+D. The p-value is meaningless with n<30
+
+---
+
+**Q8.** When is a small sample (n<30) potentially SUFFICIENT?
+
+A. Never—all research requires n≥100  
+B. When the effect is very large and variance is low  
+C. Only for qualitative research  
+D. When using machine learning methods
+
+---
+
+**Q9.** Which is a legitimate reason for small sample size?
+
+A. The researcher is lazy  
+B. The population is rare (e.g., a genetic disorder affecting 1 in 100,000)  
+C. The researcher wants to save time  
+D. Small samples are always preferable
+
+---
+
+**Q10.** A researcher states: "My study has n=15, so I'll just use nonparametric tests." What is the problem with this reasoning?
+
+A. Nonparametric tests require n≥30  
+B. The choice of test should depend on the data characteristics and research question, not just sample size  
+C. Nonparametric tests are always inferior  
+D. Parametric tests always work regardless of assumptions
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Statistical power is the probability of correctly rejecting a false null hypothesis when a specific effect size exists. With 25% power, there is a 75% chance of a Type II error (failing to detect a real effect of d=0.5). This concept is directly illustrated in the power curve figure in this chapter, which shows how power declines as sample size decreases.
+
+**Q2. Answer: B**  
+*Explanation*: The Central Limit Theorem requires sufficient sample size for sampling distributions to approximate normality. With n=15, especially if data are skewed or have outliers, parametric test assumptions may be violated. This is why the chapter emphasizes that "large-sample approximations can fail when n is small, leading to inaccurate p-values and confidence intervals."
+
+**Q3. Answer: B**  
+*Explanation*: Focused, binary comparisons are feasible with small samples. Complex multivariate questions (A, C, D) require much larger samples to avoid overfitting and ensure stable estimates. The chapter states: "focused questions about a single outcome or a few key comparisons can often be addressed with modest samples."
+
+**Q4. Answer: C**  
+*Explanation*: The wide confidence interval reflects substantial uncertainty. The study cannot rule out small negative effects (-2) or large positive effects (12). Non-significance with small n indicates insufficient evidence, not absence of effect. This aligns with the chapter's emphasis on focusing "on estimation rather than binary significance testing when n is limited."
+
+**Q5. Answer: C**  
+*Explanation*: Continuous measures preserve all variation in the data. Dichotomizing or coarsening into categories discards information, reduces statistical power, and limits the ability to detect effects. This principle underlies the recommendation to select outcome measures carefully when working with small samples.
+
+**Q6. Answer: B**  
+*Explanation*: Statistical power increases with larger effect sizes, larger sample sizes, and lower variance. Even with n=10, a very large effect (d=1.5) might have adequate power, while a small effect (d=0.2) would not. This is demonstrated in the power curve plot showing different effect sizes (d=0.3, 0.5, 0.8).
+
+**Q7. Answer: B**  
+*Explanation*: P-values near cutoffs (0.05) are highly variable with small samples. A slight change in data or analysis could flip the result. Emphasis should be on effect size magnitude and confidence intervals, not borderline p-values. The chapter warns that "small samples amplify the impact of outliers and violations of distributional assumptions."
+
+**Q8. Answer: B**  
+*Explanation*: If the true effect is very large (e.g., d=2.0) and within-group variability is small, even modest samples can provide clear evidence. Examples: a new drug that doubles survival rates, or a teaching method that improves scores by 30 points. The chapter acknowledges that some questions "can only be addressed with small datasets."
+
+**Q9. Answer: B**  
+*Explanation*: Rare populations, pilot studies, ethical constraints (minimizing burden on vulnerable groups), and resource limitations in SIDS contexts are all legitimate reasons for small samples. The chapter explicitly mentions "clinical studies of rare diseases" as one context where "small samples are the norm rather than the exception."
+
+**Q10. Answer: B**  
+*Explanation*: Test selection should consider: outcome type (continuous, ordinal, binary), distributional properties (normality, skewness), and research question. Small n is ONE consideration, but not the sole criterion. The chapter states: "The choice of method should match the research question, the type of outcome, and the sample size actually available."
+
+:::
+
+---
+
 ### Smoke Test
 
 ```{r}
@@ -125,7 +289,29 @@ wilcox_test(test_data, value ~ group)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to formulate research questions that are realistic given small sample constraints, distinguish between exploratory and confirmatory aims, and select outcome measures that yield interpretable results with limited observations. You will also understand when to prioritise effect size estimation over hypothesis testing.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Distinguish between exploratory and confirmatory research aims
+- ✓ Understand when to prioritize effect size estimation over hypothesis testing
+- ✓ Recognize which research questions are realistic for small samples
+- ✓ Explain the relationship between outcome measurement and sample size requirements
+
+**Practical Skills**
+- ✓ Formulate focused research questions appropriate for limited data
+- ✓ Select outcome measures that yield interpretable results with small n
+- ✓ Design studies that maximize information from modest samples
+- ✓ Calculate minimum detectable effects for planned sample sizes
+
+**Critical Evaluation**
+- ✓ Assess whether complex multivariate questions are feasible with available data
+- ✓ Evaluate trade-offs between breadth (many variables) and depth (focused questions)
+- ✓ Critique overly ambitious research designs given sample constraints
+
+**Application**
+- ✓ Design pilot studies with clear, answerable questions
+- ✓ Choose between continuous, ordinal, and binary outcome measures
+- ✓ Justify research scope and question framing in proposals and manuscripts
 
 ### Framing Realistic Research Questions
 
@@ -232,6 +418,142 @@ Guidance: choose a pilot sample large enough to detect major logistical problems
 - Report effect sizes and confidence intervals, not just p-values, to convey magnitude and precision.
 - Use paired, matched, or stratified designs to reduce variability and improve efficiency.
 - Consider adaptive or sequential designs if ethically and practically feasible.
+
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of the key concepts from Chapter 2. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** Which research question is better suited to small samples?
+
+A. "What is the relationship between 20 personality traits and job performance?"  
+B. "Does a brief mindfulness intervention reduce test anxiety compared to control?"  
+C. "Can we predict customer churn using all available behavioral data?"  
+D. "How do socioeconomic factors interact to predict health outcomes?"
+
+---
+
+**Q2.** An exploratory study (n=20) finds that meditation reduces anxiety (p=0.04, d=0.7). How should this be framed?
+
+A. "Meditation is proven effective"  
+B. "Preliminary evidence suggests meditation may reduce anxiety; replication needed"  
+C. "No conclusions can be drawn from n=20"  
+D. "The effect is definitely due to chance"
+
+---
+
+**Q3.** A researcher dichotomizes a continuous outcome (0-100 scale) into "high" (≥70) vs "low" (<70). With n=25, what is the consequence?
+
+A. Power increases because binary outcomes are simpler  
+B. Power decreases because information is discarded  
+C. No effect on statistical power  
+D. Analysis becomes impossible
+
+---
+
+**Q4.** A study aims to detect a "small" effect (d=0.2) with 80% power. Approximately how many participants per group are needed?
+
+A. n=20 per group  
+B. n=50 per group  
+C. n=200 per group  
+D. n=500 per group
+
+---
+
+**Q5.** Which statement about pilot studies is CORRECT?
+
+A. Pilot studies should always test hypotheses  
+B. Pilot studies assess feasibility and refine procedures  
+C. Pilot studies require the same sample size as main studies  
+D. Pilot studies never provide useful effect size estimates
+
+---
+
+**Q6.** A researcher plans a study with n=15 per group but calculates they need n=50 per group for 80% power. What should they do?
+
+A. Proceed with n=15 and interpret p-values cautiously  
+B. Reframe the study as exploratory/pilot  
+C. Report minimum detectable effect (MDE) given n=15  
+D. All of the above
+
+---
+
+**Q7.** Which outcome is LEAST appropriate for n=20?
+
+A. Binary outcome (success/failure)  
+B. Ordinal outcome (1-7 Likert scale)  
+C. Continuous outcome (0-100 scale)  
+D. 50-item questionnaire with subscale factor analysis
+
+---
+
+**Q8.** A study comparing two teaching methods (n=12 per class) finds no significant difference (p=0.18, d=0.45). The conclusion should be:
+
+A. "The two methods are equally effective"  
+B. "The study found no evidence of a difference, but was underpowered to detect medium effects"  
+C. "Teaching method has no effect on learning"  
+D. "The null hypothesis is confirmed"
+
+---
+
+**Q9.** When choosing between a paired and independent-groups design with small samples, which is generally preferable?
+
+A. Always use independent groups—pairing is only for large samples  
+B. Paired designs reduce within-subject variability and increase power  
+C. The choice makes no difference statistically  
+D. Paired designs require larger samples than independent designs
+
+---
+
+**Q10.** A pilot study with n=18 yields a mean difference of 5 points (95% CI: [0.2, 9.8]). What is the appropriate next step?
+
+A. Conclude the intervention is effective and implement widely  
+B. Use this estimate to plan a fully-powered confirmatory study  
+C. Abandon the research because the sample was too small  
+D. Report only the p-value and ignore the confidence interval
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Focused, binary comparisons with a single primary outcome are feasible with small samples. Multivariate questions (A, C, D) require large samples to estimate many parameters reliably. The chapter emphasizes: "focused questions about a single outcome or a few key comparisons can often be addressed with modest samples."
+
+**Q2. Answer: B**  
+*Explanation*: Exploratory studies with small samples generate hypotheses but require replication. Results should be framed as preliminary, with acknowledgment of limited power and potential for Type I error. As stated in the chapter: "Exploratory studies generate hypotheses, describe patterns... They do not require large samples, but results should be interpreted cautiously and replicated before drawing firm conclusions."
+
+**Q3. Answer: B**  
+*Explanation*: Dichotomizing continuous variables discards information about the magnitude of differences, reduces statistical power, and can create spurious findings at arbitrary cut-points. The chapter clearly states: "rather than dichotomising patient improvement into 'improved' versus 'not improved', use a continuous measure... This preserves information and increases statistical efficiency."
+
+**Q4. Answer: C**  
+*Explanation*: Detecting small effects requires large samples. For d=0.2 with 80% power and α=0.05 (two-tailed), approximately n=393 per group is needed. With small samples, only large effects (d≥0.8) can be reliably detected. This aligns with the power curve from Chapter 1 showing that detecting d=0.3 effects is beyond reach of small samples.
+
+**Q5. Answer: B**  
+*Explanation*: Pilot studies (typically n=10-30) assess feasibility (recruitment rates, protocol adherence, measurement properties), refine procedures, and provide preliminary effect size estimates for sample size planning—but are not powered for definitive hypothesis testing. The chapter's "Designing Pilot Studies" section explicitly states: "focus on collecting process metrics and precision estimates rather than hypothesis testing."
+
+**Q6. Answer: D**  
+*Explanation*: When desired sample size is infeasible: (1) proceed but interpret with appropriate caution, (2) frame as exploratory, (3) report what effect sizes CAN be detected (MDE), (4) emphasize effect size estimation over hypothesis testing. This integrates guidance from both the "Framing Realistic Research Questions" and "Effect Sizes and Estimation" sections.
+
+**Q7. Answer: D**  
+*Explanation*: Factor analysis requires n≥100-200 (ideally 5-10 observations per item). With n=20 and 50 items, factor analysis would be completely unreliable. This reflects general principles about matching analysis complexity to sample size discussed throughout the chapter.
+
+**Q8. Answer: B**  
+*Explanation*: Non-significance with small samples indicates insufficient evidence, not proof of no effect. A medium effect (d=0.45) is plausible given the CI, but the study lacked power to detect it definitively. The chapter emphasizes: "A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect."
+
+**Q9. Answer: B**  
+*Explanation*: Paired designs reduce within-subject variability and increase power. The chapter's "Research Design Considerations" section states: "Paired or matched designs (before–after, crossover, matched-pair comparisons) reduce variability by comparing each unit to itself or a closely matched control. This within-unit comparison can yield precise inferences even when the number of units is small."
+
+**Q10. Answer: B**  
+*Explanation*: Use this estimate to plan a fully-powered confirmatory study. Pilot studies provide preliminary effect estimates and variability information needed for sample size planning. The "Designing Pilot Studies" section recommends reporting "Preliminary effect estimates with wide confidence intervals, making clear that they are exploratory" and using pilots to "estimating variability to inform future sample size calculations."
+
+:::
+
+---
 
 ### Smoke Test
 

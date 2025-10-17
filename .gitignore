@@ -9,6 +9,10 @@ _book/
 _freeze/
 /.quarto/
 figure/
+*.html
+*_files/
+site_libs/
+*.rmarkdown
 
 # Data files (optional - uncomment if you want to exclude generated data)
 # data/*.csv

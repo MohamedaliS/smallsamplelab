@@ -1,4 +1,4 @@
-# Part 6: Detailed Technical Appendices
+# Part F: Technical Appendices
 
 ## Pre-Registration and Registered Reports for Small-Sample Studies
 
@@ -702,10 +702,136 @@ Problem-solving questions use `quiz2_data.csv` (ordinal outcome, n = 12 per grou
 
 ### Part 5: Supplementary Datasets
 
-Provide students with realistic small-sample datasets for practice. Run the code below to generate CSV files in the `data/` directory.
+Provide students with realistic small-sample datasets for practice across **education, business, health sciences, and operations** contexts. Run the code below to generate CSV files in the `data/` directory, or use `source("R/make_datasets.R")` which generates all 12 datasets.
+
+#### Education Datasets (NEW)
 
 ```{r eval = FALSE}
-# Dataset 1: Hospital Readmissions (n = 25)
+# Dataset 1: Classroom Reading Intervention (n = 22, paired pre/post)
+# Use case: Paired t-test, Wilcoxon signed-rank, effect sizes
+set.seed(2025)
+n_students <- 22
+baseline_reading <- round(rnorm(n_students, mean = 65, sd = 12), 1)
+reading_gain <- rnorm(n_students, mean = 8, sd = 5)
+post_reading <- round(pmin(100, pmax(0, baseline_reading + reading_gain)), 1)
+
+classroom_reading <- tibble(
+  student_id = 1:n_students,
+  grade_level = sample(c("3rd", "4th"), n_students, replace = TRUE),
+  pre_reading_score = baseline_reading,
+  post_reading_score = post_reading,
+  improvement = post_reading - baseline_reading,
+  teacher = sample(c("Ms. Johnson", "Mr. Lee"), n_students, replace = TRUE)
+)
+
+write_csv(classroom_reading, "data/classroom_reading.csv")
+
+# Dataset 2: Peer Tutoring Comparison (n = 30, two instructional methods)
+# Use case: Independent t-test, Mann-Whitney U, effect sizes
+n_peer <- 16
+n_teacher <- 14
+
+peer_scores <- round(rnorm(n_peer, mean = 78, sd = 9), 1)
+teacher_scores <- round(rnorm(n_teacher, mean = 73, sd = 10), 1)
+
+peer_tutoring <- tibble(
+  student_id = 1:(n_peer + n_teacher),
+  method = c(rep("Peer-Led", n_peer), rep("Teacher-Led", n_teacher)),
+  test_score = c(peer_scores, teacher_scores),
+  prior_gpa = round(runif(n_peer + n_teacher, min = 2.5, max = 4.0), 2),
+  attendance_rate = round(runif(n_peer + n_teacher, min = 0.75, max = 1.0), 2)
+)
+
+write_csv(peer_tutoring, "data/peer_tutoring.csv")
+
+# Dataset 3: Quiz Reliability (n = 28, five binary items)
+# Use case: KR-20 reliability, item analysis
+n_quiz <- 28
+latent_knowledge <- rnorm(n_quiz, mean = 0.7, sd = 0.15)
+
+quiz_reliability <- tibble(
+  student_id = 1:n_quiz,
+  item1 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.15)))),
+  item2 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.15)))),
+  item3 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.18)))),
+  item4 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.15)))),
+  item5 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.20))))
+)
+
+write_csv(quiz_reliability, "data/quiz_reliability.csv")
+```
+
+**Example Applications**:
+- **classroom_reading.csv**: Evaluate literacy interventions, compare pre/post achievement
+- **peer_tutoring.csv**: Compare instructional strategies, assess pedagogical innovations
+- **quiz_reliability.csv**: Validate short classroom assessments, item analysis for formative tests
+- **mediation_example.csv**: Test mechanisms (e.g., does self-efficacy mediate intervention effects?)
+
+---
+
+#### Psychology and Behavioral Sciences
+
+**mediation_example.csv** (n = 100)
+
+```{r}
+#| label: dataset-mediation
+#| eval: false
+
+# Simulated data: Growth mindset intervention study
+set.seed(5678)
+mediation_example <- tibble(
+  participant_id = 1:100,
+  intervention = rep(c(1, 0), each = 50),
+  self_efficacy = case_when(
+    intervention == 1 ~ rnorm(50, mean = 6.9, sd = 0.5),
+    TRUE ~ rnorm(50, mean = 4.2, sd = 0.4)
+  ),
+  exam_score = case_when(
+    intervention == 1 ~ round(65 + 4.5 * self_efficacy + rnorm(50, 0, 3)),
+    TRUE ~ round(65 + 4.5 * self_efficacy + rnorm(50, 0, 3))
+  ),
+  age = sample(20:23, 100, replace = TRUE),
+  gender = rep(c("Female", "Male"), 50),
+  prior_gpa = round(rnorm(100, mean = 3.0, sd = 0.3), 1)
+)
+
+write_csv(mediation_example, "data/mediation_example.csv")
+```
+
+**Purpose**: Demonstrate simple mediation analysis (X → M → Y) for understanding **how** interventions work. Tests whether self-efficacy mediates the effect of a growth mindset intervention on exam performance.
+
+**Variables**:
+- `intervention`: Treatment condition (1 = growth mindset program, 0 = control)
+- `self_efficacy`: Post-intervention self-efficacy (1-10 scale)
+- `exam_score`: Final exam score (0-100 points)
+- `age`, `gender`, `prior_gpa`: Covariates
+
+**Key Features**:
+- n = 100 (minimum for mediation analysis with bootstrap)
+- Temporal ordering: Intervention → Self-Efficacy (Week 6) → Exam (Week 8)
+- Strong indirect effect (≈79% of total effect mediated)
+- Used in Part E, Project 5: "Understanding Intervention Mechanisms"
+
+**Methods Demonstrated**:
+- Baron & Kenny approach (paths a, b, c, c')
+- Bootstrap confidence intervals for indirect effects (mediation package)
+- Sensitivity analysis for unmeasured confounding
+- Covariate-adjusted mediation models
+
+**Sample Size Requirement**: n ≥ 80-100 for adequate power to detect indirect effects via bootstrapping.
+
+---
+```
+
+**Education Applications:**
+- **classroom_reading.csv**: Evaluate literacy interventions, compare pre/post achievement
+- **peer_tutoring.csv**: Compare instructional strategies, assess pedagogical innovations
+- **quiz_reliability.csv**: Validate short classroom assessments, item analysis for formative tests
+
+#### Health Sciences Datasets
+
+```{r eval = FALSE}
+# Dataset 4: Hospital Readmissions (n = 25)
 set.seed(2025)
 hospital_data <- tibble(
   patient_id = 1:25,
@@ -716,8 +842,16 @@ hospital_data <- tibble(
 )
 
 write_csv(hospital_data, "data/hospital_readmissions.csv")
+```
 
-# Dataset 2: Employee Engagement Survey (n = 36, 5 items)
+**Health Applications:**
+- **hospital_readmissions.csv**: Firth logistic regression for rare events, risk prediction models
+
+#### Business/Marketing Datasets
+
+```{r eval = FALSE}
+# Dataset 5: Employee Engagement Survey (n = 36, 5 items)
+# Use case: Cronbach's alpha, reliability analysis
 n <- 36
 latent_engagement <- rnorm(n, mean = 4, sd = 1)
 
@@ -733,7 +867,8 @@ engagement_data <- tibble(
 
 write_csv(engagement_data, "data/employee_engagement.csv")
 
-# Dataset 3: A/B Test with Sparse Conversions (n = 40, 4 conversions)
+# Dataset 6: A/B Test with Sparse Conversions (n = 40, 4 conversions)
+# Use case: Fisher's exact test, exact binomial tests
 ab_test_data <- tibble(
   user_id = 1:40,
   variant = rep(c("A", "B"), each = 20),
@@ -743,7 +878,15 @@ ab_test_data <- tibble(
 write_csv(ab_test_data, "data/ab_test_sparse.csv")
 ```
 
-Each dataset includes an accompanying exercise in the chapter narrative to reinforce method selection and interpretation.
+**Business Applications:**
+- **employee_engagement.csv**: Scale validation, organizational surveys
+- **ab_test_sparse.csv**: Marketing experiments, conversion rate testing
+
+**Additional Datasets**: See `R/make_datasets.R` for 6 more datasets covering operations (process improvement), service quality, clinical trials, and general exercises.
+
+---
+
+Each dataset includes accompanying exercises in chapter narratives to reinforce method selection and interpretation across diverse domains: **education, health sciences, business, and operations**.
 
 ### Part 6: Advanced Topics Roadmap
 

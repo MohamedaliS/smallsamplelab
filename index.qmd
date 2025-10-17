@@ -1,10 +1,16 @@
 # Preface {.unnumbered}
 
-This book addresses a common challenge in applied research: how to conduct rigorous quantitative analysis when sample sizes are small. Whether you are studying remote communities, rare clinical conditions, or exploratory projects with limited resources, the principles and tools in this guide will help you make sound inferences from modest datasets.
+This book addresses a common challenge in applied research: how to conduct rigorous quantitative analysis when sample sizes are small. Whether you are studying remote communities, rare clinical conditions, pilot educational programs, or exploratory projects with limited resources, the principles and tools in this guide will help you make sound inferences from modest datasets.
 
 ## Who This Book Is For
 
-This book is written for undergraduates, taught masters students, and early-career PhD researchers who regularly work with samples of approximately 10 to 100 observations. It is particularly relevant for those conducting research in Small Island Developing States (SIDS) and similar contexts where large samples may be impractical or impossible.
+This book is written for undergraduates, taught masters students, and early-career PhD researchers in **social sciences, health sciences, business, and education** who regularly work with samples of approximately 10 to 100 observations. It is particularly relevant for:
+
+- Researchers conducting studies in Small Island Developing States (SIDS) and similar resource-constrained contexts
+- Educational practitioners evaluating classroom interventions with small class sizes
+- Health researchers studying rare conditions or conducting pilot clinical trials
+- Business analysts testing new strategies in small markets or with limited customer bases
+- Social scientists conducting community-based participatory research
 
 ## What You Will Learn
 
@@ -30,6 +36,46 @@ All methods are implemented in R using a curated set of packages. Every code exa
 
 **Part E: Worked Projects** offers complete case studies that integrate multiple methods from earlier chapters.
 
+### Concept Map: How the Parts Connect
+
+The following diagram shows how the book's parts build on one another and how specific chapters feed into the worked projects:
+
+```{mermaid}
+%%| fig-width: 8
+%%| fig-cap: "Book structure showing the flow from foundations through to integrated projects"
+
+graph TD
+    A[Part A: Foundations<br/>Power & Design] --> B[Part B: Data Collection<br/>Sampling & Quality]
+    B --> C[Part C: Analysis Methods<br/>Ch 3-8]
+    C --> D[Part D: Reporting<br/>Communication & Transparency]
+    A --> C
+    C --> E[Part E: Worked Projects<br/>Integrated Case Studies]
+    D --> E
+    
+    C1[Ch 3: Exact Tests<br/>Fisher's, Binomial] --> E1[Project 1:<br/>Clinical Trial Analysis]
+    C2[Ch 4: Nonparametric<br/>Mann-Whitney, Wilcoxon] --> E1
+    C3[Ch 6: Reliability<br/>Cronbach's Alpha] --> E2[Project 2:<br/>Scale Validation Study]
+    C4[Ch 4: Paired Tests<br/>Signed-Rank] --> E3[Project 3:<br/>Intervention Evaluation]
+    C5[Ch 5: Regression<br/>Firth, Bayesian] --> E3
+    
+    style A fill:#e1f5ff
+    style B fill:#fff4e1
+    style C fill:#ffe1f5
+    style D fill:#e1ffe1
+    style E fill:#f5e1ff
+    style E1 fill:#ffd4d4
+    style E2 fill:#ffd4d4
+    style E3 fill:#ffd4d4
+```
+
+**Reading paths**: 
+
+- **Linear path**: Work through Parts A → B → C → D → E sequentially for comprehensive coverage
+- **Methods-focused path**: Start with Part C (Analysis Methods) if you're already familiar with small-sample considerations
+- **Project-based path**: Begin with Part E (Worked Projects) and refer back to specific chapters as needed
+
+Each chapter in Part C includes guided Lab Practicals that apply methods to realistic scenarios across **education, business, health sciences, and social sciences** contexts.
+
 ## Software and Packages
 
 All analyses use R (version 4.0 or later) and Quarto for reproducible reporting. The following R packages are required:
@@ -39,18 +85,22 @@ All analyses use R (version 4.0 or later) and Quarto for reproducible reporting.
 -   **boot**: bootstrap resampling
 -   **exact2x2**: exact tests for 2×2 tables
 -   **logistf**: Firth-penalised logistic regression
+-   **glmnet**: ridge, lasso, and elastic net regression
+-   **mediation**: simple mediation analysis with bootstrap CIs
 -   **gt**: publication-ready tables
 -   **performance**: model diagnostics
 -   **psych**: reliability and factor analysis
 -   **DescTools**: miscellaneous descriptive and test functions
+-   **patchwork**: combining plots
 -   **brms** (optional): Bayesian regression with Stan
 
 You can install all required packages by running:
 
 ``` r
 install.packages(c("tidyverse", "rstatix", "boot", "exact2x2", 
-                   "logistf", "gt", "performance", "psych", 
-                   "DescTools", "brms"))
+                   "logistf", "glmnet", "mediation", "gt", 
+                   "performance", "psych", "DescTools", "patchwork",
+                   "brms"))
 ```
 
 ## Conventions

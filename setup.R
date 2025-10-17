@@ -38,6 +38,7 @@ cat("\n2. Checking optional packages...\n")
 
 optional_packages <- list(
   brms = "Bayesian regression (requires RStan, can be complex to install)",
+  rstanarm = "Bayesian regression (lighter Stan interface; precompiled models)",
   mice = "Multiple imputation for missing data",
   pwr = "Power analysis calculations"
 )
@@ -51,8 +52,9 @@ for (pkg in names(optional_packages)) {
 }
 
 cat("\nTo install optional packages:\n")
-cat('  install.packages(c("mice", "pwr"))\n')
-cat('  install.packages("brms")  # Requires RStan - see: https://mc-stan.org/\n\n')
+ cat('  install.packages(c("mice", "pwr"))\n')
+ cat('  install.packages("rstanarm")  # Lighter Stan interface; often easier for examples\n')
+ cat('  install.packages("brms")  # Requires RStan - see: https://mc-stan.org/\n\n')
 
 # Create necessary directories
 cat("3. Creating project directories...\n")
