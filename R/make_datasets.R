@@ -188,7 +188,74 @@ cat("Created data/reliability_exercise.csv (n =", nrow(reliability_items), ")\n"
 
 
 # -------------------------------------------------------------------------
-# Dataset 9: quiz2_data.csv
+# Dataset 9: classroom_reading.csv
+# n = 22, paired pre/post reading comprehension scores (EDUCATION)
+# -------------------------------------------------------------------------
+n_students <- 22
+
+baseline_reading <- round(rnorm(n_students, mean = 65, sd = 12), 1)
+reading_gain <- rnorm(n_students, mean = 8, sd = 5)  # Average gain of 8 points
+post_reading <- round(pmin(100, pmax(0, baseline_reading + reading_gain)), 1)
+
+classroom_reading <- tibble(
+  student_id = 1:n_students,
+  grade_level = sample(c("3rd", "4th"), n_students, replace = TRUE),
+  pre_reading_score = baseline_reading,
+  post_reading_score = post_reading,
+  improvement = post_reading - baseline_reading,
+  teacher = sample(c("Ms. Johnson", "Mr. Lee"), n_students, replace = TRUE)
+)
+
+write_csv(classroom_reading, "data/classroom_reading.csv")
+cat("Created data/classroom_reading.csv (n =", nrow(classroom_reading), ")\n")
+
+
+# -------------------------------------------------------------------------
+# Dataset 10: peer_tutoring.csv
+# n₁ = 16, n₂ = 14, two instructional methods (EDUCATION)
+# -------------------------------------------------------------------------
+n_peer <- 16
+n_teacher <- 14
+
+# Peer tutoring slightly higher mean (effect size d ≈ 0.6)
+peer_scores <- round(rnorm(n_peer, mean = 78, sd = 9), 1)
+teacher_scores <- round(rnorm(n_teacher, mean = 73, sd = 10), 1)
+
+peer_tutoring <- tibble(
+  student_id = 1:(n_peer + n_teacher),
+  method = c(rep("Peer-Led", n_peer), rep("Teacher-Led", n_teacher)),
+  test_score = c(peer_scores, teacher_scores),
+  prior_gpa = round(runif(n_peer + n_teacher, min = 2.5, max = 4.0), 2),
+  attendance_rate = round(runif(n_peer + n_teacher, min = 0.75, max = 1.0), 2)
+)
+
+write_csv(peer_tutoring, "data/peer_tutoring.csv")
+cat("Created data/peer_tutoring.csv (n =", nrow(peer_tutoring), ")\n")
+
+
+# -------------------------------------------------------------------------
+# Dataset 11: quiz_reliability.csv
+# n = 28, five-item quiz for reliability analysis (EDUCATION)
+# -------------------------------------------------------------------------
+n_quiz <- 28
+latent_knowledge <- rnorm(n_quiz, mean = 0.7, sd = 0.15)  # Proportion correct
+
+# 5 quiz items, each scored 0-1, with moderate reliability (for KR-20)
+quiz_reliability <- tibble(
+  student_id = 1:n_quiz,
+  item1 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.15)))),
+  item2 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.15)))),
+  item3 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.18)))),
+  item4 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.15)))),
+  item5 = rbinom(n_quiz, 1, pmin(0.95, pmax(0.05, latent_knowledge + rnorm(n_quiz, 0, 0.20))))
+)
+
+write_csv(quiz_reliability, "data/quiz_reliability.csv")
+cat("Created data/quiz_reliability.csv (n =", nrow(quiz_reliability), ")\n")
+
+
+# -------------------------------------------------------------------------
+# Dataset 12: quiz2_data.csv (keep existing)
 # n = 24, ordinal outcome for classroom exercises (12 per group)
 # -------------------------------------------------------------------------
 quiz_group <- rep(c("Control", "Intervention"), each = 12)
@@ -211,5 +278,30 @@ cat("Created data/quiz2_data.csv (n =", nrow(quiz2_data), ")\n")
 # -------------------------------------------------------------------------
 # Summary
 # -------------------------------------------------------------------------
-cat("\nAll datasets generated successfully.\n")
+cat("\n=== ALL DATASETS CREATED SUCCESSFULLY ===\n")
+cat("Total datasets: 12\n")
+cat("Location: data/ directory\n\n")
+
+cat("EDUCATION-specific datasets:\n")
+cat("  - classroom_reading.csv (n=22, paired pre/post reading scores)\n")
+cat("  - peer_tutoring.csv (n=30, two instructional methods comparison)\n")
+cat("  - quiz_reliability.csv (n=28, binary items for KR-20 reliability)\n\n")
+
+cat("BUSINESS/MARKETING datasets:\n")
+cat("  - mini_marketing.csv (n=30, campaign comparison)\n")
+cat("  - ab_test_sparse.csv (n=40, sparse conversions)\n\n")
+
+cat("HEALTH/CLINICAL datasets:\n")
+cat("  - anxiety_study.csv (n=40, mindfulness intervention)\n")
+cat("  - hospital_readmissions.csv (n=25, rare events logistic)\n\n")
+
+cat("OPERATIONS/PROCESS datasets:\n")
+cat("  - process_change.csv (n=20, before/after improvement)\n")
+cat("  - service_quality.csv (n=36, 3-item scale)\n")
+cat("  - employee_engagement.csv (n=36, 5-item scale)\n\n")
+
+cat("GENERAL/EXERCISES datasets:\n")
+cat("  - reliability_exercise.csv (n=25, 3 Likert items)\n")
+cat("  - quiz2_data.csv (n=24, ordinal satisfaction)\n\n")
+
 cat("Use read_csv('data/<filename>.csv') to load them in your analysis scripts.\n")

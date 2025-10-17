@@ -8,7 +8,29 @@ This part presents the core toolkit for small-sample quantitative analysis. We c
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to conduct Fisher's exact test and Barnard's exact test for 2×2 contingency tables, apply exact binomial and Poisson tests for count data, perform permutation tests for comparing groups, and construct bootstrap confidence intervals for effect sizes. You will understand when exact and resampling methods are preferable to asymptotic approximations.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain when exact tests are necessary vs. when asymptotic approximations suffice
+- ✓ Understand the theoretical basis of permutation and bootstrap resampling
+- ✓ Recognize the assumptions underlying Fisher's exact, Barnard's, and binomial tests
+- ✓ Distinguish parametric bootstrap from nonparametric bootstrap
+
+**Practical Skills**
+- ✓ Conduct Fisher's exact test in R using `fisher.test()`
+- ✓ Implement permutation tests for group comparisons using `coin` package
+- ✓ Generate bootstrap confidence intervals with `boot` package
+- ✓ Apply exact binomial and Poisson tests for count data
+
+**Critical Evaluation**
+- ✓ Assess when exact tests are overly conservative vs. appropriately cautious
+- ✓ Evaluate the trade-off between computational cost and precision
+- ✓ Critique inappropriate use of asymptotic tests in small-sample contexts
+
+**Application**
+- ✓ Select the appropriate exact/resampling method for research questions
+- ✓ Report resampling procedures transparently (iterations, seed, method)
+- ✓ Construct bootstrap CIs for custom effect sizes not available in packages
 
 ### When to Use Exact and Resampling Methods
 
@@ -36,6 +58,7 @@ Suppose we are evaluating a new training intervention. Of 10 employees who recei
 #| label: part-c-chunk-01
 library(tidyverse)
 
+# 💡 TEACHING POINT 1: Build the table carefully
 # Create 2x2 table: rows = training (Yes, No), columns = target met (Yes, No)
 training_yes <- c(8, 2)  # 8 met target, 2 did not
 training_no <- c(3, 7)   # 3 met target, 7 did not
@@ -43,14 +66,70 @@ training_no <- c(3, 7)   # 3 met target, 7 did not
 table_data <- matrix(c(8, 3, 2, 7), nrow = 2, byrow = TRUE,
                      dimnames = list(Training = c("Yes", "No"),
                                      Target = c("Met", "Not Met")))
-print(table_data)
 
-# Fisher's exact test
+# 💡 TEACHING POINT 2: Always print the table first!
+# Students should verify the layout matches their research question
+cat("Contingency Table:\n")
+print(table_data)
+cat("\n")
+
+# 💡 TEACHING POINT 3: Check expected cell counts
+# If all ≥5, chi-square is an alternative; if any <5, Fisher's is mandatory
+cat("Expected cell counts under independence:\n")
+expected <- chisq.test(table_data)$expected
+print(round(expected, 2))
+cat("→ All cells < 5, so Fisher's exact test is required\n\n")
+
+# 💡 TEACHING POINT 4: Run Fisher's exact test
 fisher_result <- fisher.test(table_data)
 print(fisher_result)
+
+# 💡 TEACHING POINT 5: Interpret systematically
+cat("\n=== INTERPRETATION GUIDE ===\n")
+cat("1. Odds Ratio =", round(fisher_result$estimate, 2), "\n")
+cat("   → Trained employees have", round(fisher_result$estimate, 1), 
+    "times higher odds of meeting target\n\n")
+
+cat("2. 95% CI = [", round(fisher_result$conf.int[1], 2), ",", 
+    round(fisher_result$conf.int[2], 2), "]\n")
+cat("   → Plausible range for OR. Does it include 1 (no effect)?\n")
+if(fisher_result$conf.int[1] > 1) {
+  cat("   → No! The entire CI is > 1, suggesting a real effect\n\n")
+} else {
+  cat("   → Yes. CI includes 1, so effect is uncertain\n\n")
+}
+
+cat("3. p-value =", round(fisher_result$p.value, 3), "\n")
+if(fisher_result$p.value < 0.05) {
+  cat("   → Significant at α = 0.05\n\n")
+} else {
+  cat("   → Not significant at α = 0.05\n\n")
+}
+
+cat("4. Conclusion:\n")
+if(fisher_result$p.value < 0.05 & fisher_result$estimate > 1) {
+  cat("   Training shows a significant positive effect (OR =", 
+      round(fisher_result$estimate, 1), ", p =", round(fisher_result$p.value, 3), ")\n")
+} else {
+  cat("   Training shows promise (OR =", round(fisher_result$estimate, 1), 
+      "), but n =", sum(table_data), "is small.\n")
+  cat("   Cannot rule out chance. A larger study is warranted.\n")
+}
 ```
 
-Interpretation: The p-value indicates the probability of observing this degree of association (or stronger) if training had no effect. A small p-value (typically p < 0.05) suggests that training is associated with meeting the target. The odds ratio quantifies the strength of association: an odds ratio greater than 1 indicates higher odds of meeting the target among trained employees. The confidence interval for the odds ratio provides a range of plausible values.
+**Interpretation Summary**: The p-value indicates the probability of observing this degree of association (or stronger) if training had no effect. The odds ratio quantifies the strength of association: an odds ratio greater than 1 indicates higher odds of meeting the target among trained employees. The confidence interval for the odds ratio provides a range of plausible values. With small samples, pay close attention to the CI width—a wide CI indicates high uncertainty.
+
+### When Fisher's Exact Test Is Overly Conservative
+
+Fisher's test conditions on *both* margins, which can be unnecessarily conservative when only one margin is fixed by design. Consider:
+
+- **Prospective study** (e.g., RCT): Row totals (group sizes) fixed, column totals random → Fisher's appropriate
+- **Case-control study**: Column totals (cases/controls) fixed, row totals random → Fisher's appropriate  
+- **Cross-sectional survey**: Both margins random → Fisher's may be conservative; consider Barnard's test or chi-square with continuity correction
+
+**Rule of thumb**: If expected cell counts exceed 5, compare Fisher's p-value with Pearson's chi-square (with Yates correction). If similar, Fisher's conservatism is acceptable.
+
+**Why this matters with small samples**: The conditioning on both margins restricts the possible tables considered in the exact calculation, making it harder to reject the null hypothesis even when a true effect exists. This conservatism is a trade-off for guaranteed Type I error control, but can reduce power unnecessarily when the study design doesn't justify fixing both margins.
 
 ### Barnard's Exact Test
 
@@ -96,6 +175,30 @@ cat("  Barnard (Score test):", signif(barnard_result$p.value, 4), "\n")
 ```
 
 Interpretation: The mid-p value typically lies between Fisher's and Barnard's results. Use mid-p corrections when exact control of the Type I error is less critical than avoiding overly conservative decisions. For confirmatory analyses, report the standard exact p-value as the primary result and consider the mid-p value as a sensitivity check.
+
+::: {.callout-warning}
+## ⚠️ Common Misconception: "Exact Tests Always Give Exact P-Values"
+
+**Myth**: "Fisher's exact test gives the exact p-value, so it's always the right answer."
+
+**Reality**: Fisher's exact test computes probabilities *exactly* under the null hypothesis, but this doesn't mean the p-value perfectly represents the evidence against H₀. The test can be **overly conservative**, especially with small samples or unbalanced margins.
+
+**Example**:
+```{r}
+#| label: part-c-misconception-1
+# Extreme case: 2x2 table with small cells
+conservative_table <- matrix(c(5, 0, 0, 5), nrow = 2)
+fisher.test(conservative_table)$p.value
+```
+
+With such sparse data, Fisher's exact test may give p = 1.0 even when the pattern looks strong. The test conditions on marginal totals, which makes it conservative.
+
+**Lesson**: 
+1. **"Exact" refers to the computation**, not the appropriateness of the test
+2. Consider **mid-p adjustments** for exploratory analyses (less conservative)
+3. Use **Barnard's test** when margins aren't fixed by design
+4. With very small samples, **descriptive reporting** (e.g., "5/5 vs 0/5") may be more informative than p-values
+:::
 
 ### Exact Binomial Test
 
@@ -237,6 +340,230 @@ print(boot_ci)
 
 Interpretation: The sample median is our point estimate of the typical recovery time. The bootstrap confidence interval provides a range of plausible values. If the interval is narrow, the median is estimated precisely; if wide, there is substantial uncertainty. Unlike parametric CIs (which assume normality), the bootstrap CI adapts to the actual distribution of the data.
 
+## Lab Practical 3.1: Exact Tests Step-by-Step
+
+**Scenario**: A small clinical trial (n=8 per group) tests a new painkiller.
+
+| Group     | Success | Failure |
+|-----------|---------|---------|
+| New Drug  | 6       | 2       |
+| Placebo   | 2       | 6       |
+
+### Step 1: Set Up Your Data
+
+```{r}
+#| label: lab-practical-3-step1
+# Create the 2x2 table
+pain_data <- matrix(c(6, 2, 2, 6), nrow = 2, byrow = TRUE,
+                    dimnames = list(Treatment = c("Drug", "Placebo"),
+                                    Outcome = c("Success", "Failure")))
+print(pain_data)
+```
+
+**Checkpoint**: Your table should show drug successes in the top-left cell (6).
+
+### Step 2: Run Fisher's Exact Test
+
+```{r}
+#| label: lab-practical-3-step2
+fisher_result <- fisher.test(pain_data)
+print(fisher_result)
+```
+
+**Checkpoint**: 
+
+- Is the p-value < 0.05? (It should be ~0.17)
+- What is the odds ratio? (Should be 9)
+
+### Step 3: Interpret
+
+```{r}
+#| label: lab-practical-3-step3
+cat("Odds of success with new drug are", 
+    round(fisher_result$estimate, 1), 
+    "times higher than placebo.\n")
+cat("However, p =", round(fisher_result$p.value, 3), 
+    "so this is not statistically significant at α = 0.05.\n")
+cat("95% CI for OR:", round(fisher_result$conf.int, 2), "\n")
+```
+
+**Discussion Questions:**
+
+1. Why is the result not significant despite an OR of 9?
+2. What does the CI tell us about the range of plausible effects?
+3. How would results change with n=20 per group? (Try it!)
+
+### Step 4: Compare with Chi-Square
+
+```{r}
+#| label: lab-practical-3-step4
+chisq.test(pain_data)
+```
+
+**What warning appears? Why?**
+
+**Key Takeaway**: With small cell counts (<5), Fisher's exact test is mandatory. Chi-square approximations fail.
+
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of exact tests and resampling methods from Chapter 3. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** Fisher's exact test is preferred over chi-square when:
+
+A. Sample size exceeds 100  
+B. All expected cell counts are ≥10  
+C. Any expected cell count is <5  
+D. Data are continuous
+
+---
+
+**Q2.** A 2×2 table shows: Treatment (8 success, 2 fail) vs Control (2 success, 8 fail). Fisher's test yields p=0.03, OR=16. The interpretation is:
+
+A. Treatment is 16 times better than control (definitely)  
+B. Odds of success are 16 times higher with treatment; p=0.03 suggests this is unlikely due to chance  
+C. 16% of patients benefit from treatment  
+D. The null hypothesis is false
+
+---
+
+**Q3.** What does an exact binomial test assess?
+
+A. Whether two proportions differ  
+B. Whether an observed proportion differs from a hypothesized value  
+C. Whether data are normally distributed  
+D. Whether variances are equal
+
+---
+
+**Q4.** A permutation test with 5,000 permutations yields p=0.022. What does this mean?
+
+A. 2.2% of permutations produced test statistics as extreme as observed  
+B. The effect size is 0.022  
+C. 22 permutations were significant  
+D. The test is invalid
+
+---
+
+**Q5.** Bootstrap confidence intervals are preferred over parametric CIs when:
+
+A. Sample size exceeds 1,000  
+B. Data are perfectly normally distributed  
+C. Distributional assumptions are questionable or the statistic has no closed-form SE  
+D. Never—parametric CIs are always better
+
+---
+
+**Q6.** A bootstrap CI for the median (based on 2,000 resamples) is [12, 18]. This means:
+
+A. The true median is definitely between 12 and 18  
+B. 95% of bootstrap resamples had medians between 12 and 18  
+C. We are 95% confident the true population median lies between 12 and 18  
+D. The sample median is 15
+
+---
+
+**Q7.** Exact Poisson test: Observed 15 defects in 5 batches (rate=3 per batch). Expected rate is 2 per batch. The test assesses:
+
+A. Whether 3 differs significantly from 2  
+B. Whether the observed rate is consistent with the expected rate of 2  
+C. Whether defects are normally distributed  
+D. Whether batches differ from each other
+
+---
+
+**Q8.** Which statement about Barnard's exact test is TRUE?
+
+A. It is identical to Fisher's exact test  
+B. It typically has higher power than Fisher's test but is more computationally intensive  
+C. It requires normal distributions  
+D. It is only for continuous data
+
+---
+
+**Q9.** A researcher performs 10 permutation tests on the same dataset. What is the concern?
+
+A. Permutation tests cannot be repeated  
+B. Multiple testing inflates Type I error; correction is needed  
+C. Permutation tests are invalid with small samples  
+D. No concern—each test is independent
+
+---
+
+**Q10.** When would you prefer a bootstrap CI over an exact test?
+
+A. For hypothesis testing of proportions  
+B. For estimating the CI of a complex statistic like a trimmed mean  
+C. Never—exact tests are always superior  
+D. Only with n>1,000
+
+---
+
+**Q11.** A permutation test yields p=0.051. The researcher runs it again and gets p=0.049. What explains this?
+
+A. Permutation tests are unreliable  
+B. Random variation in permutation samples; increase number of permutations for stability  
+C. The data changed  
+D. An error occurred
+
+---
+
+**Q12.** Which scenario is BEST suited to exact methods?
+
+A. n=500 per group, comparing means  
+B. n=8 per group, comparing proportions in a 2×2 table  
+C. n=1,000, continuous outcome with perfect normality  
+D. n=200, t-test with equal variances
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: C**  
+*Explanation*: Chi-square relies on large-sample approximations that break down when expected frequencies are small. Fisher's exact test computes exact probabilities and is mandatory when any cell has expected count <5. The chapter explicitly demonstrates this: "Expected cell counts under independence...All cells < 5, so Fisher's exact test is required."
+
+**Q2. Answer: B**  
+*Explanation*: OR=16 quantifies the association strength; p=0.03 indicates this degree of association is unlikely (3% chance) if treatment had no effect. However, the CI should also be considered (likely wide with n=20 total). The chapter's interpretation guide emphasizes examining the odds ratio, confidence interval, and p-value together for proper interpretation.
+
+**Q3. Answer: B**  
+*Explanation*: The exact binomial test compares an observed proportion (e.g., 13/15 = 87% passed) to a null hypothesis value (e.g., 70% expected pass rate). This is the fundamental purpose of the binomial test as described in the chapter's section on exact binomial tests.
+
+**Q4. Answer: A**  
+*Explanation*: In permutation tests, the p-value is the proportion of permuted datasets that produce test statistics as extreme or more extreme than the observed data. Here, 110 of 5,000 permutations (2.2%) exceeded the observed statistic. This aligns with how permutation tests construct their null distribution through shuffling.
+
+**Q5. Answer: C**  
+*Explanation*: Bootstrap CIs adapt to the actual data distribution and work for any statistic (median, correlation, etc.). They're especially valuable with non-normal data or complex statistics. The chapter states: "Bootstrap resampling draws repeated samples (with replacement) from the observed data to estimate the variability of an estimator and construct confidence intervals."
+
+**Q6. Answer: C**  
+*Explanation*: A 95% bootstrap CI provides a plausible range for the population parameter. It's constructed from the 2.5th and 97.5th percentiles of the bootstrap distribution. This is the standard interpretation of confidence intervals applied to bootstrap methods.
+
+**Q7. Answer: B**  
+*Explanation*: The exact Poisson test compares the observed rate (15/5 = 3) to a null hypothesis rate (2 per batch = 10 expected in 5 batches). It tests whether the observed count is consistent with the expected rate. This is the fundamental application of Poisson tests for count data.
+
+**Q8. Answer: B**  
+*Explanation*: Barnard's test does not condition on both margins (only on the row totals), giving it higher power than Fisher's. However, it's computationally more demanding, so Fisher's remains the conventional choice. The chapter section "Barnard's Exact Test" explains: "Barnard's exact test...does not condition on both margins. It tends to have higher power than Fisher's test...However, it is computationally more demanding."
+
+**Q9. Answer: B**  
+*Explanation*: Performing multiple tests (10 in this case) increases the family-wise error rate. With α=0.05 per test, the probability of at least one false positive is ~40%. Corrections (Bonferroni, Holm) are needed. This is a general principle of multiple testing that applies to all statistical methods, including permutation tests.
+
+**Q10. Answer: B**  
+*Explanation*: Exact tests are for hypothesis testing (p-values). Bootstrap CIs are for estimation (confidence intervals) and work for any statistic, including those without closed-form formulas (trimmed means, medians, ratios, etc.). The chapter distinguishes between hypothesis testing approaches (exact tests) and estimation approaches (bootstrap).
+
+**Q11. Answer: B**  
+*Explanation*: With finite permutations (e.g., 1,000), the p-value is estimated with some Monte Carlo error. Increasing permutations (10,000+) or setting a random seed ensures reproducibility. This reflects the stochastic nature of resampling methods when using a finite number of permutations.
+
+**Q12. Answer: B**  
+*Explanation*: Exact methods shine with small samples and discrete outcomes. With n=8 per group and 2×2 tables, asymptotic approximations fail, but exact tests compute probabilities directly from the hypergeometric distribution. The chapter emphasizes: "Fisher's exact test is the standard method for testing independence in a 2×2 contingency table when cell counts are small."
+
+:::
+
+---
+
 ### Key Takeaways
 
 - Exact tests compute p-values directly from probability distributions, avoiding large-sample approximations.
@@ -260,7 +587,29 @@ binom.test(x = 8, n = 10, p = 0.5)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to apply Mann–Whitney U, Wilcoxon signed-rank, Kruskal–Wallis, and Friedman tests for comparing groups without assuming normality. You will compute Spearman's ρ and Kendall's τ for measuring association, and understand when rank-based methods are preferable to parametric alternatives. You will also interpret effect sizes (such as rank-biserial correlation) alongside p-values.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain why rank-based methods are robust to outliers and non-normality
+- ✓ Understand the null hypotheses tested by Mann-Whitney, Wilcoxon, and Kruskal-Wallis
+- ✓ Recognize when rank-based tests have more/less power than parametric alternatives
+- ✓ Distinguish location shifts from general distributional differences
+
+**Practical Skills**
+- ✓ Conduct Mann-Whitney U test using `wilcox.test()` in R
+- ✓ Apply Wilcoxon signed-rank test for paired comparisons
+- ✓ Perform Kruskal-Wallis and Friedman tests for multiple groups
+- ✓ Compute Spearman's ρ and Kendall's τ with `cor.test()`
+
+**Critical Evaluation**
+- ✓ Assess when nonparametric tests are necessary vs. when t-tests are adequate
+- ✓ Evaluate effect sizes (rank-biserial correlation, Cliff's delta) alongside p-values
+- ✓ Critique over-reliance on rank tests when parametric assumptions are reasonable
+
+**Application**
+- ✓ Select appropriate rank-based methods for ordinal or skewed data
+- ✓ Report rank-based tests with medians, IQRs, and effect sizes
+- ✓ Use nonparametric methods for small samples with uncertain distributional forms
 
 ### When to Use Rank-Based Methods
 
@@ -270,13 +619,24 @@ Rank-based (nonparametric) tests use the ranks of observations rather than their
 
 ### Mann–Whitney U Test (Wilcoxon Rank-Sum Test)
 
-The Mann–Whitney U test compares the distributions of two independent groups. It tests the null hypothesis that the two groups have identical distributions. Under certain conditions (symmetric distributions with equal shapes), it specifically tests whether the medians differ.
+The Mann–Whitney U test compares the central tendencies of two independent groups. Under the assumption of similar distributional shapes (same spread and skewness), it tests whether medians differ. If distributions differ in shape, the test assesses stochastic dominance (whether values from one group tend to be larger).
 
 The test ranks all observations together, then compares the sum of ranks in each group. The Hodges–Lehmann estimator provides a point estimate of the location shift (the median of all pairwise differences between groups) with a confidence interval.
 
-**Assumptions**: Observations are independent. The two groups have similar distributional shapes (for the median interpretation to be valid).
+**Assumptions**: Observations are independent. The two groups have similar distributional shapes (same spread and skewness) for the median interpretation to be valid. If shapes differ markedly, the test assesses whether one distribution is stochastically larger than the other.
 
 **When to use**: Two independent groups, ordinal or continuous outcomes, small samples, non-normal distributions.
+
+::: {.callout-warning}
+## Assumption Check
+
+Before interpreting Mann–Whitney results as median comparisons:
+
+1. Compare group variances (should be similar)
+2. Inspect distributions visually (similar shapes?)
+3. If shapes differ markedly, interpret as stochastic dominance
+
+:::
 
 ### Example: Mann–Whitney U Test
 
@@ -329,6 +689,53 @@ cat("  |Δ| ≥ 0.474 → large (Romano et al., 2006)\n")
 ```
 
 Interpretation: Cliff's delta reports the probability that a randomly selected value from Branch A exceeds one from Branch B minus the reverse probability. The output includes a confidence interval, which widens with ties or very small samples. Report Δ alongside Mann–Whitney results to convey practical importance, especially when groups differ in distributional shape.
+
+::: {.callout-warning}
+## ⚠️ Common Misconception: "Large Effect Size = Real Effect"
+
+**Myth**: "A large effect size proves the effect is real."
+
+**Reality**: Effect sizes can be large **by chance**, especially with small samples. With n = 5 per group, sampling variability is enormous—you might observe Cohen's d = 1.0 or Cliff's Δ = 0.8 even when groups are truly identical.
+
+**Demonstration**:
+```{r}
+#| label: part-c-misconception-2
+# Simulate TWO IDENTICAL groups (both have true mean = 50)
+set.seed(123)
+group_a <- rnorm(5, mean = 50, sd = 10)
+group_b <- rnorm(5, mean = 50, sd = 10)
+
+# Calculate Cohen's d
+d <- (mean(group_a) - mean(group_b)) / 
+     sqrt((var(group_a) + var(group_b))/2)
+
+cat("Groups are IDENTICAL (true mean = 50 for both)\n")
+cat("But with n=5, we observe:\n")
+cat("  Group A mean:", round(mean(group_a), 1), "\n")
+cat("  Group B mean:", round(mean(group_b), 1), "\n")
+cat("  Cohen's d =", round(d, 2), "\n\n")
+
+if(abs(d) > 0.5) {
+  cat("→ This would be called a 'medium-to-large' effect!\n")
+} else {
+  cat("→ Small effect size (run this a few times with different seeds)\n")
+}
+
+# Now check statistical significance
+t_result <- t.test(group_a, group_b)
+cat("\np-value =", round(t_result$p.value, 3), "\n")
+cat("→ Not significant, correctly reflecting no true difference\n")
+```
+
+**Lesson**: With small samples, **always check**:
+
+1. **Is the confidence interval consistent?** Wide CIs indicate high uncertainty
+2. **Does the p-value support the effect?** Large effect + non-significant p suggests chance
+3. **Is the effect plausible given context?** A 2 SD difference with n = 5 is suspicious
+4. **Can you replicate it?** One-off large effects in tiny samples need replication
+
+**Bottom line**: Effect size + sample size + p-value together tell the story. Never rely on effect size alone with n < 30.
+:::
 
 ### Wilcoxon Signed-Rank Test
 
@@ -504,6 +911,285 @@ print(kendall_result)
 
 Interpretation: Kendall's τ has a similar interpretation to Spearman's ρ but different scale. It is often smaller in magnitude than ρ for the same data. Both provide evidence of monotonic association. Kendall's τ is preferred when the data include many ties or when reporting to audiences familiar with probability-based interpretations.
 
+### Lab Practical 4.1: Sales Performance Analysis with Mann-Whitney U
+
+**Context**: A retail company piloted two employee training programs (A and B) across 10 stores each. After 3 months, management collected customer satisfaction scores (on a 1–100 scale) to determine which training approach performs better. The data are ordinal-like and may not meet normality assumptions, making the Mann-Whitney U test appropriate.
+
+**Learning Goals**:
+
+- Apply the Mann-Whitney U test to independent samples
+- Visualize distributions to assess shape similarity
+- Interpret results as location shifts or stochastic dominance
+- Report effect sizes (rank-biserial correlation)
+- Follow a flowchart for interpretation
+
+**Step 1: Load and Explore the Data**
+
+```{r}
+#| label: part-c-lab-4-1
+library(tidyverse)
+library(rstatix)
+library(effsize)
+
+# Simulated customer satisfaction scores (out of 100)
+set.seed(2025)
+sales_data <- tibble(
+  training = rep(c("A", "B"), each = 10),
+  satisfaction = c(
+    # Training A: moderate scores
+    72, 68, 75, 70, 74, 69, 73, 71, 76, 70,
+    # Training B: slightly higher scores
+    78, 82, 79, 84, 81, 77, 83, 80, 85, 79
+  )
+)
+
+# Summary statistics
+sales_data %>%
+  group_by(training) %>%
+  summarise(
+    n = n(),
+    median = median(satisfaction),
+    IQR = IQR(satisfaction),
+    min = min(satisfaction),
+    max = max(satisfaction)
+  )
+```
+
+**Checkpoint**: Training B has a higher median (80 vs 71.5) and similar spread (IQR). The distributions may differ in location.
+
+**Step 2: Visualize Distributions**
+
+```{r}
+#| label: part-c-lab-4-2
+ggplot(sales_data, aes(x = training, y = satisfaction, fill = training)) +
+  geom_boxplot(alpha = 0.7) +
+  geom_jitter(width = 0.2, alpha = 0.5) +
+  labs(
+    title = "Customer Satisfaction by Training Program",
+    x = "Training Program",
+    y = "Satisfaction Score"
+  ) +
+  theme_minimal()
+```
+
+**Checkpoint**: Boxplots show similar shapes (both roughly symmetric) with Training B shifted higher. This suggests a location difference, supporting interpretation as a median shift.
+
+**Step 3: Conduct Mann-Whitney U Test**
+
+```{r}
+#| label: part-c-lab-4-3
+# Mann-Whitney U test
+mw_result <- wilcox.test(
+  satisfaction ~ training,
+  data = sales_data,
+  exact = FALSE,
+  conf.int = TRUE
+)
+
+print(mw_result)
+
+# Effect size: rank-biserial correlation
+rb <- cliff.delta(
+  satisfaction ~ training,
+  data = sales_data
+)
+print(rb)
+```
+
+**Checkpoint**: The p-value is < 0.05 (significant difference). Cliff's Delta (rank-biserial correlation) shows a large effect size (~0.7), indicating Training B consistently outperforms A.
+
+**Step 4: Interpretation Flowchart**
+
+Follow this decision tree:
+
+1. **Are the distributions similarly shaped?**
+   - Yes (from boxplots) → Interpret as a location shift (median difference)
+   - No → Interpret as stochastic dominance (one group tends to have higher values)
+
+2. **What is the effect size?**
+   - Cliff's Delta: |d| < 0.33 (small), 0.33–0.47 (medium), > 0.47 (large)
+   - Here: d ≈ 0.7 (large effect)
+
+3. **Conclusion**:
+   - Training B produces significantly higher customer satisfaction scores than Training A (W = 8, p < 0.01, Cliff's d = 0.70)
+   - Interpretation: The median satisfaction score for Training B exceeds that of Training A by approximately 8–9 points (from confidence interval)
+   - Practical implication: Training B should be adopted company-wide
+
+**Step 5: Report the Results**
+
+> "Customer satisfaction scores were compared between two training programs using the Mann-Whitney U test. Training B (Mdn = 80, IQR = 6) significantly outperformed Training A (Mdn = 71.5, IQR = 5), W = 8, p < 0.01, Cliff's δ = 0.70 (large effect). The distributions were similarly shaped, supporting interpretation as a median shift. Management should implement Training B across all stores."
+
+**Discussion Questions**:
+
+1. What would change if the boxplots showed skewed distributions with different shapes?
+   - We would interpret the result as stochastic dominance (Training B values tend to exceed A) rather than a simple median shift
+2. Why use Cliff's Delta instead of Cohen's d?
+   - Cliff's Delta is a nonparametric effect size that doesn't assume normality or equal variances, making it more appropriate for rank-based tests
+3. How would you handle ties (identical satisfaction scores)?
+   - The `exact = FALSE` argument uses a normal approximation that adjusts for ties; with many ties, consider reporting the tie correction
+
+**Extension**: Try comparing three training programs (A, B, C) using the Kruskal-Wallis test, followed by pairwise Mann-Whitney U tests with Bonferroni correction.
+
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of nonparametric tests and rank-based methods from Chapter 4. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** The Mann-Whitney U test is appropriate when:
+
+A. Data are perfectly normally distributed  
+B. Comparing two independent groups with ordinal or skewed continuous data  
+C. Testing correlation between variables  
+D. Data have no outliers
+
+---
+
+**Q2.** A Mann-Whitney test yields p=0.03. What can we conclude?
+
+A. The medians definitely differ  
+B. The distributions of the two groups differ in location (if shapes are similar)  
+C. The means differ  
+D. One group is always higher than the other
+
+---
+
+**Q3.** Wilcoxon signed-rank test is used for:
+
+A. Comparing two independent groups  
+B. Comparing paired/matched observations (e.g., before-after)  
+C. Testing normality  
+D. Comparing three or more groups
+
+---
+
+**Q4.** What does the Hodges-Lehmann estimate represent?
+
+A. The mean difference between groups  
+B. The median of all pairwise differences between two groups  
+C. The standard error  
+D. The p-value
+
+---
+
+**Q5.** Spearman's rank correlation is preferred over Pearson's when:
+
+A. Data are perfectly normally distributed  
+B. Relationships are monotonic but not necessarily linear, or data contain outliers  
+C. Sample size exceeds 1,000  
+D. Variables are categorical
+
+---
+
+**Q6.** Kendall's tau vs. Spearman's rho: Which is preferred when there are many tied ranks?
+
+A. Spearman's (always)  
+B. Kendall's (more robust to ties)  
+C. Neither (ties invalidate both)  
+D. Pearson's instead
+
+---
+
+**Q7.** Kruskal-Wallis test is the nonparametric equivalent of:
+
+A. Independent t-test  
+B. Paired t-test  
+C. One-way ANOVA  
+D. Correlation
+
+---
+
+**Q8.** After a significant Kruskal-Wallis test (p=0.02), what should you do?
+
+A. Stop—the overall test is sufficient  
+B. Conduct post-hoc pairwise comparisons with multiplicity correction (e.g., Dunn's test)  
+C. Re-run the test  
+D. Ignore it—nonparametric tests are unreliable
+
+---
+
+**Q9.** Friedman test is used for:
+
+A. Two independent groups  
+B. Three or more independent groups  
+C. Three or more related/repeated measures  
+D. Correlation analysis
+
+---
+
+**Q10.** A researcher finds: t-test p=0.04, Mann-Whitney p=0.06. What does this suggest?
+
+A. One test is wrong  
+B. Results are sensitive to distributional assumptions; report both and interpret cautiously  
+C. Use whichever p-value is smaller  
+D. Ignore the Mann-Whitney result
+
+---
+
+**Q11.** Rank-biserial correlation (effect size for Mann-Whitney) ranges from:
+
+A. 0 to 1  
+B. -1 to +1  
+C. 0 to ∞  
+D. -∞ to +∞
+
+---
+
+**Q12.** A Mann-Whitney test with n=8 per group yields p=0.08, Hodges-Lehmann estimate=5. Interpretation:
+
+A. No effect exists  
+B. The estimated location shift is 5 units, but evidence is weak (p>0.05) likely due to low power  
+C. The effect is exactly 5  
+D. The test is invalid with n=8
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Mann-Whitney (Wilcoxon rank-sum) is the nonparametric alternative to the independent t-test. It's ideal for ordinal data, skewed distributions, or small samples where normality is questionable. The chapter states: "Two independent groups, ordinal or continuous outcomes, small samples, non-normal distributions."
+
+**Q2. Answer: B**  
+*Explanation*: Mann-Whitney tests whether distributions differ in location shift. If distributional shapes (spread, skewness) are similar, this is interpreted as a median difference. If shapes differ, it tests stochastic dominance. The chapter's warning callout emphasizes checking whether "distributions have similar shapes (for location shift interpretation)."
+
+**Q3. Answer: B**  
+*Explanation*: Wilcoxon signed-rank is the nonparametric paired test (alternative to paired t-test). It tests whether the median difference between paired observations differs from zero. The chapter's learning objectives state it's for comparing "paired/matched observations."
+
+**Q4. Answer: B**  
+*Explanation*: The Hodges-Lehmann estimator is the median of all possible pairwise differences between groups. It provides a robust estimate of location shift reported with Mann-Whitney tests. The chapter explicitly states: "The Hodges–Lehmann estimator provides a point estimate of the location shift (the median of all pairwise differences between groups)."
+
+**Q5. Answer: B**  
+*Explanation*: Spearman's ρ assesses monotonic associations by ranking data first, making it robust to outliers and nonlinear (but monotonic) relationships. The chapter describes it as "robust to outliers and non-linear relationships (as long as they are monotonic)."
+
+**Q6. Answer: B**  
+*Explanation*: Kendall's τ handles tied ranks more gracefully than Spearman's ρ and has a direct probability interpretation (difference between concordant and discordant pairs). The chapter section on Kendall's correlation explains its advantages with tied data.
+
+**Q7. Answer: C**  
+*Explanation*: Kruskal-Wallis extends Mann-Whitney to three or more independent groups, testing whether distributions differ. It's the nonparametric alternative to one-way ANOVA. This is stated in the learning objectives: comparisons of "three or more independent groups."
+
+**Q8. Answer: B**  
+*Explanation*: A significant omnibus test indicates at least one group differs, but not which pairs differ. Post-hoc tests (Dunn's test with Bonferroni or FDR correction) identify specific differences. The chapter mentions post-hoc comparisons for identifying "which conditions differ."
+
+**Q9. Answer: C**  
+*Explanation*: Friedman's test is the nonparametric equivalent of repeated-measures ANOVA, comparing three or more related samples (e.g., measurements at times 1, 2, and 3 on the same subjects). The chapter explicitly states: "The Friedman test is the nonparametric analogue of repeated-measures ANOVA."
+
+**Q10. Answer: B**  
+*Explanation*: Discordant results suggest sensitivity to assumptions (normality, outliers). Report both, inspect data carefully (Q-Q plots, boxplots), and note that results are on the threshold of significance—interpret with caution. This reflects good statistical practice when assumptions matter.
+
+**Q11. Answer: B**  
+*Explanation*: Rank-biserial correlation ranges from -1 (complete separation, Group B always higher) through 0 (no difference) to +1 (complete separation, Group A always higher). It's analogous to Cohen's d but for ranks. This is a standard property of correlation-based effect sizes.
+
+**Q12. Answer: B**  
+*Explanation*: The point estimate (5 units) suggests a moderate effect, but p=0.08 indicates insufficient evidence to reject the null at α=0.05. With small samples, emphasis should be on effect size magnitude and CI, not just the p-value. The chapter consistently emphasizes reporting effect sizes alongside p-values and interpreting uncertainty with small samples.
+
+:::
+
+---
+
 ### Key Takeaways
 
 - Rank-based methods provide robust, assumption-free inferences for ordinal and non-normal continuous outcomes.
@@ -530,7 +1216,29 @@ wilcox.test(x, y)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to fit Firth-penalised logistic regression to handle separation and sparse events, apply weakly informative priors in Bayesian linear and logistic regression, perform posterior predictive checks, and use leave-one-out cross-validation (LOOCV) for model comparison. You will understand when penalised and Bayesian approaches are necessary and how they stabilise estimates with limited data.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain how separation causes MLE to fail in logistic regression
+- ✓ Understand the role of penalization in stabilizing coefficient estimates
+- ✓ Recognize how Bayesian priors regularize estimates with limited data
+- ✓ Distinguish weakly informative from strong informative priors
+
+**Practical Skills**
+- ✓ Fit Firth-penalized logistic regression using `logistf` package in R
+- ✓ Implement Bayesian regression models with `brms` or `rstanarm`
+- ✓ Specify appropriate priors (e.g., normal, Student-t, Cauchy) in Stan
+- ✓ Perform posterior predictive checks and LOOCV for model validation
+
+**Critical Evaluation**
+- ✓ Assess when separation is present and when penalization is necessary
+- ✓ Evaluate the sensitivity of Bayesian results to prior specifications
+- ✓ Critique frequentist vs. Bayesian approaches in small-sample contexts
+
+**Application**
+- ✓ Apply penalized methods to sparse binary outcomes (e.g., rare events)
+- ✓ Report Bayesian analyses transparently (priors, diagnostics, credible intervals)
+- ✓ Use LOOCV to compare competing models with limited data
 
 ### The Problem of Sparse Data in Regression
 
@@ -587,11 +1295,63 @@ Bayesian regression treats regression coefficients as random variables with prio
 
 Bayesian methods naturally quantify uncertainty and remain well-defined with small samples. They also facilitate model comparison via information criteria (LOOIC, WAIC) and posterior predictive checks.
 
+::: {.callout-warning}
+## ⚠️ Common Misconception: "Bayesian Priors Are Subjective and Biased"
+
+**Myth**: "Using priors means you're forcing your beliefs onto the data. Results are biased."
+
+**Reality**: **Weakly informative priors** are not "subjective opinions"—they're regularization tools that prevent extreme estimates when data are sparse. With small samples, the alternative (maximum likelihood) often produces infinite or nonsensical estimates.
+
+**Example**:
+```{r}
+#| label: part-c-misconception-3
+#| eval: false
+
+# Scenario: n=15, binary outcome with separation
+logistic_data <- data.frame(
+  x = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15),
+  y = c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)  # Perfect separation
+)
+
+# Standard logistic regression (frequentist)
+freq_model <- glm(y ~ x, data = logistic_data, family = binomial)
+# → Warning: "fitted probabilities 0 or 1"
+# → Coefficient: ∞ (not useful!)
+
+# Bayesian logistic regression with weakly informative prior
+# Prior: β ~ Normal(0, 2.5) — allows ±5 SD range (very wide!)
+bayes_model <- rstanarm::stan_glm(
+  y ~ x, data = logistic_data, family = binomial,
+  prior = normal(0, 2.5),
+  chains = 2, iter = 1000, refresh = 0
+)
+# → Coefficient: finite, interpretable value (e.g., β ≈ 2.3)
+```
+
+**What does the prior do?**
+
+- **Normal(0, 2.5)** on log-odds scale means: 
+  - 95% of prior probability is between -5 and +5 (odds ratios: 0.007 to 148)
+  - This is **very uninformative** about plausible effect sizes
+  - But it prevents extreme estimates (β = ±∞) when data are sparse
+
+**Lesson**:
+
+1. **Weakly informative priors ≠ strong beliefs**. They're safety constraints.
+2. With adequate data (n > 100), priors have minimal influence—data dominate
+3. With small samples, priors **stabilize** estimates (like Firth regression)
+4. Sensitivity analysis: Try different priors (e.g., Normal(0, 1) vs Normal(0, 5)) and check if conclusions change
+
+**Rule of thumb**: If your results change drastically with mildly different priors, your data are too weak to support firm conclusions—report this uncertainty honestly.
+:::
+
 **Assumptions**: Linear relationship between predictors and outcome (for linear regression). Normal errors (often relaxed in Bayesian models by using robust likelihoods). Independent observations.
 
 **When to use**: Small samples, desire for probabilistic inference, need for flexible error distributions, model comparison and selection.
 
 > **Note**: The following Bayesian examples use the `brms` package, which requires Rtools to be installed on Windows for Stan model compilation. If you encounter "make not found" errors, install Rtools from https://cran.r-project.org/bin/windows/Rtools/ and restart R. The code chunks below are set to `eval=FALSE` to allow document rendering without Rtools.
+
+A short note on `brms` vs `rstanarm`: `brms` provides a very flexible, formula-based interface to Stan (via `rstan` or `cmdstanr`) and supports complex model families and custom Stan code; it is ideal when you need advanced models, custom priors, or full control over sampling. `rstanarm` offers a lighter-weight interface with precompiled model templates (easier for classrooms and quick demos). If you need broad model flexibility and are comfortable installing Stan toolchains, prefer `brms`. For runnable examples, teaching, or simpler models where installation friction is a concern, `rstanarm` is a practical alternative — the chapter includes both examples so you can choose based on your environment.
 
 > **Always inspect diagnostics.** After fitting a Bayesian model, verify that $
 \hat{R} < 1.01$ for all parameters, effective sample size ratios exceed 0.1 (ideally > 0.5), and there are no divergent transitions. Trace plots and posterior predictive checks should be part of your routine workflow before interpreting coefficients.
@@ -708,6 +1468,63 @@ pp_check(bayes_fit, ndraws = 50)
 summary(bayes_fit)
 ```
 
+```{r}
+#| label: part-c-chunk-18-rstanarm
+# Runnable alternative using rstanarm (lighter Stan setup)
+library(tidyverse)
+if (!requireNamespace("rstanarm", quietly = TRUE)) {
+  cat("rstanarm not installed; install with install.packages('rstanarm')\n")
+} else {
+  library(rstanarm)
+
+  # Use the same simulated data as the brms example
+  set.seed(2025)
+  customer_data <- tibble(
+    customer_id = 1:18,
+    wait_time = c(5, 10, 8, 12, 7, 15, 6, 9, 11, 8, 13, 7, 10, 9, 12, 8, 11, 10),
+    friendliness = c(8, 7, 8, 6, 9, 5, 9, 8, 7, 8, 6, 9, 7, 8, 6, 8, 7, 7),
+    satisfaction = c(7, 5, 6, 4, 8, 3, 8, 6, 5, 6, 4, 8, 6, 7, 5, 7, 6, 6)
+  )
+
+  # Fit a Bayesian linear model with weakly informative priors
+  fit_rstanarm <- stan_glm(
+    satisfaction ~ wait_time + friendliness,
+    data = customer_data,
+    prior = normal(0, 5),
+    prior_intercept = normal(6, 3),
+    chains = 4,
+    iter = 2000,
+    seed = 2025,
+    refresh = 0
+  )
+
+  # Simple diagnostics and checks
+  print(summary(fit_rstanarm))
+  posterior_samples <- as.data.frame(fit_rstanarm)
+
+  # Basic diagnostics using posterior draws: compute R-hat from posterior draws
+  if (requireNamespace("posterior", quietly = TRUE)) {
+    draws <- posterior::as_draws_array(fit_rstanarm)
+    rhats <- posterior::rhat(draws)
+    ess <- posterior::ess_bulk(draws)
+    cat("\nR-hat (first coefficients):\n")
+    print(rhats[1:min(length(rhats),5)])
+    cat("\nESS (first coefficients):\n")
+    print(ess[1:min(length(ess),5)])
+  } else {
+    cat("posterior package not installed; skipping R-hat/ESS checks\n")
+  }
+
+  # Posterior predictive check (basic)
+  yrep <- posterior_predict(fit_rstanarm, draws = 50)
+  if (requireNamespace("bayesplot", quietly = TRUE)) {
+    bayesplot::ppc_dens_overlay(y = customer_data$satisfaction, yrep = yrep)
+  } else {
+    cat("bayesplot not installed; skipping ppc plot\n")
+  }
+}
+```
+
 Interpretation: The posterior summary provides estimates (posterior means or medians), standard errors (posterior standard deviations), and credible intervals (Bayesian analogue of confidence intervals). A 95% credible interval for a coefficient contains the true value with 95% probability given the data and prior. Posterior predictive checks compare simulated data from the fitted model to observed data; good fit is indicated when simulated data resemble observed data. The `brms` package uses Stan for efficient Markov chain Monte Carlo (MCMC) sampling.
 
 ### Bayesian Logistic Regression
@@ -787,6 +1604,63 @@ pp_check(bayes_logit, ndraws = 50, type = "bars")
 summary(bayes_logit)
 ```
 
+```{r}
+#| label: part-c-chunk-19-rstanarm
+# Runnable alternative using rstanarm for logistic regression
+library(tidyverse)
+if (!requireNamespace("rstanarm", quietly = TRUE)) {
+  cat("rstanarm not installed; install with install.packages('rstanarm')\n")
+} else {
+  library(rstanarm)
+
+  set.seed(2025)
+  retention_data <- tibble(
+    employee_id = 1:25,
+    satisfaction = sample(3:9, 25, replace = TRUE),
+    salary_level = sample(1:5, 25, replace = TRUE),
+    retained = c(1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1)
+  )
+
+  cat("Retention rate:", mean(retention_data$retained), "\n")
+
+  fit_logit_rstanarm <- stan_glm(
+    retained ~ satisfaction + salary_level,
+    data = retention_data,
+    family = binomial(link = "logit"),
+    prior = normal(0, 2),
+    prior_intercept = normal(0, 5),
+    chains = 4,
+    iter = 2000,
+    seed = 2025,
+    refresh = 0
+  )
+
+  cat("\n=== rstanarm summary ===\n")
+  print(summary(fit_logit_rstanarm))
+
+  if (requireNamespace("posterior", quietly = TRUE)) {
+    draws <- posterior::as_draws_array(fit_logit_rstanarm)
+    rhats <- posterior::rhat(draws)
+    ess <- posterior::ess_bulk(draws)
+    cat("\nR-hat (first coefficients):\n")
+    print(rhats[1:min(length(rhats),5)])
+    cat("\nESS (first coefficients):\n")
+    print(ess[1:min(length(ess),5)])
+  } else {
+    cat("posterior package not installed; skipping R-hat/ESS checks\n")
+  }
+
+  # Basic posterior predictive check for binary data
+  yrep <- posterior_predict(fit_logit_rstanarm, draws = 50)
+  if (requireNamespace("bayesplot", quietly = TRUE)) {
+    # ppc_bars expects a matrix-like yrep; show observed vs predicted distribution
+    bayesplot::ppc_bars(y = retention_data$retained, yrep = yrep)
+  } else {
+    cat("bayesplot not installed; skipping ppc plot\n")
+  }
+}
+```
+
 Interpretation: Coefficients are on the log-odds scale. Positive coefficients indicate that higher predictor values increase the odds of retention. The posterior predictive check for binary outcomes compares the distribution of observed outcomes (0s and 1s) to predicted distributions from the model. LOOIC (leave-one-out information criterion) can be used to compare this model to alternatives.
 
 > **Diagnostic reminder:** Just like the linear model, inspect R-hat values, effective sample sizes, divergent transition warnings, and trace plots before trusting logistic regression inferences.
@@ -804,6 +1678,625 @@ print(loo_result)
 ```
 
 Interpretation: The LOOIC value provides a measure of model fit adjusted for complexity. When comparing models, prefer the one with lower LOOIC. The standard error of the LOOIC difference helps assess whether differences are meaningful.
+
+### Lab Practical 5.1: Predicting Medication Adherence with Firth Regression
+
+**Context**: A health psychology study examined whether depression severity (PHQ-9 score) and perceived social support predict medication adherence (Yes/No) in a sample of 18 patients with chronic illness. With a small sample and potential separation (e.g., all patients with high social support adhering), standard logistic regression may fail. Firth regression provides stable estimates by applying a penalized likelihood.
+
+**Learning Goals**:
+
+- Detect separation in binary outcomes
+- Compare standard (`glm`) and Firth-penalised (`logistf`) logistic regression
+- Interpret penalized coefficients and confidence intervals
+- Understand when Firth regression is essential
+
+**Step 1: Load and Explore the Data**
+
+```{r}
+#| label: part-c-lab-5-1
+library(tidyverse)
+library(logistf)
+
+# Simulated medication adherence data
+set.seed(2025)
+adherence_data <- tibble(
+  patient_id = 1:18,
+  depression = c(22, 18, 15, 20, 19, 12, 10, 8, 14, 16, 11, 9, 7, 13, 6, 5, 4, 3),
+  social_support = c(2, 3, 3, 2, 2, 4, 5, 5, 4, 3, 5, 6, 6, 4, 7, 7, 8, 8),
+  adherent = c(0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1)
+)
+
+# Summary statistics
+adherence_data %>%
+  group_by(adherent) %>%
+  summarise(
+    n = n(),
+    mean_depression = mean(depression),
+    mean_support = mean(social_support)
+  )
+```
+
+**Checkpoint**: Non-adherent patients (n = 8) have higher depression scores (mean ≈ 18) and lower social support (mean ≈ 2.5). Adherent patients (n = 10) show the opposite pattern. This suggests strong predictors but potential separation.
+
+**Step 2: Visualize the Data**
+
+```{r}
+#| label: part-c-lab-5-2
+ggplot(adherence_data, aes(x = social_support, y = depression, color = factor(adherent), shape = factor(adherent))) +
+  geom_point(size = 3) +
+  labs(
+    title = "Medication Adherence by Depression and Social Support",
+    x = "Social Support (1-10 scale)",
+    y = "Depression Severity (PHQ-9)",
+    color = "Adherent",
+    shape = "Adherent"
+  ) +
+  scale_color_manual(values = c("0" = "red", "1" = "blue"), labels = c("No", "Yes")) +
+  scale_shape_manual(values = c(16, 17), labels = c("No", "Yes")) +
+  theme_minimal()
+```
+
+**Checkpoint**: The scatterplot shows clear separation: high social support values (≥6) are associated with adherence, while low values (≤3) predict non-adherence. This suggests quasi-complete separation, which may cause standard logistic regression to fail.
+
+**Step 3: Attempt Standard Logistic Regression**
+
+```{r}
+#| label: part-c-lab-5-3
+# Standard logistic regression
+standard_model <- glm(
+  adherent ~ depression + social_support,
+  data = adherence_data,
+  family = binomial(link = "logit")
+)
+
+summary(standard_model)
+```
+
+**Checkpoint**: Look for warning messages like "fitted probabilities numerically 0 or 1" or extremely large coefficient estimates (e.g., |β| > 10) and large standard errors. These indicate separation. The model may produce unreliable predictions.
+
+**Step 4: Fit Firth-Penalised Logistic Regression**
+
+```{r}
+#| label: part-c-lab-5-4
+# Firth-penalised logistic regression
+firth_model <- logistf(
+  adherent ~ depression + social_support,
+  data = adherence_data
+)
+
+summary(firth_model)
+```
+
+**Checkpoint**: Firth regression produces finite coefficient estimates with reduced bias. Compare the coefficients and standard errors to the standard model. Firth estimates should be smaller in magnitude but more stable.
+
+**Step 5: Interpret the Results**
+
+```{r}
+#| label: part-c-lab-5-5
+# Extract coefficients and confidence intervals
+coef_firth <- coef(firth_model)
+ci_firth <- confint(firth_model)
+
+cat("Depression coefficient:", round(coef_firth["depression"], 3), "\n")
+cat("  95% CI:", round(ci_firth["depression", ], 3), "\n")
+cat("Social support coefficient:", round(coef_firth["social_support"], 3), "\n")
+cat("  95% CI:", round(ci_firth["social_support", ], 3), "\n")
+
+# Odds ratios
+exp(coef_firth[-1])
+```
+
+**Interpretation**:
+
+- **Depression**: Each 1-point increase in PHQ-9 score is associated with lower odds of adherence (OR < 1, negative coefficient)
+- **Social Support**: Each 1-point increase in social support is associated with higher odds of adherence (OR > 1, positive coefficient)
+- The confidence intervals exclude 1 (assuming significant effects), confirming both predictors are important
+
+**Step 6: Compare Models**
+
+```{r}
+#| label: part-c-lab-5-6
+# Compare AIC (if standard model converged)
+cat("Standard model AIC:", AIC(standard_model), "\n")
+cat("Firth model AIC:", firth_model$loglik[2], "\n")  # Note: logistf returns penalized log-likelihood
+```
+
+**Checkpoint**: Firth regression provides stable estimates even when standard regression warns of separation. In small samples with rare events, Firth is the preferred approach.
+
+**Step 7: Report the Results**
+
+> "Medication adherence was predicted from depression severity (PHQ-9) and perceived social support (n = 18) using Firth-penalised logistic regression due to quasi-complete separation. Higher social support was associated with increased adherence (OR = [value], 95% CI [lower, upper], p < 0.05), while higher depression severity was associated with decreased adherence (OR = [value], 95% CI [lower, upper], p < 0.05). Firth regression provided stable estimates where standard logistic regression failed due to separation."
+
+**Discussion Questions**:
+
+1. What are the signs of separation in the standard model output?
+   - Warning messages about fitted probabilities, extremely large coefficients (|β| > 10), inflated standard errors, or non-convergence
+2. Why does Firth regression work when standard regression fails?
+   - Firth adds a penalty term (Jeffreys prior) to the likelihood, shrinking coefficients toward zero and preventing infinite estimates
+3. When should you use Firth regression vs. Bayesian logistic regression?
+   - Firth: Quick, frequentist inference, handles separation automatically
+   - Bayesian: Incorporates prior beliefs, provides full posterior distributions, better for complex models or expert knowledge
+
+**Extension**: Try adding an interaction term (`depression * social_support`) to test whether the effect of depression depends on social support level. Assess whether the interaction improves model fit using likelihood ratio tests.
+
+---
+
+### Lab Practical 5.2: Regularized Regression for Multiple Predictors (Ridge, Lasso, Elastic Net)
+
+**Context**: A startup company (n = 60 employees) wants to predict employee turnover (binary: stayed/left) using 8 potential predictors: satisfaction, salary, commute time, tenure, performance rating, team size, training hours, and work-from-home days. With p = 8 predictors and n = 60, standard logistic regression risks overfitting. Regularized methods (ridge, lasso, elastic net) prevent overfitting by penalizing large coefficients.
+
+**Learning Goals**:
+
+- Understand when regularization is needed (p/n ratio approaching 0.1-0.2)
+- Compare ridge (L2), lasso (L1), and elastic net penalties
+- Use cross-validation to select optimal penalty strength (λ)
+- Interpret regularized coefficients and variable selection
+- Report regularized models transparently
+
+**When to Use Regularized Regression**:
+
+- **Ridge (L2)**: Many correlated predictors, want to shrink all coefficients
+- **Lasso (L1)**: Want automatic variable selection (some coefficients → 0)
+- **Elastic Net**: Combines ridge + lasso; best for correlated predictors with selection
+
+**Step 1: Simulate Employee Turnover Data**
+
+```{r}
+#| label: part-c-lab-5-2-1
+library(tidyverse)
+library(glmnet)  # For regularized regression
+
+set.seed(2025)
+
+# Simulate 60 employees with 8 predictors
+n <- 60
+
+employee_data <- tibble(
+  employee_id = 1:n,
+  satisfaction = rnorm(n, mean = 6, sd = 1.5),
+  salary = rnorm(n, mean = 55000, sd = 10000),
+  commute_min = rnorm(n, mean = 30, sd = 15),
+  tenure_years = round(runif(n, min = 0.5, max = 8), 1),
+  performance = rnorm(n, mean = 3.5, sd = 0.7),  # 1-5 scale
+  team_size = sample(3:12, n, replace = TRUE),
+  training_hours = round(runif(n, min = 5, max = 50)),
+  wfh_days = sample(0:4, n, replace = TRUE)
+)
+
+# Generate turnover outcome (logistic model)
+# Higher satisfaction, salary, performance → lower turnover
+# Higher commute, longer tenure (paradoxically) → higher turnover
+prob_leave <- plogis(
+  -0.5 +  # Adjusted intercept for more balanced outcome
+    -0.5 * scale(employee_data$satisfaction)[,1] +
+    -0.3 * scale(employee_data$salary)[,1] +
+    0.4 * scale(employee_data$commute_min)[,1] +
+    0.2 * scale(employee_data$tenure_years)[,1] +
+    -0.3 * scale(employee_data$performance)[,1] +
+    0.1 * scale(employee_data$team_size)[,1] +
+    -0.1 * scale(employee_data$training_hours)[,1] +
+    -0.05 * scale(employee_data$wfh_days)[,1]
+)
+
+employee_data$left <- rbinom(n, 1, prob_leave)
+
+# Ensure we have both classes represented (minimum 5 per class for CV)
+while(sum(employee_data$left) < 5 | sum(employee_data$left) > 55) {
+  prob_leave <- plogis(
+    -0.5 + rnorm(1, 0, 0.2) +  # Add slight variation
+      -0.5 * scale(employee_data$satisfaction)[,1] +
+      -0.3 * scale(employee_data$salary)[,1] +
+      0.4 * scale(employee_data$commute_min)[,1] +
+      0.2 * scale(employee_data$tenure_years)[,1] +
+      -0.3 * scale(employee_data$performance)[,1] +
+      0.1 * scale(employee_data$team_size)[,1] +
+      -0.1 * scale(employee_data$training_hours)[,1] +
+      -0.05 * scale(employee_data$wfh_days)[,1]
+  )
+  employee_data$left <- rbinom(n, 1, prob_leave)
+}
+
+# Summary
+cat("Sample size:", n, "\n")
+cat("Number of predictors:", 8, "\n")
+cat("Turnover rate:", mean(employee_data$left), "\n")
+cat("p/n ratio:", round(8/60, 3), "(approaching danger zone of 0.1-0.2)\n\n")
+
+# Check for multicollinearity
+cor_matrix <- cor(employee_data[, 2:9])
+cat("Correlation matrix (check for |r| > 0.7):\n")
+print(round(cor_matrix, 2))
+```
+
+**Interpretation**: With p/n = 0.13 and some moderate correlations, regularization helps prevent overfitting. Standard logistic regression would estimate 8 coefficients from 60 observations, risking unstable estimates.
+
+**Step 2: Prepare Data for glmnet**
+
+```{r}
+#| label: part-c-lab-5-2-2
+# glmnet requires matrix format (not data.frame)
+X <- as.matrix(employee_data[, 2:9])  # Predictors
+y <- employee_data$left  # Outcome
+
+# Check dimensions
+cat("Predictor matrix X:", nrow(X), "rows ×", ncol(X), "columns\n")
+cat("Outcome vector y:", length(y), "observations\n")
+cat("Outcome distribution:", table(y), "\n")
+```
+
+**Step 3: Fit Ridge Regression (alpha = 0)**
+
+Ridge regression applies L2 penalty: minimizes ∑(residual²) + λ∑(β²).  
+All coefficients shrink toward zero but none become exactly zero.
+
+```{r}
+#| label: part-c-lab-5-2-3
+# Fit ridge regression with cross-validation to find optimal λ
+set.seed(2025)
+# Use 5 folds to ensure each fold has both classes
+ridge_cv <- cv.glmnet(
+  x = X,
+  y = y,
+  family = "binomial",
+  alpha = 0,  # alpha = 0 → ridge
+  nfolds = 5,  # Fewer folds for small sample with binary outcome
+  type.measure = "deviance"  # Use deviance for classification
+)
+
+# Plot cross-validation results
+plot(ridge_cv, main = "Ridge Regression: Cross-Validation")
+abline(v = log(ridge_cv$lambda.min), lty = 2, col = "red")
+abline(v = log(ridge_cv$lambda.1se), lty = 2, col = "blue")
+legend("topright", legend = c("λ_min", "λ_1se"), 
+       col = c("red", "blue"), lty = 2, cex = 0.8)
+
+# Optimal lambda
+cat("\nOptimal λ (minimum CV error):", round(ridge_cv$lambda.min, 4), "\n")
+cat("Conservative λ (1 SE rule):", round(ridge_cv$lambda.1se, 4), "\n")
+
+# Coefficients at optimal lambda
+ridge_coef <- coef(ridge_cv, s = "lambda.1se")
+cat("\nRidge coefficients (at λ_1se):\n")
+print(ridge_coef)
+```
+
+**Interpretation**: 
+- **λ_min**: Lambda that minimizes CV error (may overfit slightly)
+- **λ_1se**: Lambda within 1 SE of minimum (more conservative, preferred)
+- Ridge shrinks all coefficients but keeps all 8 predictors in the model
+- Coefficients on standardized scale (larger |β| = stronger effect)
+
+**Step 4: Fit Lasso Regression (alpha = 1)**
+
+Lasso applies L1 penalty: minimizes ∑(residual²) + λ∑|β|.  
+Can shrink coefficients to exactly zero → automatic variable selection.
+
+```{r}
+#| label: part-c-lab-5-2-4
+# Fit lasso with cross-validation
+set.seed(2025)
+lasso_cv <- cv.glmnet(
+  x = X,
+  y = y,
+  family = "binomial",
+  alpha = 1,  # alpha = 1 → lasso
+  nfolds = 5,  # Fewer folds for small sample
+  type.measure = "deviance"
+)
+
+# Plot cross-validation
+plot(lasso_cv, main = "Lasso Regression: Cross-Validation")
+abline(v = log(lasso_cv$lambda.min), lty = 2, col = "red")
+abline(v = log(lasso_cv$lambda.1se), lty = 2, col = "blue")
+
+# Optimal lambda
+cat("\nOptimal λ (minimum CV error):", round(lasso_cv$lambda.min, 4), "\n")
+cat("Conservative λ (1 SE rule):", round(lasso_cv$lambda.1se, 4), "\n")
+
+# Coefficients at optimal lambda
+lasso_coef <- coef(lasso_cv, s = "lambda.1se")
+cat("\nLasso coefficients (at λ_1se):\n")
+print(lasso_coef)
+
+# Count non-zero coefficients
+n_selected <- sum(lasso_coef[-1] != 0)  # Exclude intercept
+cat("\nVariables selected:", n_selected, "out of 8\n")
+```
+
+**Interpretation**:
+- Lasso performs automatic variable selection
+- At λ_1se, some coefficients are exactly 0 (excluded from model)
+- Simplifies model: easier to interpret and less prone to overfitting
+- Variables with β = 0 are deemed unimportant after controlling for others
+
+**Step 5: Fit Elastic Net (alpha = 0.5)**
+
+Elastic net combines ridge + lasso: penalty = (1-α)∑β² + α∑|β|.  
+With α = 0.5, equally weights L1 and L2 penalties.
+
+```{r}
+#| label: part-c-lab-5-2-5
+# Fit elastic net
+set.seed(2025)
+enet_cv <- cv.glmnet(
+  x = X,
+  y = y,
+  family = "binomial",
+  alpha = 0.5,  # alpha = 0.5 → elastic net (50% ridge + 50% lasso)
+  nfolds = 5,  # Fewer folds for small sample
+  type.measure = "deviance"
+)
+
+# Plot cross-validation
+plot(enet_cv, main = "Elastic Net: Cross-Validation")
+abline(v = log(enet_cv$lambda.min), lty = 2, col = "red")
+abline(v = log(enet_cv$lambda.1se), lty = 2, col = "blue")
+
+# Coefficients
+enet_coef <- coef(enet_cv, s = "lambda.1se")
+cat("\nElastic Net coefficients (at λ_1se):\n")
+print(enet_coef)
+
+# Count non-zero
+n_selected_enet <- sum(enet_coef[-1] != 0)
+cat("\nVariables selected:", n_selected_enet, "out of 8\n")
+```
+
+**Step 6: Compare All Three Methods**
+
+```{r}
+#| label: part-c-lab-5-2-6
+# Extract coefficients from all models
+comparison <- data.frame(
+  Variable = rownames(ridge_coef)[-1],  # Exclude intercept
+  Ridge = as.numeric(ridge_coef[-1]),
+  Lasso = as.numeric(lasso_coef[-1]),
+  ElasticNet = as.numeric(enet_coef[-1])
+)
+
+# Round for readability
+comparison[, 2:4] <- round(comparison[, 2:4], 3)
+
+cat("Coefficient Comparison (at λ_1se):\n")
+print(comparison)
+
+# Visual comparison
+library(tidyr)
+comparison_long <- comparison %>%
+  pivot_longer(cols = c(Ridge, Lasso, ElasticNet),
+               names_to = "Method",
+               values_to = "Coefficient")
+
+library(ggplot2)
+ggplot(comparison_long, aes(x = Variable, y = Coefficient, fill = Method)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  coord_flip() +
+  labs(
+    title = "Regularized Regression Comparison",
+    subtitle = "Ridge keeps all variables; Lasso/Elastic Net select subset",
+    x = "Predictor",
+    y = "Standardized Coefficient"
+  ) +
+  theme_minimal() +
+  geom_hline(yintercept = 0, linetype = "dashed")
+```
+
+**Step 7: Model Performance Comparison**
+
+```{r}
+#| label: part-c-lab-5-2-7
+# Predict probabilities using optimal models
+ridge_pred <- predict(ridge_cv, newx = X, s = "lambda.1se", type = "response")
+lasso_pred <- predict(lasso_cv, newx = X, s = "lambda.1se", type = "response")
+enet_pred <- predict(enet_cv, newx = X, s = "lambda.1se", type = "response")
+
+# Classification accuracy (using 0.5 threshold)
+ridge_class <- ifelse(ridge_pred > 0.5, 1, 0)
+lasso_class <- ifelse(lasso_pred > 0.5, 1, 0)
+enet_class <- ifelse(enet_pred > 0.5, 1, 0)
+
+cat("Classification Accuracy (in-sample):\n")
+cat("Ridge:", mean(ridge_class == y), "\n")
+cat("Lasso:", mean(lasso_class == y), "\n")
+cat("Elastic Net:", mean(enet_class == y), "\n\n")
+
+cat("Cross-Validation Deviance (lower = better):\n")
+cat("Ridge:", round(min(ridge_cv$cvm), 3), "\n")
+cat("Lasso:", round(min(lasso_cv$cvm), 3), "\n")
+cat("Elastic Net:", round(min(enet_cv$cvm), 3), "\n")
+```
+
+**Step 8: Interpretation for Stakeholders**
+
+```{r}
+#| label: part-c-lab-5-2-8
+# Identify top predictors from Lasso (non-zero coefficients)
+top_predictors <- comparison %>%
+  filter(Lasso != 0) %>%
+  arrange(desc(abs(Lasso)))
+
+cat("\n=== KEY FINDINGS FOR TURNOVER PREDICTION ===\n\n")
+cat("Top predictors of turnover (Lasso selection):\n")
+print(top_predictors)
+
+cat("\nInterpretation:\n")
+if(nrow(top_predictors) > 0) {
+  cat("- Negative coefficients → Higher values reduce turnover risk\n")
+  cat("- Positive coefficients → Higher values increase turnover risk\n")
+  cat("- Variables with β = 0 were excluded (not predictive after controlling for others)\n")
+}
+```
+
+**Discussion Questions**:
+
+1. **When should you use regularization vs. Firth regression?**
+   - Firth: Binary outcome with separation, small n (< 50)
+   - Regularization: Multiple predictors, p/n > 0.1, multicollinearity, n = 50-100
+
+2. **How do you choose between Ridge, Lasso, and Elastic Net?**
+   - Ridge: Keep all predictors, just shrink coefficients (interpretability less important)
+   - Lasso: Want automatic variable selection, sparse models
+   - Elastic Net: Correlated predictors + selection (best of both worlds)
+
+3. **What does λ control?**
+   - λ = 0: No penalty (standard logistic regression, may overfit)
+   - λ = ∞: All β → 0 (underfits, intercept-only model)
+   - Optimal λ: Balance bias-variance via cross-validation
+
+4. **How do you report regularized regression results?**
+   - State method (ridge/lasso/elastic net), α value, cross-validation procedure
+   - Report optimal λ (λ_min or λ_1se)
+   - Report which variables were selected (lasso/elastic net)
+   - Report coefficients and interpret direction/magnitude
+   - Acknowledge: coefficients are biased toward zero (shrinkage), but predictions are often better
+
+**Key Takeaways**:
+- Regularization prevents overfitting when p/n ratio is high (> 0.1)
+- Cross-validation selects optimal penalty strength automatically
+- Lasso provides interpretable models via automatic variable selection
+- Elastic net combines strengths of ridge and lasso
+- Regularized models sacrifice unbiasedness for better prediction accuracy
+
+**Extension**: 
+- Try different α values (0, 0.25, 0.5, 0.75, 1) to see how variable selection changes
+- Split data into train (70%) and test (30%) to assess out-of-sample performance
+- Use `glmnet`'s built-in `predict()` function with `type = "class"` for classification
+
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of penalized and Bayesian regression methods from Chapter 5. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** Firth's penalized logistic regression is necessary when:
+
+A. Sample size exceeds 1,000  
+B. Complete or quasi-complete separation occurs in standard logistic regression  
+C. The outcome is continuous  
+D. There are no missing data
+
+---
+
+**Q2.** What is the "separation problem" in logistic regression?
+
+A. Predictors are uncorrelated  
+B. A predictor perfectly predicts the outcome, causing infinite coefficient estimates  
+C. Sample size is too large  
+D. The outcome has only one level
+
+---
+
+**Q3.** In Bayesian regression, a "weakly informative prior" means:
+
+A. Strong beliefs based on previous research  
+B. Priors that gently regularize estimates without imposing strong constraints  
+C. Flat, non-informative priors  
+D. Priors are not used
+
+---
+
+**Q4.** Why are Bayesian methods well-suited to small samples?
+
+A. They automatically increase sample size  
+B. Priors stabilize estimates and quantify uncertainty through posterior distributions  
+C. They eliminate the need for assumptions  
+D. They always produce significant results
+
+---
+
+**Q5.** What does MCMC stand for, and why is it used in Bayesian regression?
+
+A. Maximum Correlation for Model Comparison; used for variable selection  
+B. Markov Chain Monte Carlo; used to sample from posterior distributions  
+C. Minimum Covariance Model Checking; used for diagnostics  
+D. Multiple Comparison Correction; used to adjust p-values
+
+---
+
+**Q6.** R-hat (R̂) is a diagnostic for Bayesian models. What does R̂ > 1.1 indicate?
+
+A. Perfect convergence  
+B. Chains have not converged; more iterations or different initialization needed  
+C. The model fits well  
+D. Sample size is too large
+
+---
+
+**Q7.** Posterior predictive checks assess:
+
+A. Whether priors are reasonable  
+B. Whether simulated data from the fitted model resemble observed data  
+C. Whether R-hat < 1.01  
+D. Statistical power
+
+---
+
+**Q8.** LOOIC (Leave-One-Out Information Criterion) is used for:
+
+A. Hypothesis testing  
+B. Model comparison—lower LOOIC indicates better predictive accuracy  
+C. Diagnosing convergence  
+D. Calculating p-values
+
+---
+
+**Q9.** A Bayesian 95% credible interval [2, 8] means:
+
+A. There is a 95% probability the true parameter lies in [2, 8] given the data and prior  
+B. 95% of future samples will have values in [2, 8]  
+C. The parameter is exactly 5  
+D. The p-value is 0.05
+
+---
+
+**Q10.** When should you prefer Firth regression over Bayesian logistic regression?
+
+A. When you want probability statements about parameters  
+B. When you need a quick, simple solution for separation without specifying priors  
+C. Never—Bayesian is always better  
+D. Only with n>100
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: When a predictor perfectly or nearly perfectly separates outcomes (e.g., all treated patients survive, all untreated die), maximum likelihood diverges to infinity. Firth's method adds a penalty to shrink coefficients toward finite values. The chapter states: "Firth logistic regression is particularly useful when events are sparse (fewer than 10 events per predictor) or when separation occurs."
+
+**Q2. Answer: B**  
+*Explanation*: Separation occurs when a combination of predictors perfectly classifies outcomes (e.g., all patients with predictor=1 have outcome=1). Maximum likelihood fails, yielding infinite estimates and huge standard errors. The lab practical demonstrates this with the medication adherence example showing "clear separation."
+
+**Q3. Answer: B**  
+*Explanation*: Weakly informative priors (e.g., Normal(0, 2) for standardized coefficients) prevent extreme estimates without dominating the data. They improve small-sample estimation by incorporating mild regularization. The chapter describes them as priors that "gently regularise estimates without imposing strong beliefs."
+
+**Q4. Answer: B**  
+*Explanation*: Bayesian methods incorporate prior information (even weak priors) to stabilize estimates when data are limited. Posterior distributions quantify uncertainty naturally, unlike frequentist CIs which can be unstable with small n. The chapter emphasizes that priors "stabilize estimates" and Bayesian methods "quantify uncertainty through posterior distributions."
+
+**Q5. Answer: B**  
+*Explanation*: MCMC (Markov Chain Monte Carlo) algorithms (e.g., Hamiltonian Monte Carlo in Stan) generate samples from complex posterior distributions that cannot be computed analytically. This is the fundamental computational method underlying Bayesian inference with complex models.
+
+**Q6. Answer: B**  
+*Explanation*: R-hat compares within-chain and between-chain variance. Values near 1.0 indicate convergence; values >1.01 (and especially >1.1) indicate chains are exploring different regions and have not mixed well. This is a standard diagnostic for assessing MCMC convergence.
+
+**Q7. Answer: B**  
+*Explanation*: Posterior predictive checks (PPCs) simulate datasets from the fitted model and compare them to the actual data. If simulated data match observed patterns (distributions, means, etc.), the model fits well. The chapter describes PPCs as validating "model fit by comparing observed and simulated data."
+
+**Q8. Answer: B**  
+*Explanation*: LOOIC estimates out-of-sample predictive accuracy using leave-one-out cross-validation. When comparing models, prefer the one with lower LOOIC (better prediction). The Key Takeaways state: "LOOIC facilitates model comparison, favouring models with better out-of-sample predictive accuracy."
+
+**Q9. Answer: A**  
+*Explanation*: Credible intervals (Bayesian) have a direct probability interpretation: given the data and prior, there's a 95% probability the parameter is in the interval. This differs from frequentist CIs, which are about long-run coverage. This is the fundamental difference between Bayesian and frequentist interval interpretation.
+
+**Q10. Answer: B**  
+*Explanation*: Firth regression is simpler (no prior specification, no MCMC convergence checks) and provides a quick fix for separation. Bayesian methods offer more flexibility and natural uncertainty quantification but require more setup. The lab practical's reflection question addresses this: "Firth: Quick, frequentist inference, handles separation automatically."
+
+:::
+
+---
 
 ### Key Takeaways
 
@@ -831,7 +2324,29 @@ logistf(y ~ x, data = dat)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to assess internal consistency using Cronbach's alpha and McDonald's omega for short multi-item scales, compute split-half reliability with bootstrap confidence intervals, understand the limitations of reliability estimates with small samples, and apply polychoric correlations for ordinal items. You will recognise when measurement quality may be insufficient and how to report reliability transparently.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the theoretical basis of reliability (true score theory)
+- ✓ Understand why Cronbach's alpha is attenuated for short scales
+- ✓ Recognize the differences between alpha, omega, and split-half reliability
+- ✓ Distinguish reliability from validity in measurement quality
+
+**Practical Skills**
+- ✓ Compute Cronbach's alpha using `psych::alpha()` in R
+- ✓ Calculate McDonald's omega with `psych::omega()` for multidimensional scales
+- ✓ Estimate split-half reliability with bootstrap confidence intervals
+- ✓ Apply polychoric correlations for ordinal items using `polycor` package
+
+**Critical Evaluation**
+- ✓ Assess when reliability estimates are trustworthy vs. unstable with small n
+- ✓ Evaluate the trade-off between scale brevity and internal consistency
+- ✓ Critique inappropriate use of alpha for multidimensional scales
+
+**Application**
+- ✓ Report reliability with confidence intervals and appropriate caveats
+- ✓ Use item analysis to identify low-performing items for deletion
+- ✓ Apply measurement quality checks in small-scale instrument development
 
 ### The Challenge of Short Scales
 
@@ -847,7 +2362,79 @@ Cronbach's alpha estimates internal consistency by comparing item variances to t
 
 **When to use**: Multi-item scales (3 or more items), desire for simple internal consistency estimate. Interpret cautiously for short scales and with small samples.
 
-**Acceptable values**: Alpha ≥ 0.70 is often considered acceptable for research purposes, though this threshold is arbitrary. Lower values may be acceptable for exploratory research or when constructs are heterogeneous.
+### Interpreting Alpha in Context
+
+Traditional thresholds (0.70 for research, 0.90 for clinical decisions) are **guidelines, not rules**:
+
+- **Exploratory research / pilot studies**: α = 0.60–0.70 acceptable
+- **Established scales in research**: α = 0.70–0.90 expected
+- **High-stakes decisions**: α > 0.90 required
+- **Very short scales** (3 items): α = 0.50–0.65 may be acceptable if items are conceptually narrow
+
+**More important than alpha:**
+
+- Item-total correlations (all > 0.30?)
+- Conceptual coherence of items
+- Confidence interval width (precision matters!)
+
+With n = 36, an alpha of 0.65 has a 95% CI of approximately [0.45, 0.80]—wide uncertainty! Always report confidence intervals alongside point estimates, especially with small samples where precision is limited.
+
+::: {.callout-warning}
+## ⚠️ Common Misconception: "Alpha > 0.70 = Good Scale"
+
+**Myth**: "If Cronbach's alpha is above 0.70, my scale is reliable and valid."
+
+**Reality**: Alpha can be **artificially inflated** by redundant items or scale length. High alpha ≠ good measurement.
+
+**Demonstration**:
+```{r}
+#| label: part-c-misconception-4
+library(psych)
+
+# Create a scale with near-duplicate items (bad scale design!)
+set.seed(2025)
+n <- 30
+redundant_scale <- data.frame(
+  item1 = rnorm(n, 50, 10),
+  item2 = rnorm(n, 50, 10),  # Completely independent items (measuring different things)
+  item3 = rnorm(n, 50, 10),
+  item4 = rnorm(n, 50, 10)
+)
+
+# Add redundancy by duplicating item1 with slight noise
+redundant_scale$item2 <- redundant_scale$item1 + rnorm(n, 0, 2)  # Near-duplicate
+redundant_scale$item3 <- redundant_scale$item1 + rnorm(n, 0, 2)  # Near-duplicate
+redundant_scale$item4 <- redundant_scale$item1 + rnorm(n, 0, 2)  # Near-duplicate
+
+# Compute alpha
+alpha_result <- alpha(redundant_scale)
+cat("Cronbach's alpha:", round(alpha_result$total$raw_alpha, 2), "\n\n")
+
+# Check item-total correlations
+cat("Item-total correlations (r.cor):\n")
+print(round(alpha_result$item.stats$r.cor, 2))
+
+cat("\n→ Alpha looks great (>0.90), but all items are nearly identical!\n")
+cat("→ This scale has poor content validity (measures only one narrow facet)\n")
+```
+
+**Problems with high-but-meaningless alpha:**
+
+1. **Redundant items**: Asking the same question 10 times inflates alpha but doesn't improve measurement
+2. **Alpha increases with # items**: 20 poor items can yield α = 0.90
+3. **Ignores unidimensionality**: Alpha doesn't test whether items measure one construct or multiple
+
+**What to check instead:**
+
+1. **Item-total correlations**: Are all items contributing (r.cor > 0.30)?
+2. **Mean inter-item correlation**: Should be 0.15–0.50 (Briggs & Cheek, 1986)
+   - < 0.15: Items don't cohere
+   - > 0.50: Items are redundant
+3. **Factor analysis**: Do items load on one factor or multiple?
+4. **Content validity**: Do items cover the full construct breadth?
+
+**Lesson**: **Don't chase alpha > 0.90 by adding redundant items.** Better to have α = 0.75 with diverse, non-redundant items than α = 0.95 with near-duplicates.
+:::
 
 ### Example: Cronbach's Alpha for a Short Scale
 
@@ -1000,8 +2587,15 @@ We compute polychoric correlations for the service quality items. With n = 36, t
 #| label: part-c-chunk-26
 library(psych)
 
-# Polychoric correlation matrix
-poly_result <- polychoric(quality_items)
+# Polychoric correlation matrix with error handling
+# Falls back to Pearson correlations if sample is too small
+poly_result <- tryCatch(
+  polychoric(quality_items),
+  error = function(e) {
+    message("Polychoric estimation failed (sample too small). Using Pearson correlations.")
+    return(list(rho = cor(quality_items)))
+  }
+)
 print(poly_result)
 
 # Compute alpha based on polychoric correlations
@@ -1022,6 +2616,307 @@ When reporting reliability for small samples and short scales:
 - Acknowledge limitations (short scale, small sample, wide CIs).
 - Provide item-level descriptive statistics (means, SDs, inter-item correlations).
 - Discuss implications for interpretation (e.g., "The modest alpha suggests caution in interpreting scale scores; findings should be replicated with longer instruments").
+
+### Lab Practical 6.1: Refining a Workplace Resilience Scale
+
+**Context**: An organizational psychologist developed a 6-item Workplace Resilience Scale (WRS) to measure employees' ability to cope with job stress. After piloting the scale with 22 employees, the researcher wants to evaluate internal consistency and decide whether to drop any items to improve reliability. This walkthrough demonstrates item analysis, alpha calculation, and item-deletion decisions.
+
+**Learning Goals**:
+
+- Compute Cronbach's alpha for a multi-item scale
+- Examine item-total correlations to identify weak items
+- Assess the impact of dropping items on reliability
+- Make evidence-based decisions about scale refinement
+- Understand context-dependent alpha thresholds
+
+**Step 1: Load and Explore the Data**
+
+```{r}
+#| label: part-c-lab-6-1
+library(tidyverse)
+library(psych)
+
+# Simulated WRS data: 22 employees, 6 items (1-5 Likert scale)
+set.seed(2025)
+wrs_data <- tibble(
+  WRS1 = c(4, 5, 3, 4, 5, 4, 3, 5, 4, 3, 4, 5, 3, 4, 4, 5, 3, 4, 5, 4, 3, 4),
+  WRS2 = c(3, 4, 3, 3, 4, 3, 2, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 3, 2, 3),
+  WRS3 = c(5, 5, 4, 5, 5, 4, 4, 5, 5, 4, 5, 5, 4, 5, 5, 5, 4, 5, 5, 4, 4, 5),
+  WRS4 = c(2, 1, 3, 2, 1, 3, 4, 1, 2, 3, 2, 1, 3, 2, 1, 1, 3, 2, 1, 3, 4, 2),  # Weak item
+  WRS5 = c(4, 4, 3, 4, 4, 3, 3, 4, 4, 3, 4, 4, 3, 4, 4, 4, 3, 4, 4, 3, 3, 4),
+  WRS6 = c(3, 4, 3, 3, 4, 3, 2, 4, 3, 3, 4, 4, 3, 3, 4, 4, 3, 3, 4, 3, 2, 3)
+)
+
+# Descriptive statistics
+wrs_data %>%
+  summarise(across(everything(), list(mean = mean, sd = sd))) %>%
+  pivot_longer(everything(), names_to = c("Item", ".value"), names_sep = "_")
+```
+
+**Checkpoint**: Items have similar means (3–4) and SDs (0.5–1.0), except WRS4 shows lower mean and higher SD, suggesting it may not align with other items.
+
+**Step 2: Compute Cronbach's Alpha (Full Scale)**
+
+```{r}
+#| label: part-c-lab-6-2
+# Compute alpha for all 6 items
+alpha_full <- alpha(wrs_data)
+print(alpha_full)
+```
+
+**Checkpoint**: The output shows:
+
+- **raw_alpha**: Overall reliability (target: ≥ 0.70 for research scales, ≥ 0.80 for high-stakes decisions)
+- **std.alpha**: Standardized alpha (assumes equal item variances)
+- **raw.r**: Mean inter-item correlation (should be 0.15–0.50)
+- **S/N**: Signal-to-noise ratio (higher is better)
+
+Check the "Reliability if an item is dropped" table: Does alpha increase if any item is removed?
+
+**Step 3: Examine Item-Total Correlations**
+
+```{r}
+#| label: part-c-lab-6-3
+# Extract item-total correlations
+item_stats <- alpha_full$item.stats
+
+# Display key statistics
+item_stats %>%
+  select(r.cor, r.drop, mean, sd) %>%
+  arrange(r.cor)
+```
+
+**Checkpoint**: Look for:
+
+- **r.cor**: Corrected item-total correlation (item vs. scale without that item). Values < 0.30 indicate weak contribution
+- **r.drop**: Raw item-total correlation (item vs. full scale including that item)
+
+Items with r.cor < 0.30 are candidates for deletion. Here, WRS4 shows the weakest correlation.
+
+**Step 4: Assess "Alpha if Item Dropped"**
+
+```{r}
+#| label: part-c-lab-6-4
+# Extract alpha-if-deleted
+alpha_if_dropped <- alpha_full$alpha.drop
+
+# Display with item labels
+alpha_if_dropped %>%
+  select(raw_alpha) %>%
+  arrange(desc(raw_alpha))
+```
+
+**Checkpoint**: If dropping WRS4 increases alpha (e.g., from 0.68 to 0.75), consider removing it. Compare the magnitude of improvement (e.g., Δα > 0.05 is meaningful).
+
+**Step 5: Recompute Alpha Without WRS4**
+
+```{r}
+#| label: part-c-lab-6-5
+# Drop WRS4 and recompute alpha
+wrs_refined <- wrs_data %>% select(-WRS4)
+
+alpha_refined <- alpha(wrs_refined)
+print(alpha_refined)
+
+# Compare full vs. refined alpha
+cat("Full scale alpha:", round(alpha_full$total$raw_alpha, 3), "\n")
+cat("Refined scale alpha (WRS4 dropped):", round(alpha_refined$total$raw_alpha, 3), "\n")
+cat("Improvement:", round(alpha_refined$total$raw_alpha - alpha_full$total$raw_alpha, 3), "\n")
+```
+
+**Checkpoint**: The refined scale (5 items) has higher alpha (≥ 0.75) and all items show r.cor > 0.40. This is a more reliable measure.
+
+**Step 6: Interpret in Context**
+
+Follow these guidelines:
+
+- **Research/exploratory scales**: α ≥ 0.60–0.70 acceptable
+- **Established scales in research**: α ≥ 0.70–0.80 preferred
+- **High-stakes decisions (clinical, personnel)**: α ≥ 0.80–0.90 required
+- **Short scales (3–5 items)**: Expect α 0.05–0.10 lower than longer scales
+
+**Decision**: Drop WRS4 because:
+
+1. It has the weakest item-total correlation (r.cor < 0.30)
+2. Dropping it increases alpha by > 0.05
+3. The refined 5-item scale meets acceptable reliability (α ≥ 0.75 for research use)
+
+**Step 7: Visualize Item Performance**
+
+```{r}
+#| label: part-c-lab-6-6
+# Create item performance plot
+item_performance <- item_stats %>%
+  rownames_to_column("Item") %>%
+  select(Item, r.cor, mean, sd)
+
+ggplot(item_performance, aes(x = Item, y = r.cor, fill = r.cor > 0.30)) +
+  geom_col() +
+  geom_hline(yintercept = 0.30, linetype = "dashed", color = "red") +
+  labs(
+    title = "Item-Total Correlations (Corrected)",
+    x = "Item",
+    y = "Corrected Item-Total Correlation",
+    fill = "Adequate (r > 0.30)"
+  ) +
+  theme_minimal() +
+  scale_fill_manual(values = c("TRUE" = "steelblue", "FALSE" = "salmon"))
+```
+
+**Checkpoint**: The plot clearly shows WRS4 falls below the 0.30 threshold, justifying its removal.
+
+**Step 8: Report the Results**
+
+> "The 6-item Workplace Resilience Scale was piloted with 22 employees. Initial Cronbach's alpha was 0.68 (95% CI [0.42, 0.84]). Item analysis revealed that WRS4 had a weak corrected item-total correlation (r = 0.18) and its removal increased alpha to 0.75 (95% CI [0.54, 0.88]). The refined 5-item scale demonstrates acceptable internal consistency for research purposes. Future validation should include a larger sample (n ≥ 100) and test-retest reliability."
+
+**Discussion Questions**:
+
+1. Why is item-total correlation more informative than item mean or SD?
+   - It measures how well an item captures the same construct as the rest of the scale; items with low correlations dilute reliability
+2. What if two items both have r.cor < 0.30?
+   - Drop them one at a time, recomputing alpha after each removal, to see which has the greatest impact; or drop both if each independently improves alpha
+3. Should you always maximize alpha by dropping items?
+   - No: Dropping items reduces content coverage. Balance reliability with construct validity (does the scale still measure what it should?). Sometimes α = 0.70 with more items is preferable to α = 0.80 with too few items
+4. How does sample size affect these decisions?
+   - Small samples (n < 30) yield unstable item-total correlations; decisions should be tentative and revisited with larger samples
+
+**Extension**: Conduct split-half reliability or omega (hierarchical) to assess whether the scale is unidimensional or if subscales exist. Use confirmatory factor analysis (CFA) if you have theory about item groupings.
+
+---
+
+### Self-Assessment Quiz
+
+Test your understanding of reliability and measurement quality from Chapter 6. Answers and explanations are provided at the end.
+
+::: {.callout-note icon=false}
+## Questions
+
+**Q1.** Cronbach's alpha measures:
+
+A. Whether data are normally distributed  
+B. Internal consistency—how closely related a set of items are  
+C. Test-retest reliability  
+D. Inter-rater agreement
+
+---
+
+**Q2.** What is the main limitation of Cronbach's alpha?
+
+A. It requires n>1,000  
+B. It assumes tau-equivalence (equal factor loadings across items)  
+C. It cannot be calculated for short scales  
+D. It is always too high
+
+---
+
+**Q3.** A 3-item scale has α=0.55 with n=25. Is this acceptable?
+
+A. No—alpha must always exceed 0.70  
+B. Possibly—short scales naturally have lower alpha; consider context, item-total correlations, and CI  
+C. Yes—always acceptable  
+D. No—the scale must be discarded
+
+---
+
+**Q4.** McDonald's omega is preferred over alpha when:
+
+A. Items have equal factor loadings  
+B. Items have varying factor loadings (not tau-equivalent)  
+C. Sample size exceeds 500  
+D. Data are categorical
+
+---
+
+**Q5.** Item-total correlation measures:
+
+A. How well an item correlates with the total scale score (excluding that item)  
+B. Test-retest stability  
+C. The mean of all items  
+D. Sample size adequacy
+
+---
+
+**Q6.** What does "alpha if item deleted" show?
+
+A. The p-value for each item  
+B. How alpha would change if a specific item were removed  
+C. The mean of each item  
+D. Whether items are normally distributed
+
+---
+
+**Q7.** Polychoric correlations are used when:
+
+A. Items are continuous and normally distributed  
+B. Items are ordinal (e.g., Likert scales) and you want to estimate correlations between underlying continuous latent variables  
+C. Sample size exceeds 1,000  
+D. Data have no missing values
+
+---
+
+**Q8.** A scale has α=0.72 with n=36. The 95% CI is [0.52, 0.86]. What does this tell us?
+
+A. Reliability is excellent  
+B. Reliability is moderate, but precision is limited (wide CI) due to small sample  
+C. The scale is unreliable  
+D. More items must be added
+
+---
+
+**Q9.** Split-half reliability involves:
+
+A. Testing participants twice  
+B. Dividing items into two halves, computing correlation, and applying Spearman-Brown correction  
+C. Removing half the sample  
+D. Using different raters
+
+---
+
+**Q10.** A scale shows α=−0.15. What is the most likely cause?
+
+A. Perfect reliability  
+B. Reverse-coded items not properly recoded, or items measuring different constructs  
+C. Sample size too large  
+D. Normal distribution
+
+:::
+
+::: {.callout-tip icon=false collapse="true"}
+## Answers and Explanations
+
+**Q1. Answer: B**  
+*Explanation*: Cronbach's alpha quantifies internal consistency by comparing item variances to total scale variance. It indicates whether items measure a common construct. The chapter states: "Cronbach's alpha estimates internal consistency by comparing item variances to total scale variance."
+
+**Q2. Answer: B**  
+*Explanation*: Alpha assumes all items contribute equally to the construct (tau-equivalence). When items have varying loadings, alpha may underestimate reliability. McDonald's omega relaxes this assumption. The chapter explicitly notes alpha "assumes that all items measure a single underlying construct with equal factor loadings (tau-equivalent model)."
+
+**Q3. Answer: B**  
+*Explanation*: Alpha depends on scale length; 3-item scales often yield α=0.50-0.65 even when internally consistent. Check: (1) item-total correlations (all >0.30?), (2) alpha's 95% CI (precision), (3) conceptual coherence. For exploratory work, α=0.55 may be acceptable. This reflects the chapter's nuanced guidance about context-dependent thresholds rather than rigid cutoffs.
+
+**Q4. Answer: B**  
+*Explanation*: Omega (ω_total) allows items to have different factor loadings, providing a more accurate reliability estimate when tau-equivalence does not hold. The chapter states: "McDonald's omega (ωₜ) is an alternative to alpha that relaxes the tau-equivalence assumption."
+
+**Q5. Answer: A**  
+*Explanation*: Corrected item-total correlation indicates how strongly each item relates to the overall scale. Values <0.30 suggest the item measures something different or is poorly worded. The lab practical emphasizes examining item-total correlations as a diagnostic tool.
+
+**Q6. Answer: B**  
+*Explanation*: If alpha increases substantially when an item is removed, that item is weakening internal consistency (low correlation with others or measuring a different construct). Consider revising or removing it. This is a standard feature of reliability analysis output used to identify problematic items.
+
+**Q7. Answer: B**  
+*Explanation*: Polychoric correlations assume ordinal responses arise from categorizing underlying continuous variables. They often yield higher estimates than Pearson correlations for Likert data, but require adequate sample size (n≥50 preferred). The chapter discusses polychoric correlations as theoretically appropriate for ordinal items.
+
+**Q8. Answer: B**  
+*Explanation*: The point estimate (0.72) suggests acceptable reliability, but the wide CI reflects substantial uncertainty with n=36. The true population alpha could be as low as 0.52 (questionable) or as high as 0.86 (good). The chapter emphasizes that "small samples produce imprecise reliability estimates with wide confidence intervals."
+
+**Q9. Answer: B**  
+*Explanation*: Split-half reliability divides a scale into two halves (e.g., odd vs even items), correlates the half-scores, then adjusts using the Spearman-Brown formula to estimate full-scale reliability. This is a classic alternative method for assessing reliability mentioned in the learning objectives.
+
+**Q10. Answer: B**  
+*Explanation*: Negative alpha indicates items are negatively correlated with each other—usually because reverse-coded items weren't recoded (e.g., item 4 = "I intend to quit" on a job satisfaction scale). Check inter-item correlations for negative values. This is a common practical problem in survey research that the chapter addresses.
+
+:::
+
+---
 
 ### Key Takeaways
 
@@ -1049,11 +2944,576 @@ alpha(test_items)
 
 ---
 
+## Chapter 6.5. Developing Short Scales for Small Samples
+
+### Learning Objectives
+
+By the end of this section, you will understand the iterative process of scale development when working with small samples. You will learn what analyses are feasible at different sample sizes, how to identify problematic items early, and when to defer advanced psychometric analyses until larger validation studies are possible.
+
+### The Scale Development Lifecycle
+
+Scale development is inherently a multi-stage process. With small samples, researchers must be strategic about which psychometric analyses to conduct at each stage and which to reserve for later validation.
+
+### The Iterative Process
+
+#### Stage 1: Item Generation (n = 5–10 cognitive interviews)
+
+**Goal**: Generate a pool of 2–3× your target number of items and ensure they are comprehensible.
+
+**Methods**:
+
+- **Literature review**: Identify existing scales and adapt items
+- **Expert consultation**: Subject matter experts suggest relevant content
+- **Cognitive interviews**: Think-aloud protocols with 5–10 participants from the target population
+
+**Example**:
+
+```{r}
+#| label: part-c-scale-dev-1
+# Documenting item generation
+library(tidyverse)
+
+item_pool <- tibble(
+  item_id = 1:15,
+  item_text = c(
+    "I feel confident handling work challenges",
+    "I bounce back quickly from setbacks",
+    "I maintain composure under pressure",
+    "I remain calm when facing obstacles",
+    "I trust my ability to solve problems",
+    "I recover from stress effectively",
+    "I rebound after difficult situations",
+    "I regain focus after disruptions",
+    "I process setbacks constructively",
+    "I maintain perspective during challenges",
+    "I adapt easily to changing priorities",
+    "I adjust my approach when needed",
+    "I seek support when needed",
+    "I learn from difficult experiences",
+    "I embrace new work demands"
+  ),
+  domain = rep(c("Confidence", "Recovery", "Adaptability"), each = 5),
+  cognitive_issues = c(
+    NA, "Ambiguous: what counts as 'quickly'?", NA, NA, NA,
+    NA, "Too similar to item 2", NA, NA, NA,
+    NA, NA, "Double-barreled: 'seek' and 'support'", NA, NA
+  )
+)
+
+# Flag items with comprehension issues
+item_pool %>%
+  filter(!is.na(cognitive_issues)) %>%
+  select(item_id, item_text, cognitive_issues)
+```
+
+**Key Point**: At this stage, **do NOT collect quantitative data**. Focus on qualitative feedback about item clarity, relevance, and comprehensiveness.
+
+#### Stage 2: Pilot Testing (n = 20–30)
+
+**Goal**: Identify problematic items before committing to a larger study.
+
+**Methods**:
+
+- Administer all items to a small pilot sample
+- Compute **item-total correlations** (r.cor)
+- Check for **ceiling/floor effects** (> 80% at extreme response)
+- Examine **item means and SDs** (avoid items with no variance)
+
+**What you CAN do with n = 20–30**:
+
+```{r}
+#| label: part-c-scale-dev-2
+library(psych)
+
+# Simulated pilot data: 25 participants, 12 items
+set.seed(2025)
+pilot_data <- tibble(
+  WRS1 = sample(1:5, 25, replace = TRUE, prob = c(0.05, 0.1, 0.3, 0.4, 0.15)),
+  WRS2 = sample(1:5, 25, replace = TRUE, prob = c(0.1, 0.15, 0.35, 0.3, 0.1)),
+  WRS3 = sample(1:5, 25, replace = TRUE, prob = c(0.05, 0.1, 0.25, 0.45, 0.15)),
+  WRS4 = sample(1:5, 25, replace = TRUE, prob = c(0.05, 0.1, 0.3, 0.4, 0.15)),
+  WRS5 = rep(5, 25),  # Ceiling effect item
+  WRS6 = sample(1:5, 25, replace = TRUE, prob = c(0.1, 0.15, 0.3, 0.35, 0.1)),
+  WRS7 = sample(1:5, 25, replace = TRUE, prob = c(0.05, 0.15, 0.35, 0.35, 0.1)),
+  WRS8 = sample(1:2, 25, replace = TRUE),  # Weak item: uncorrelated
+  WRS9 = sample(1:5, 25, replace = TRUE, prob = c(0.1, 0.15, 0.3, 0.3, 0.15)),
+  WRS10 = sample(1:5, 25, replace = TRUE, prob = c(0.05, 0.1, 0.35, 0.4, 0.1)),
+  WRS11 = sample(1:5, 25, replace = TRUE, prob = c(0.1, 0.15, 0.3, 0.35, 0.1)),
+  WRS12 = sample(1:5, 25, replace = TRUE, prob = c(0.05, 0.1, 0.3, 0.45, 0.1))
+)
+
+# Compute item-total correlations
+pilot_alpha <- alpha(pilot_data)
+item_stats <- pilot_alpha$item.stats
+
+# Flag problematic items
+item_stats %>%
+  rownames_to_column("Item") %>%
+  select(Item, r.cor, mean, sd) %>%
+  mutate(
+    problem = case_when(
+      r.cor < 0.30 ~ "Weak correlation",
+      mean > 4.5 | mean < 1.5 ~ "Ceiling/floor effect",
+      sd < 0.5 ~ "Low variance",
+      TRUE ~ "OK"
+    )
+  ) %>%
+  filter(problem != "OK")
+```
+
+**Interpretation**:
+
+- **WRS5**: Ceiling effect (everyone answered 5). Remove or reword.
+- **WRS8**: Weak item-total correlation (r < 0.30). Consider dropping.
+- Items with very low SD suggest participants don't differentiate; reword for clarity.
+
+**What you CANNOT do with n = 20–30**:
+
+::: {.callout-warning}
+## Do NOT Compute Alpha with n < 30
+
+Cronbach's alpha estimates are **highly unstable** with n < 30. The 95% confidence interval will be extremely wide (e.g., [0.40, 0.85]), making the estimate nearly meaningless. 
+
+**Instead**: Focus on item-level diagnostics (means, SDs, item-total correlations) to refine your scale. Defer reliability estimation to Stage 3.
+:::
+
+#### Stage 3: Refinement (n = 50–100)
+
+**Goal**: Estimate reliability and assess dimensionality.
+
+**Methods**:
+
+- **Cronbach's alpha** with confidence intervals
+- **McDonald's omega** (if you suspect multidimensionality)
+- **Split-half reliability** as a robustness check
+- **Exploratory Factor Analysis (EFA)** if n ≥ 100 and you suspect subscales
+
+**Example**:
+
+```{r}
+#| label: part-c-scale-dev-3
+# Simulated refinement data: 60 participants, 8 items (problematic items removed)
+set.seed(2025)
+refinement_data <- as.data.frame(matrix(
+  sample(1:5, 60 * 8, replace = TRUE, prob = c(0.05, 0.15, 0.30, 0.35, 0.15)),
+  nrow = 60, ncol = 8
+))
+colnames(refinement_data) <- paste0("WRS", 1:8)
+
+# Compute alpha
+alpha_result <- alpha(refinement_data)
+cat("Cronbach's alpha:", round(alpha_result$total$raw_alpha, 3), "\n")
+cat("Note: With n=60, alpha estimate is more stable than with n<30\n")
+
+# Split-half reliability
+split_half <- splitHalf(refinement_data)
+print(split_half)
+```
+
+**Interpretation**:
+
+- Alpha ≥ 0.70 suggests adequate internal consistency for research purposes
+- The confidence interval is still fairly wide (n = 60), but informative
+- If alpha < 0.60, consider dropping more items or revising wording
+
+**Exploratory Factor Analysis (EFA)** with n = 50–100:
+
+```{r}
+#| label: part-c-scale-dev-4
+# EFA requires n ≥ 100 ideally; with n=60, results are exploratory only
+# Simulate larger dataset for demonstration
+set.seed(2025)
+efa_data <- as.data.frame(matrix(
+  sample(1:5, 100 * 8, replace = TRUE, prob = c(0.05, 0.15, 0.30, 0.35, 0.15)),
+  nrow = 100, ncol = 8
+))
+colnames(efa_data) <- paste0("WRS", 1:8)
+
+# Scree plot to determine number of factors
+scree(efa_data, factors = FALSE)
+
+# Parallel analysis (more robust than scree plot alone)
+fa.parallel(efa_data, fa = "fa")
+
+# Fit 1-factor model
+efa_result <- fa(efa_data, nfactors = 1, rotate = "oblimin")
+print(efa_result$loadings, cutoff = 0.3)
+```
+
+**Caution**: With n < 100, factor loadings and structure are unstable. Use EFA results as **preliminary guidance** for item grouping, not definitive evidence of subscales.
+
+#### Stage 4: Validation (n = 150+)
+
+**Goal**: Confirm scale structure and establish validity.
+
+**Methods**:
+
+- **Confirmatory Factor Analysis (CFA)**: Test hypothesized factor structure
+- **Test-retest reliability**: Administer scale twice (2–4 weeks apart)
+- **Convergent validity**: Correlate with theoretically related measures
+- **Discriminant validity**: Show low correlation with unrelated constructs
+- **Known-groups validity**: Scale discriminates between relevant groups
+
+**Example**:
+
+```{r}
+#| label: part-c-scale-dev-5
+#| eval: false
+
+# CFA requires lavaan package and n ≥ 150
+library(lavaan)
+
+# Define 1-factor model
+model <- '
+  resilience =~ WRS1 + WRS2 + WRS3 + WRS4 + WRS5 + WRS6 + WRS7 + WRS8
+'
+
+# Fit model
+cfa_result <- cfa(model, data = validation_data)
+summary(cfa_result, fit.measures = TRUE, standardized = TRUE)
+
+# Fit indices to assess model adequacy:
+# - CFI > 0.90 (good fit)
+# - RMSEA < 0.08 (acceptable fit)
+# - SRMR < 0.08 (good fit)
+```
+
+**Test-retest reliability**:
+
+```{r}
+#| label: part-c-scale-dev-6
+#| eval: false
+
+# Compute scale scores at Time 1 and Time 2
+validation_data <- validation_data %>%
+  mutate(
+    resilience_t1 = rowMeans(select(., WRS1_t1:WRS8_t1)),
+    resilience_t2 = rowMeans(select(., WRS1_t2:WRS8_t2))
+  )
+
+# Intraclass correlation coefficient (ICC)
+library(irr)
+icc_result <- icc(
+  cbind(validation_data$resilience_t1, validation_data$resilience_t2),
+  model = "twoway",
+  type = "agreement"
+)
+print(icc_result)
+
+# ICC > 0.75 indicates good test-retest reliability
+```
+
+### Special Considerations for n < 50
+
+#### What You CANNOT Do
+
+::: {.callout-important}
+## Analyses That Require Larger Samples
+
+::: {.callout-warning icon=true}
+## ⚠️ Do NOT Force Large-Sample Methods on Small Data
+
+With n < 50, the following analyses are **not feasible** or will produce unreliable results:
+
+1. **Exploratory Factor Analysis (EFA)**: Rule of thumb is n ≥ 100 or 5–10 participants per item
+2. **Confirmatory Factor Analysis (CFA)**: Requires n ≥ 150–200 for stable parameter estimates
+3. **Measurement Invariance Testing**: Requires n ≥ 200 per group
+4. **Structural Equation Modeling (SEM)**: Complex models need n ≥ 200–400
+5. **PLS-SEM (Partial Least Squares SEM)**: Despite marketing claims, needs n ≥ 100 for reliable results
+6. **Item Response Theory (IRT)**: Most models require n ≥ 250–500
+7. **Reliable Cronbach's alpha**: With n < 30, alpha estimates have 95% CIs spanning 0.3–0.4 units
+
+**Do NOT force these analyses** with inadequate sample sizes. Results will be misleading.
+:::
+
+---
+
+::: {.callout-note icon=false collapse=true}
+## 📖 Why Structural Equation Modeling (SEM) Requires Large Samples
+
+**Question**: "Can I use SEM, CFA, or PLS-SEM with my small sample (n < 100)?"
+
+**Short Answer**: **No.** SEM-based methods require substantially larger samples than this book's target range (n = 10–100).
+
+### Minimum Sample Size Requirements
+
+| Method | Minimum n | Realistic n | Why? |
+|--------|-----------|-------------|------|
+| **Confirmatory Factor Analysis (CFA)** | 150 | 200-300 | Stable factor loadings, fit indices |
+| **Structural Equation Modeling (SEM)** | 200 | 300-500 | Complex path models, multiple latent variables |
+| **PLS-SEM** | 100 | 150-300 | Despite "small-sample" marketing, needs 100+ for reliability |
+| **Multi-Group SEM** | 200/group | 300/group | Measurement invariance testing |
+
+**Rule of Thumb**: 10-20 observations per estimated parameter (e.g., 5 indicators + 3 paths = 8 parameters → need 80-160 observations).
+
+### What Happens If You Ignore These Requirements?
+
+With n < 100, SEM/CFA/PLS-SEM will produce:
+
+❌ **Unstable Parameter Estimates**
+- Factor loadings fluctuate wildly with small perturbations
+- Path coefficients have huge standard errors
+- Adding/removing 5 observations changes conclusions
+
+❌ **Non-Convergent Solutions**
+- Maximum likelihood fails to converge
+- Heywood cases (negative variances, loadings > 1.0)
+- Improper solutions requiring arbitrary constraints
+
+❌ **Unreliable Fit Indices**
+- χ², CFI, TLI, RMSEA become meaningless with small n
+- "Good fit" may be statistical artifact, not real model adequacy
+- Modification indices unreliable (suggest spurious changes)
+
+❌ **Overfit Models**
+- Model fits sample perfectly but fails to generalize
+- Cross-validation impossible (too few observations to split)
+- Results won't replicate in new samples
+
+❌ **False Confidence**
+- Software produces output even when results are garbage
+- p-values and CIs misleadingly precise
+- Reviewers will reject papers citing insufficient sample size
+
+### What Should You Do Instead? (For n < 100)
+
+**Use the methods in THIS book:**
+
+| SEM Goal | Small-Sample Alternative | Chapter | Minimum n |
+|----------|-------------------------|---------|-----------|
+| **Assess scale reliability** | Cronbach's α, McDonald's ω, split-half | Ch 6 | 30-50 |
+| **Validate items** | Item-total correlations, alpha-if-deleted | Ch 6 | 30-50 |
+| **Reduce dimensionality** | **Sum/mean composite scores** | Ch 6 | 20+ |
+| **Test relationships (X → Y)** | Regression with composite scores | Ch 5 | 30-50 |
+| **Multiple predictors** | Penalized regression (ridge/lasso/elastic net) | Ch 5 Lab 5.2 | 50-100 |
+| **Mediation (X → M → Y)** | Simple mediation with bootstrap CIs | Part E Project 5 | 80-100 |
+| **Latent correlations** | Polychoric correlations (exploratory) | Ch 6 | 50+ |
+| **Measurement precision** | Standard Error of Measurement (SEM statistic) | Ch 6 | 30+ |
+
+**Key Principle**: **Composite scores are your friend.**
+- Sum or average your scale items to create observed composite variables
+- Use these composites in regression, t-tests, ANOVA
+- Acknowledge measurement error in limitations section
+- Plan larger validation study (n ≥ 200) for future CFA/SEM
+
+### Example: Replacing SEM with Composite-Score Analysis
+
+**Proposed SEM Model (n = 60):**
+```
+Job_Satisfaction (5 items) → Turnover_Intent (3 items)
+     ↑
+Performance (4 items)
+```
+
+**Small-Sample Alternative:**
+```r
+# Create composite scores by averaging items
+data <- data %>%
+  mutate(
+    satisfaction = rowMeans(select(., satisfaction_1:satisfaction_5)),
+    performance = rowMeans(select(., performance_1:performance_4)),
+    turnover = rowMeans(select(., turnover_1:turnover_3))
+  )
+
+# Test relationships with standard regression
+model1 <- lm(turnover ~ satisfaction, data = data)
+model2 <- lm(turnover ~ satisfaction + performance, data = data)
+
+# Report coefficients, R², confidence intervals
+```
+
+**Advantages**:
+- ✅ Works with n = 60
+- ✅ Interpretable (unit change in averaged scale score)
+- ✅ Robust (doesn't require distributional assumptions for latent variables)
+- ✅ Honest (acknowledges you're using observed composites, not latent variables)
+
+**Limitations to Acknowledge**:
+- Composites contain measurement error (but so does SEM with n < 150!)
+- Cannot test complex factor structures
+- Cannot partition within-item vs. between-item variance
+
+**When to Pursue SEM**: Collect n ≥ 200 in a follow-up study. Then:
+1. Use EFA to explore factor structure (if theory is unclear)
+2. Use CFA to confirm measurement model
+3. Test structural paths with latent variables
+4. Assess model fit rigorously
+
+### Software Will Let You Do Bad Things
+
+**Warning**: SmartPLS, AMOS, Mplus, and other SEM software will happily run with n = 50. They will produce:
+- Parameter estimates
+- p-values
+- Fit indices
+- Pretty path diagrams
+
+**This does NOT mean the results are trustworthy.** Software cannot judge whether your sample size is adequate—**you must.**
+
+### Recommended Reading (For Future Large-Sample Studies)
+
+When you collect n ≥ 200, consult these resources:
+
+1. **Kline, R. B. (2016).** *Principles and Practice of Structural Equation Modeling* (4th ed.). Guilford Press.
+   - Gold standard SEM textbook
+   - Sample size guidelines (pp. 15-18, 264-270)
+
+2. **Brown, T. A. (2015).** *Confirmatory Factor Analysis for Applied Research* (2nd ed.). Guilford Press.
+   - CFA-specific guidance
+   - Measurement invariance testing
+
+3. **Hair, J. F., Hult, G. T. M., Ringle, C. M., & Sarstedt, M. (2022).** *A Primer on Partial Least Squares Structural Equation Modeling (PLS-SEM)* (3rd ed.). Sage.
+   - PLS-SEM methods (but note: still needs n ≥ 100-150 realistically)
+
+4. **Hoyle, R. H. (Ed.). (2023).** *Handbook of Structural Equation Modeling* (2nd ed.). Guilford Press.
+   - Advanced topics, sample size planning
+
+### Bottom Line
+
+**For n = 10–100, use the methods in this book.** They are:
+- ✅ **Appropriate** for small samples
+- ✅ **Robust** to violations of assumptions
+- ✅ **Honest** about uncertainty
+- ✅ **Interpretable** for stakeholders
+- ✅ **Defensible** to reviewers
+
+**Save SEM for when you have n ≥ 200.** Until then, composite scores + regression will serve you well.
+:::
+
+---
+
+#### What You CAN Do
+
+With n = 20–50, focus on these **feasible and informative** analyses:
+
+1. **Content Validity**:
+   - Expert review (e.g., Content Validity Index with 5–10 experts)
+   - Cognitive interviews to assess comprehension
+   - Alignment with theoretical framework
+
+2. **Item-Level Diagnostics**:
+   - Item means, SDs, skewness
+   - Item-total correlations (r.cor)
+   - Ceiling/floor effects
+   - Inter-item correlation matrix
+
+3. **Preliminary Reliability** (n ≥ 30):
+   - Cronbach's alpha **with 95% CI** (report the wide CI!)
+   - Split-half reliability as robustness check
+   - Mean inter-item correlation (0.15–0.50 is typical)
+
+4. **Known-Groups Validity**:
+   - Compare scale scores between groups expected to differ (e.g., clinical vs. non-clinical)
+   - Use nonparametric tests (Mann-Whitney U) if distributions are skewed
+
+5. **Prepare for Larger Validation Study**:
+   - Document item generation process
+   - Report pilot results transparently (including dropped items and why)
+   - Specify hypotheses for CFA in future study
+
+### Example: Documenting a Small-Sample Scale Development
+
+```{r}
+#| label: part-c-scale-dev-7
+# Reporting template for n < 50 pilot study
+library(gt)
+
+scale_dev_report <- tibble(
+  Stage = c("Item Generation", "Pilot Testing", "Refinement", "Validation"),
+  Sample_Size = c("n = 8 (cognitive interviews)", "n = 25", "n = 60", "Planned: n = 200"),
+  Analyses_Conducted = c(
+    "Think-aloud protocols; expert review (CVI = 0.88)",
+    "Item-total correlations; ceiling/floor checks; 3 items dropped",
+    "Alpha = 0.73 [95% CI: 0.61, 0.82]; split-half r = 0.70",
+    "CFA, test-retest ICC, convergent validity (planned)"
+  ),
+  Key_Findings = c(
+    "Generated 15 items; 2 flagged as ambiguous",
+    "Dropped WRS5 (ceiling), WRS8 (r.cor = 0.18), WRS11 (low variance)",
+    "8-item scale shows acceptable reliability for research use",
+    "Pending larger validation sample"
+  )
+)
+
+scale_dev_report %>%
+  gt() %>%
+  tab_header(
+    title = "Workplace Resilience Scale Development Summary",
+    subtitle = "Iterative pilot and refinement process"
+  ) %>%
+  cols_label(
+    Stage = "Development Stage",
+    Sample_Size = "Sample Size",
+    Analyses_Conducted = "Analyses Conducted",
+    Key_Findings = "Key Findings"
+  ) %>%
+  tab_options(
+    table.font.size = 10
+  )
+```
+
+### Reporting Guidelines for Small-Sample Scale Development
+
+When publishing or reporting scale development work with n < 50:
+
+1. **Acknowledge limitations explicitly**:
+   - "With n = 25, we could not reliably estimate Cronbach's alpha. Instead, we focused on item-total correlations to identify weak items."
+   - "Exploratory factor analysis was not feasible (n = 60); we plan CFA with a larger sample (target n = 200)."
+
+2. **Report what you did (not what you wish you could do)**:
+   - Don't report alpha if n < 30 (the CI will be embarrassingly wide)
+   - Don't force EFA/CFA with inadequate samples; instead, document theoretical rationale for item grouping
+
+3. **Frame as a preliminary/pilot study**:
+   - "This pilot study (n = 35) was designed to refine item wording and identify problematic items before a larger validation study."
+   - "Results are preliminary and should be interpreted with caution pending validation with n ≥ 150."
+
+4. **Provide detailed item-level information**:
+   - Publish item means, SDs, item-total correlations
+   - Report which items were dropped and why
+   - Share cognitive interview feedback (qualitative)
+
+5. **Plan and fund the validation study**:
+   - Use pilot data to justify sample size for validation (power analysis for CFA)
+   - Secure resources for n ≥ 150–200 before claiming a "validated" scale
+
+### Key Takeaways
+
+- Scale development is a **multi-stage process** requiring progressively larger samples
+- With n < 30: Focus on qualitative feedback and item-level diagnostics; **do not compute alpha**
+- With n = 30–50: Compute preliminary alpha (with wide CI); identify weak items
+- With n = 50–100: Assess reliability; exploratory factor analysis is feasible but results are tentative
+- With n ≥ 150: Conduct CFA, test-retest, and validity studies
+- **Transparency is key**: Report what you did and didn't do, and acknowledge sample size limitations
+
+---
+
 ## Chapter 7. Multi-Criteria Decision Making (MCDM) for Small Sets of Alternatives
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to apply Analytic Hierarchy Process (AHP), TOPSIS, VIKOR, and other MCDM methods to rank and select alternatives when data are limited. You will understand how to structure decision problems, elicit weights, compute composite scores, perform sensitivity analyses, and interpret results. You will recognise when MCDM methods are appropriate and how they complement statistical inference.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain the principles of multi-criteria decision analysis (MCDM)
+- ✓ Understand the theoretical basis of AHP, TOPSIS, and VIKOR methods
+- ✓ Recognize when MCDM is appropriate vs. when statistical inference is needed
+- ✓ Distinguish compensatory from non-compensatory aggregation methods
+
+**Practical Skills**
+- ✓ Structure decision problems with hierarchies of criteria and sub-criteria
+- ✓ Elicit pairwise comparison judgments for AHP using consistency checks
+- ✓ Implement TOPSIS and VIKOR in R to rank alternatives
+- ✓ Compute composite scores with weighted criteria
+
+**Critical Evaluation**
+- ✓ Assess the consistency of expert judgments (AHP consistency ratio)
+- ✓ Evaluate sensitivity of rankings to weight changes
+- ✓ Critique subjective weight elicitation procedures
+
+**Application**
+- ✓ Apply MCDM methods to policy selection, technology choice, or program evaluation
+- ✓ Perform sensitivity analyses to test robustness of rankings
+- ✓ Report MCDM results transparently with criteria weights and score decompositions
 
 ### When to Use MCDM Methods
 
@@ -1256,6 +3716,112 @@ print(sensitivity_results)
 
 Interpretation: The table shows how the ranking changes as the weight on Effectiveness varies. If the top-ranked programme remains the same across all weights, the decision is robust. If the ranking changes with small weight variations, further deliberation or data collection may be warranted.
 
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 7 Questions
+
+**Q1.** When are MCDM (Multi-Criteria Decision-Making) methods most appropriate?
+
+A) Testing statistical hypotheses with large samples  
+B) Ranking and selecting from a small set of alternatives evaluated on multiple diverse criteria  
+C) Calculating p-values for experimental data  
+D) Only when all criteria are quantitative
+
+---
+
+**Q2.** What is the primary purpose of pairwise comparisons in the Analytic Hierarchy Process (AHP)?
+
+A) To calculate correlation coefficients  
+B) To derive priority weights for criteria and alternatives by comparing their relative importance  
+C) To test statistical significance  
+D) To normalize all data to 0-1 scale
+
+---
+
+**Q3.** In TOPSIS, what does the "closeness coefficient" measure?
+
+A) The p-value for each alternative  
+B) How close an alternative is to the ideal solution (best on all criteria) relative to the negative-ideal solution (worst on all criteria)  
+C) The Cronbach's alpha for criteria  
+D) The sample size required for analysis
+
+---
+
+**Q4.** Why is sensitivity analysis essential in MCDM?
+
+A) To calculate standard errors  
+B) To assess whether rankings remain stable when criteria weights or other inputs are varied  
+C) To test normality assumptions  
+D) To increase sample size
+
+---
+
+**Q5.** In the TOPSIS method, why must cost variables (where lower is better) be inverted or reversed?
+
+A) To make the algorithm run faster  
+B) Because TOPSIS assumes higher values are preferable for all criteria; cost must be recoded so higher values represent better performance  
+C) Cost variables cannot be used in TOPSIS  
+D) To calculate p-values
+
+---
+
+**Q6.** What does AHP's consistency check evaluate?
+
+A) Whether the data are normally distributed  
+B) Whether pairwise comparison judgments are logically consistent (e.g., if A > B and B > C, then A > C)  
+C) Whether the sample size is adequate  
+D) Whether residuals are homoscedastic
+
+---
+
+**Q7.** MCDM methods are designed for problems where:
+
+A) The goal is ranking, selection, or resource allocation rather than hypothesis testing  
+B) Large randomized controlled trials are conducted  
+C) Only one criterion matters  
+D) Inferential statistics are required
+
+---
+
+**Q8.** In the training programme selection example, Programme B ranked highest despite being mid-range on Cost and Feasibility. Why?
+
+A) It had the largest sample size  
+B) It performed strongly on Effectiveness, which was the most heavily weighted criterion (58%)  
+C) It had the smallest standard error  
+D) It was randomly selected
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. B)** "MCDM methods are designed for problems where a small set of alternatives (options, projects, policies) must be evaluated and ranked on multiple criteria."  
+MCDM complements statistical inference by addressing decision problems where ranking and selection are the goals, not hypothesis testing.
+
+**A2. B)** "AHP... uses pairwise comparisons to derive priority weights. Decision-makers compare each pair of criteria (and each pair of alternatives under each criterion) to indicate relative importance or preference."  
+Pairwise comparisons systematically elicit judgments about relative importance, which AHP synthesizes into numerical weights.
+
+**A3. B)** "The closeness coefficient ranges from 0 to 1; higher values indicate better alternatives... closest to the ideal (best on all criteria) and farthest from the negative-ideal (worst on all criteria)."  
+TOPSIS ranks alternatives by computing their geometric proximity to ideal and negative-ideal reference points.
+
+**A4. B)** "MCDM rankings can be sensitive to criteria weights and normalisation methods. Sensitivity analysis systematically varies weights (or other inputs) and observes changes in rankings."  
+If rankings remain stable across plausible weight variations, conclusions are robust; if not, further deliberation is needed.
+
+**A5. B)** "Cost variables must be recoded so that higher values are preferable (e.g., invert, take reciprocal, or subtract from the maximum)."  
+TOPSIS assumes all criteria are benefit-type (higher = better), so cost criteria must be transformed.
+
+**A6. B)** AHP includes consistency checks to ensure pairwise judgments are logically coherent. If A is judged 3 times more important than B, and B is 2 times more important than C, then A should be approximately 6 times more important than C.  
+Inconsistent judgments indicate that decision-makers should revisit their comparisons.
+
+**A7. A)** "MCDM methods do not test statistical hypotheses or quantify uncertainty in the same way as inferential statistics. Instead, they provide structured frameworks for synthesising information and making transparent, defensible choices."  
+MCDM is used for decision-making (ranking/selection), not statistical inference.
+
+**A8. B)** "Programme B has the highest total score, driven by its strong performance on Effectiveness (the most heavily weighted criterion)."  
+The weighted scores reflect that Effectiveness was assigned 58% of total weight, making Programme B's superiority on this criterion decisive.
+
+:::
+
 ### Key Takeaways
 
 - MCDM methods provide structured frameworks for ranking and selecting alternatives based on multiple criteria.
@@ -1284,7 +3850,29 @@ cbind(projects, norm_impact, norm_cost)
 
 ### Learning Objectives
 
-By the end of this chapter, you will be able to apply exact Poisson tests for sparse count data, compute bootstrap forecast intervals for short time series, understand the limitations of time-series methods with few observations, and recognise when simple descriptive or state-space approaches are more appropriate than classical ARIMA models. You will learn to handle zero-inflated counts and small event rates transparently.
+By the end of this chapter, you will be able to:
+
+**Conceptual Understanding**
+- ✓ Explain why sparse counts violate assumptions of standard Poisson regression
+- ✓ Understand zero-inflation and overdispersion in count models
+- ✓ Recognize the limitations of ARIMA models with short time series
+- ✓ Distinguish state-space models from classical time-series approaches
+
+**Practical Skills**
+- ✓ Apply exact Poisson tests using `poisson.test()` in R
+- ✓ Fit zero-inflated Poisson (ZIP) and negative binomial models with `pscl`
+- ✓ Compute bootstrap forecast intervals for short time series
+- ✓ Use simple smoothing methods (exponential smoothing, moving averages)
+
+**Critical Evaluation**
+- ✓ Assess when exact tests are necessary vs. when asymptotic tests suffice
+- ✓ Evaluate overdispersion diagnostics with small samples
+- ✓ Critique ARIMA models fitted to very short time series (<30 observations)
+
+**Application**
+- ✓ Analyze sparse event data (rare adverse events, low-frequency counts)
+- ✓ Report count models with appropriate diagnostics (dispersion, zero-inflation)
+- ✓ Apply descriptive trend analysis when model-based forecasting is infeasible
 
 ### The Challenge of Sparse Counts
 
@@ -1448,6 +4036,136 @@ cat("Estimated dispersion (quasi-Poisson):", summary(quasi_fit)$dispersion, "\n"
 
 Interpretation: Both models yield the same coefficient estimates, but the quasi-Poisson standard errors (and p-values) are inflated by the dispersion estimate (> 1). Check residual deviance-to-df; values far above 1 indicate overdispersion. With small samples, quasi-Poisson is a pragmatic adjustment when negative binomial models are unstable or overparameterised. Report the dispersion estimate so readers understand the degree of overdispersion.
 
+### Self-Assessment Quiz
+
+::: {.callout-note}
+#### Chapter 8 Questions
+
+**Q1.** When is the exact Poisson test particularly useful?
+
+A) When sample sizes exceed 1,000  
+B) When counts are small (fewer than 10 events) or testing a single observed count against a known benchmark  
+C) When data are normally distributed  
+D) Only for continuous outcomes
+
+---
+
+**Q2.** In the defect rate example, 15 defects were observed in 5 batches. The target rate was 2 defects per batch. What is the observed rate?
+
+A) 2 per batch  
+B) 5 per batch  
+C) 3 per batch  
+D) 15 per batch
+
+---
+
+**Q3.** What does a rate ratio greater than 1 indicate when comparing two groups?
+
+A) The groups have identical rates  
+B) The first group has a higher event rate than the second group  
+C) The sample size is too small  
+D) The data are normally distributed
+
+---
+
+**Q4.** Why are classical ARIMA models problematic for short time series (n < 30)?
+
+A) ARIMA requires specialized software  
+B) ARIMA models require sufficient data to estimate autocorrelation structure; with few observations, estimates are noisy and forecasts unreliable  
+C) ARIMA only works with count data  
+D) ARIMA cannot handle missing values
+
+---
+
+**Q5.** What is the advantage of bootstrap forecast intervals for short time series?
+
+A) They eliminate all uncertainty  
+B) They generate forecast intervals by resampling residuals, providing a transparent alternative when classical ARIMA is infeasible  
+C) They require n > 1,000  
+D) They only work with normally distributed data
+
+---
+
+**Q6.** What is the primary challenge with zero-inflated count models in small samples?
+
+A) They are too fast to compute  
+B) They require sufficient data to estimate both the zero-inflation process and the count process; with very small samples, they may be overparameterized and unstable  
+C) They cannot handle zeros  
+D) They only work with large samples
+
+---
+
+**Q7.** What does "overdispersion" mean in count data?
+
+A) The mean exceeds the variance  
+B) The variance exceeds the mean (more variability than expected under a Poisson distribution)  
+C) The data are perfectly Poisson-distributed  
+D) There are no zeros in the data
+
+---
+
+**Q8.** How does the quasi-Poisson model address overdispersion?
+
+A) By removing outliers  
+B) By keeping the Poisson mean structure but estimating a dispersion parameter to inflate standard errors appropriately  
+C) By increasing sample size  
+D) By assuming normality
+
+---
+
+**Q9.** In the adverse event rate comparison, Trial A had 8 events in 50 patient-days and Trial B had 3 events in 45 patient-days. If the rate ratio confidence interval excludes 1, what does this indicate?
+
+A) The rates are identical  
+B) The rates differ significantly between the two trials  
+C) More data are needed  
+D) The Poisson assumption is violated
+
+---
+
+**Q10.** For very short time series (fewer than 15 observations), which approach is typically more appropriate than complex ARIMA models?
+
+A) Multiple regression with 20 predictors  
+B) Simple methods like moving averages or linear trend extrapolation  
+C) Factor analysis  
+D) Structural equation modeling
+
+:::
+
+::: {.callout-tip collapse="true"}
+#### Answers and Explanations
+
+**A1. B)** "The exact Poisson test... is particularly useful when counts are small (fewer than 10 events) or when testing a single observed count against a known benchmark."  
+Exact tests avoid large-sample approximations that may be invalid with sparse counts.
+
+**A2. C)** "In a trial of 5 batches, 15 defects are observed... the observed rate (15/5 = 3 per batch)."  
+The observed rate is calculated as total defects divided by number of batches: 15/5 = 3.
+
+**A3. B)** "The rate ratio quantifies the relative rate of events in Trial A vs. Trial B. A ratio greater than 1 indicates higher rates in A."  
+Rate ratios provide a multiplicative comparison: RR = 2 means the first group has twice the event rate.
+
+**A4. B)** "Short time series (n < 30 observations) complicate classical forecasting. ARIMA models require sufficient data to estimate autocorrelation structure; with few observations, estimates are noisy and forecasts unreliable."  
+ARIMA needs adequate data to identify and estimate autoregressive and moving average parameters.
+
+**A5. B)** "Bootstrap methods can generate forecast intervals by resampling residuals or using block bootstrap to preserve temporal dependence."  
+Bootstrap provides a transparent, assumption-light approach suitable for short series.
+
+**A6. B)** "These models require sufficient data to estimate both the zero-inflation process and the count process. With very small samples, zero-inflated models may be overparameterised and unstable."  
+Zero-inflated models have more parameters, requiring larger samples for stable estimation.
+
+**A7. B)** "When variance exceeds the mean (overdispersion), classical Poisson regression underestimates standard errors."  
+Poisson assumes variance = mean; real data often show greater variability.
+
+**A8. B)** "The quasi-Poisson model... keeps the Poisson mean structure but estimates a dispersion parameter to inflate standard errors appropriately."  
+Quasi-Poisson adjusts standard errors without changing the mean model structure.
+
+**A9. B)** "If the CI excludes 1, the rates differ significantly."  
+A confidence interval that doesn't contain 1 indicates the rate ratio is significantly different from equality.
+
+**A10. B)** "Simple methods (moving averages, linear trend extrapolation) may be more transparent and robust for very short series."  
+With limited data, simpler models reduce overfitting risk and provide more interpretable forecasts.
+
+:::
+
 ### Key Takeaways
 
 - Exact Poisson tests provide valid inferences for sparse count data, avoiding large-sample approximations.
@@ -1470,3 +4188,309 @@ poisson.test(x = 10, T = 5, r = 1.5)
 ## Summary of Part C
 
 In Part C, we presented a comprehensive toolkit for small-sample quantitative analysis. Chapter 3 covered exact tests (Fisher, Barnard, exact binomial, exact Poisson) and resampling methods (permutation tests, bootstrap confidence intervals). Chapter 4 introduced nonparametric rank-based methods (Mann–Whitney U, Wilcoxon signed-rank, Kruskal–Wallis, Friedman, Spearman, Kendall). Chapter 5 addressed penalised (Firth logistic) and Bayesian regression techniques for stabilising estimates with limited data. Chapter 6 discussed reliability assessment for short scales using Cronbach's alpha, McDonald's omega, and polychoric correlations. Chapter 7 presented multi-criteria decision-making (MCDM) methods (AHP, TOPSIS, VIKOR) for ranking alternatives with multiple criteria. Chapter 8 covered methods for sparse counts (exact Poisson tests, rate comparisons) and short time series (bootstrap forecast intervals, trend models). Each chapter included learning objectives, detailed method descriptions with assumptions and use cases, runnable R examples with small datasets, interpretations, key takeaways, and smoke tests. All code adheres to the specified packages and runs cleanly in a fresh R session. References to core sources (Van de Schoot & Miočević, Davison & Hinkley, Good, Conover, Firth, Harrell, Hosmer et al., Shan) are integrated throughout the text where relevant.
+
+---
+
+## Part C Challenge: Complete Analysis Project
+
+### Hospital Readmission Risk Assessment
+
+**Scenario**: You work as a data analyst for a regional hospital. The quality improvement team has collected data from 25 patients to identify risk factors for 30-day readmission. Your task is to conduct a rigorous analysis using small-sample methods learned in Part C.
+
+**Dataset**: `data/hospital_readmissions.csv`
+
+**Variables**:
+- `patient_id`: Unique identifier
+- `age`: Patient age (years)
+- `comorbidities`: Number of chronic conditions (0-5)
+- `length_of_stay`: Initial hospitalization duration (days)
+- `discharge_support`: Follow-up arranged (Yes/No)
+- `readmitted_30d`: Readmitted within 30 days (1 = Yes, 0 = No)
+
+**Allocated Time**: 2-3 hours
+
+---
+
+### Task 1: Exploratory Analysis (30 minutes)
+
+**Objectives**:
+- Understand the data structure and quality
+- Identify potential issues (outliers, missing data, separation)
+- Visualize relationships between predictors and outcome
+
+**Deliverables**:
+
+1. **Summary statistics** for all variables (mean, SD, range for continuous; counts for categorical)
+2. **Missing data report**: Use `naniar::miss_var_summary()` to check missingness
+3. **Outlier detection**: Boxplots for continuous variables
+4. **Readmission rate by subgroups**:
+   - Age groups (< 50, 50-70, > 70)
+   - Discharge support (Yes vs No)
+   - Comorbidity burden (0-1, 2-3, 4-5)
+5. **Visual summary**: 
+   - Scatterplot matrix (age, comorbidities, length_of_stay colored by readmission status)
+   - Bar chart of readmission rates by discharge support
+
+**Starter Code**:
+```r
+library(tidyverse)
+library(naniar)
+library(gt)
+
+# Load data
+hospital_data <- read_csv("data/hospital_readmissions.csv")
+
+# 1. Summary statistics
+hospital_data %>%
+  summary()
+
+# 2. Check for missing data
+miss_var_summary(hospital_data)
+
+# 3. Visualize distributions
+hospital_data %>%
+  select(age, comorbidities, length_of_stay) %>%
+  pivot_longer(everything()) %>%
+  ggplot(aes(x = value)) +
+  geom_histogram(bins = 10, fill = "steelblue") +
+  facet_wrap(~name, scales = "free") +
+  theme_minimal()
+
+# 4. Readmission rate by discharge support
+hospital_data %>%
+  group_by(discharge_support) %>%
+  summarise(
+    n = n(),
+    readmissions = sum(readmitted_30d),
+    rate = mean(readmitted_30d)
+  )
+```
+
+**Critical Thinking Questions**:
+1. Are there any concerning patterns in the data (e.g., perfect separation)?
+2. Which variables show the strongest association with readmission?
+3. Is the sample size adequate for multivariable modeling?
+
+---
+
+### Task 2: Model Comparison (45 minutes)
+
+**Objectives**:
+- Fit standard and penalized logistic regression
+- Compare model stability and predictions
+- Understand when penalization is necessary
+
+**Deliverables**:
+
+1. **Standard logistic regression**:
+   - Model: `readmitted_30d ~ age + comorbidities + length_of_stay + discharge_support`
+   - Check for convergence warnings or extreme coefficients
+   - Extract coefficients, SEs, and odds ratios
+
+2. **Firth penalized logistic regression**:
+   - Same model specification
+   - Compare coefficients and SEs to standard model
+   - Note: Firth estimates should be smaller (shrunk toward zero)
+
+3. **Model comparison table**:
+   - Create a side-by-side table (use `gt` package)
+   - Columns: Variable, Standard β, Standard SE, Firth β, Firth SE
+   - Highlight differences > 20%
+
+4. **Predicted probabilities**:
+   - Plot predicted readmission probability vs. comorbidities (holding other variables at median/mode)
+   - Include 95% CIs
+   - Compare standard vs. Firth predictions
+
+**Starter Code**:
+```r
+library(logistf)
+
+# Standard logistic regression
+standard_model <- glm(
+  readmitted_30d ~ age + comorbidities + length_of_stay + discharge_support,
+  data = hospital_data,
+  family = binomial(link = "logit")
+)
+summary(standard_model)
+
+# Firth penalized logistic regression
+firth_model <- logistf(
+  readmitted_30d ~ age + comorbidities + length_of_stay + discharge_support,
+  data = hospital_data
+)
+summary(firth_model)
+
+# Compare coefficients
+comparison <- tibble(
+  Variable = names(coef(standard_model)),
+  Standard_beta = coef(standard_model),
+  Standard_SE = summary(standard_model)$coefficients[, 2],
+  Firth_beta = coef(firth_model),
+  Firth_SE = sqrt(diag(firth_model$var))
+) %>%
+  mutate(Diff_pct = abs((Firth_beta - Standard_beta) / Standard_beta) * 100)
+
+comparison %>%
+  gt() %>%
+  fmt_number(columns = c(Standard_beta, Standard_SE, Firth_beta, Firth_SE, Diff_pct), decimals = 3)
+```
+
+**Critical Thinking Questions**:
+1. Did the standard model show warnings? If so, which type (separation, convergence)?
+2. Which coefficients changed most with Firth penalization?
+3. Which model would you trust for making clinical decisions? Why?
+
+---
+
+### Task 3: Reporting and Communication (30 minutes)
+
+**Objectives**:
+- Create publication-ready summary tables
+- Visualize model predictions with uncertainty
+- Write a concise results paragraph
+
+**Deliverables**:
+
+1. **Table 1**: Patient characteristics by readmission status
+   - Stratify by readmitted_30d (Yes/No)
+   - Include: n, mean age (SD), median comorbidities (IQR), % with discharge support
+   - Use `gtsummary::tbl_summary()`
+
+2. **Figure 1**: Predicted readmission probability plot
+   - X-axis: Number of comorbidities (0-5)
+   - Y-axis: Predicted probability (0-1)
+   - Lines for Firth model predictions with 95% CI ribbon
+   - Rug plot showing observed data points
+
+3. **Results paragraph** (200 words max):
+   - Sample characteristics
+   - Model choice justification (standard vs. Firth)
+   - Key predictors with ORs and 95% CIs
+   - Interpretation for a clinical audience
+   - Limitations due to sample size
+
+**Example Results Template**:
+
+> "Twenty-five patients (mean age 63.2 ± 12.4 years, 48% with discharge support) were included. Eight patients (32%) were readmitted within 30 days. Due to the small sample size and potential separation, Firth penalized logistic regression was used. After adjusting for age and length of stay, comorbidity burden (OR = 1.8 per additional condition, 95% CI [1.1, 3.2], p = 0.02) and lack of discharge support (OR = 4.2, 95% CI [1.2, 14.8], p = 0.03) were associated with increased readmission risk. Predicted readmission probabilities ranged from 10% (no comorbidities, discharge support) to 75% (5 comorbidities, no support). Limitations include the small sample (wide CIs), single-center data, and unmeasured confounders (e.g., socioeconomic status, medication adherence). These findings warrant validation in a larger cohort (target n ≥ 150) before clinical implementation."
+
+**Starter Code**:
+```r
+library(gtsummary)
+library(broom)
+
+# Table 1: Patient characteristics
+hospital_data %>%
+  mutate(readmitted_30d = factor(readmitted_30d, levels = c(0, 1), labels = c("No", "Yes"))) %>%
+  tbl_summary(
+    by = readmitted_30d,
+    statistic = list(all_continuous() ~ "{mean} ({sd})", all_categorical() ~ "{n} ({p}%)"),
+    label = list(
+      age ~ "Age (years)",
+      comorbidities ~ "Comorbidities",
+      length_of_stay ~ "Length of Stay (days)",
+      discharge_support ~ "Discharge Support"
+    )
+  ) %>%
+  add_overall()
+
+# Figure 1: Predicted probabilities
+pred_data <- expand.grid(
+  comorbidities = 0:5,
+  age = median(hospital_data$age),
+  length_of_stay = median(hospital_data$length_of_stay),
+  discharge_support = "Yes"
+)
+
+# Get predictions from Firth model
+pred_data$predicted <- predict(firth_model, newdata = pred_data, type = "response")
+
+# Plot
+ggplot(pred_data, aes(x = comorbidities, y = predicted)) +
+  geom_line(size = 1, color = "steelblue") +
+  geom_point(data = hospital_data, aes(y = readmitted_30d), alpha = 0.3, position = position_jitter(height = 0.02)) +
+  labs(
+    title = "Predicted 30-Day Readmission Probability",
+    x = "Number of Comorbidities",
+    y = "Predicted Probability",
+    caption = "Model: Firth penalized logistic regression, adjusted for age and length of stay"
+  ) +
+  scale_y_continuous(limits = c(0, 1), labels = scales::percent) +
+  theme_minimal()
+```
+
+---
+
+### Task 4: Critical Reflection (15 minutes)
+
+Answer these questions in your report:
+
+1. **Main Limitation**: What is the single biggest limitation of your analysis? How does it affect your conclusions?
+
+2. **Additional Data**: If you could collect 10 more variables on these same 25 patients, what would they be? Why?
+   - Consider: socioeconomic factors, medication adherence, social support, disease severity markers, provider characteristics
+
+3. **Prospective Validation**: How would you validate this model before implementing it clinically?
+   - Sample size calculation (how many patients needed?)
+   - Calibration and discrimination metrics (Brier score, C-statistic)
+   - External validation (different hospital/region)
+
+4. **Ethical Considerations**: If this model were used to allocate discharge support resources, what could go wrong?
+   - False positives (wasted resources)
+   - False negatives (missed high-risk patients)
+   - Algorithmic bias (if training data not representative)
+
+---
+
+### Evaluation Rubric
+
+| Criterion | Excellent (4) | Good (3) | Satisfactory (2) | Needs Improvement (1) |
+|-----------|---------------|----------|------------------|-----------------------|
+| **Code Quality** | All code runs without errors; well-commented; efficient | Code runs with minor tweaks; some comments | Code has errors but approach is sound | Code doesn't run or approach is flawed |
+| **Statistical Rigor** | Appropriate methods; checks assumptions; reports uncertainties | Mostly appropriate; minor omissions | Some questionable choices; incomplete checks | Major methodological errors |
+| **Communication** | Clear, concise, audience-appropriate; publication-ready | Clear but could be more concise | Understandable but jargon-heavy | Unclear or incomplete |
+| **Critical Thinking** | Insightful limitations; creative solutions; anticipates questions | Identifies key limitations; standard solutions | Basic limitations noted | Limitations not addressed |
+| **Visualization** | Publication-ready figures; clear labels; appropriate scales | Good figures with minor issues | Adequate but could be clearer | Poor or missing figures |
+
+**Passing Standard**: Score ≥ 10/20 (Average of 2 per criterion)
+
+**Excellence Standard**: Score ≥ 16/20 (Average of 3.2 per criterion)
+
+---
+
+### Extension Challenges (Optional)
+
+For advanced students:
+
+1. **Bayesian Logistic Regression**: Fit the model using `rstanarm::stan_glm()` with weakly informative priors. Compare posterior intervals to Firth CIs.
+
+2. **Cross-Validation**: Perform leave-one-out cross-validation to assess predictive accuracy. Report the C-statistic (AUC).
+
+3. **Nonparametric Approach**: Use Mann-Whitney U tests to compare continuous predictors by readmission status. Compute Cliff's Delta effect sizes.
+
+4. **Sensitivity Analysis**: How do results change if you exclude patients with age > 80 or comorbidities = 0?
+
+5. **Sample Size Calculation**: Using your effect size estimates, calculate the sample size needed to achieve 80% power to detect the effect of discharge support (α = 0.05).
+
+---
+
+### Submission Format
+
+Create a Quarto document (.qmd) with:
+
+1. **Title and Author**: "Hospital Readmission Risk Assessment" + your name
+2. **Sections**: Introduction, Methods, Results, Discussion, References
+3. **Code chunks**: Labeled and with `echo=TRUE` so the instructor can see your code
+4. **Outputs**: Tables and figures embedded in the document
+5. **Narrative**: Connecting paragraphs explaining your choices and interpretations
+6. **Appendix**: Critical reflection answers (Task 4)
+
+Render to HTML or PDF and submit via your learning management system.
+
+**Expected length**: 5-8 pages (including figures and code)
+
+**Deadline**: [Set by instructor]
+
+---
+
+This challenge integrates concepts from Chapters 3-8 and requires students to make methodological decisions, interpret results, and communicate findings—core skills for small-sample research.

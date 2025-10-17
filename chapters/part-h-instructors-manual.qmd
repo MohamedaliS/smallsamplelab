@@ -1,0 +1,2344 @@
+# Part H: Instructor's Manual
+
+# INSTRUCTOR'S MANUAL
+## Quantitative Analysis with Small Samples
+
+**For Academic Use Only**  
+**Confidential—Not for Student Distribution**
+
+---
+
+## Table of Contents
+
+1. [Course Planning](#course-planning)
+2. [Sample Syllabi](#sample-syllabi)
+3. [Answer Keys](#answer-keys)
+4. [Grading Rubrics](#grading-rubrics)
+5. [Common Teaching Challenges](#teaching-challenges)
+6. [Additional Resources](#additional-resources)
+
+---
+
+## 1. COURSE PLANNING
+
+### 1.1 Target Audiences
+
+**Primary:**
+- Graduate students (Master's/PhD) in social sciences, health sciences, business, education
+  - **Social Sciences:** Psychology, sociology, anthropology, political science
+  - **Health Sciences:** Nursing, public health, clinical research, health psychology
+  - **Business:** Marketing analytics, organizational behavior, operations management
+  - **Education:** Curriculum & instruction, educational psychology, special education, teacher education
+- Researchers in SIDS or resource-constrained settings
+- Quantitative methods courses emphasizing practical skills
+- Education practitioners conducting classroom-based research (action research, program evaluation)
+
+**Secondary:**
+- Advanced undergraduates with prior statistics coursework
+- Continuing education for practitioners (workshops, short courses)
+- Self-study for researchers transitioning from large-sample methods
+- School administrators and instructional coaches evaluating interventions
+
+### 1.2 Prerequisites
+
+**Required:**
+- Introductory statistics (hypothesis testing, confidence intervals, regression)
+- Basic R programming (loading data, running functions, interpreting output)
+- Familiarity with RStudio interface
+
+**Recommended:**
+- Experience with linear and logistic regression
+- Prior exposure to ANOVA/t-tests
+- Understanding of p-values and effect sizes
+
+**If Prerequisites Are Missing:**
+- **Week 0: R Bootcamp** (4 hours)—install R/RStudio, basic syntax, importing data
+- **Pre-course materials:** Recommend DataCamp's "Introduction to R" or *R for Data Science* (Wickham & Grolemund)
+
+### 1.3 Learning Outcomes (Course-Level)
+
+By the end of this course, students will be able to:
+
+**Conceptual:**
+- Explain why large-sample methods fail with small n
+- Distinguish between exact, resampling, and nonparametric approaches
+- Identify when small samples are sufficient vs. insufficient
+
+**Practical:**
+- Conduct Fisher's exact test, Mann-Whitney U, Wilcoxon signed-rank
+- Fit Firth logistic regression and Bayesian models
+- Compute Cronbach's alpha and McDonald's omega
+- Generate bootstrap confidence intervals
+
+**Professional:**
+- Report results transparently following best practices
+- Interpret non-significant results appropriately
+- Pre-register analyses and document deviations
+- Critique published small-sample studies
+
+---
+
+## 2. SAMPLE SYLLABI
+
+### 2.1 Fifteen-Week Semester Course (Graduate Level)
+
+**Course:** Advanced Quantitative Methods for Small Samples  
+**Credits:** 3  
+**Meeting Time:** 3 hours/week (2 hours lecture + 1 hour lab)  
+**Level:** Graduate (Master's/PhD)
+
+#### Week-by-Week Schedule
+
+| Week | Topics | Readings | Lab/Activities | Assessments | Notes |
+|------|--------|----------|----------------|-------------|-------|
+| **1** | **Course Introduction**<br>- Syllabus overview<br>- Why small samples matter<br>- Small n ≠ bad research | Ch 1 | Install R/RStudio/packages<br>Explore example datasets<br>Introductions: Share research contexts | — | Set up computational environment |
+| **2** | **Research Design Foundations**<br>- Framing research questions<br>- Outcome selection<br>- Exploratory vs. confirmatory | Ch 2 | Generate synthetic datasets<br>Critique study designs<br>Discussion: When are small samples justified? | Quiz 1 (Ch 1-2) | Emphasize question formulation |
+| **3** | **Sampling & Power**<br>- Sampling strategies<br>- Power analysis<br>- Minimum detectable effects | Ch 9 | Lab 1: Power Analysis<br>Calculate sample size requirements<br>Sensitivity analyses | — | Critical for study planning |
+| **4** | **Measurement Quality I**<br>- Scale development<br>- Validity assessment<br>- Pilot testing | Ch 10 (first half) | Cognitive interview exercise<br>Item-level diagnostics<br>Content validity evaluation | Assignment 1 Due:<br>Study Design Proposal | Include measurement plan |
+| **5** | **Measurement Quality II**<br>- Reliability theory<br>- Cronbach's α, McDonald's ω<br>- Short scale challenges | Ch 10 (second half) | Lab 6: Reliability Analysis<br>Compute internal consistency<br>Interpret with small n | — | Stress limitations with small n |
+| **6** | **Data Screening**<br>- Outlier detection<br>- Normality assessment<br>- Diagnostic checks | Ch 11 | Lab 8: Data Screening<br>Univariate & multivariate outliers<br>Q-Q plots, Shapiro-Wilk tests | Quiz 2 (Ch 9-11) | Document all decisions |
+| **7** | **Missing Data**<br>- MCAR, MAR, MNAR<br>- Multiple imputation<br>- MICE implementation | Ch 12 | Lab 9: Multiple Imputation<br>Convergence diagnostics<br>Pooling results (Rubin's rules) | — | Emphasize assumptions |
+| **8** | **MIDTERM BREAK / REVIEW**<br>- Synthesis of Weeks 1-7<br>- Q&A session<br>- Worked Project 1 | Part E (Project 1) | Work through employee engagement project<br>Open lab time for Assignment 2 | — | Consolidation week |
+| **9** | **Exact Tests & Resampling**<br>- Fisher's exact test<br>- Permutation tests<br>- Bootstrap CIs | Ch 3 | Lab 2: Exact Tests<br>Compare Fisher vs. chi-square<br>Generate permutation distributions | Assignment 2 Due:<br>Data Analysis Report | Hands-on resampling |
+| **10** | **Nonparametric Methods**<br>- Mann-Whitney U<br>- Wilcoxon signed-rank<br>- Rank-based effect sizes | Ch 4 | Lab 3: Nonparametric Tests<br>Compute rank-biserial correlation<br>When to use vs. t-tests | — | Emphasize robustness |
+| **11** | **Regression for Small Samples**<br>- Separation in logistic regression<br>- Firth's penalized method<br>- Bayesian regression intro | Ch 5 | Lab 4: Penalized Regression<br>Lab 5: Bayesian Estimation (brms basics)<br>Prior sensitivity analysis | Quiz 3 (Ch 3-5) | May skip Bayesian if time-limited |
+| **12** | **Specialized Methods**<br>- Reliability for short scales<br>- MCDM techniques (optional)<br>- Sparse counts | Ch 6, 8 (Ch 7 optional) | Lab 7: Bootstrap Methods<br>Applied reliability analysis<br>Zero-inflated Poisson models | — | Adapt to student interests |
+| **13** | **Reporting & Interpretation I**<br>- Effect sizes over p-values<br>- Confidence intervals<br>- Transparent reporting | Ch 13-14 | Lab 11: Effect Sizes & CIs<br>Critique published papers<br>APA-style reporting workshop | — | Critical reporting skills |
+| **14** | **Reporting & Interpretation II**<br>- Non-significant results<br>- Equivalence testing<br>- Visualization best practices | Ch 15-16 | Lab 12: Visualization<br>Create raincloud plots<br>Publication-ready figures | Assignment 3 Draft Due:<br>For peer review | Emphasize uncertainty visualization |
+| **15** | **Synthesis & Presentations**<br>- Worked Projects 2-3<br>- Student presentations<br>- Course wrap-up | Part E (Projects 2-3) | Student presentations (15 min each)<br>Peer feedback<br>Reflection on learning | Final Presentation<br>Assignment 3 Final Due | Celebrate learning! |
+
+#### Grading Breakdown
+
+| Component | Weight | Details |
+|-----------|--------|---------|
+| Quizzes (3) | 15% | 5% each, open-book, conceptual focus (Ch 1-2, 9-11, 3-5) |
+| Lab Participation | 15% | Attendance + completion of 12 labs (1.25% each) |
+| Assignment 1: Study Design Proposal | 15% | Design small-sample study with power analysis, measurement plan (due Week 4) |
+| Assignment 2: Data Analysis Report | 25% | Analyze provided dataset, full write-up with screening, analysis, interpretation (due Week 9) |
+| Assignment 3: Final Report | 20% | Independent analysis + report (APA format); draft due Week 14, final due Week 15 |
+| Final Presentation | 10% | 15-min presentation of Assignment 3 (Week 15) |
+
+**Total:** 100%
+
+---
+
+### 2.2 Fifteen-Week Semester Course (Undergraduate Adaptation)
+
+**Course:** Quantitative Methods for Small Samples  
+**Credits:** 3  
+**Meeting Time:** 3 hours/week (2 hours lecture + 1 hour lab)  
+**Level:** Advanced Undergraduate (junior/senior with stats prerequisite)
+
+#### Key Adaptations for Undergraduates
+
+**1. Simplified Content:**
+- **Omit:** Bayesian methods (Ch 5, Lab 5), MCDM (Ch 7), advanced topics in Ch 6, 8
+- **Emphasize:** Exact tests, nonparametric methods, effect sizes, visualization
+- **Focus:** Practical application over theoretical depth
+
+**2. Reduced Technical Complexity:**
+- Use pre-written R scripts (students modify, not write from scratch)
+- Provide more scaffolding in labs (fill-in-the-blank code)
+- Focus on interpretation over programming
+
+**3. Modified Assessments:**
+- Replace "Study Design Proposal" with "Mini Literature Review" (critique 3 small-sample studies)
+- Simplify Assignment 2 (guided analysis with step-by-step instructions)
+- Allow group projects for Assignment 3 (pairs)
+
+**4. Additional Support:**
+- Weekly R help sessions (30 min before/after class)
+- Video tutorials for all labs
+- More worked examples in lectures
+
+#### Undergraduate Week-by-Week Schedule
+
+| Week | Topics | Readings | Lab/Activities | Assessments | UG Modifications |
+|------|--------|----------|----------------|-------------|------------------|
+| **1** | **Introduction**<br>- What are small samples?<br>- When & why they occur | Ch 1 | R/RStudio setup<br>Explore datasets | — | Extra R tutorial time |
+| **2** | **Research Questions**<br>- Formulating testable questions<br>- Choosing outcomes | Ch 2 | Critique example studies<br>Discussion activity | Quiz 1 (Ch 1-2) | Use real-world examples |
+| **3** | **Power & Sample Size**<br>- What is statistical power?<br>- Calculating minimum n | Ch 9 (simplified) | Lab 1: Power Analysis (guided)<br>Use online calculators | — | Focus on interpretation, not derivation |
+| **4** | **Measurement Basics**<br>- Reliability & validity<br>- Scale quality | Ch 10 (core concepts only) | Item analysis exercise<br>Compute Cronbach's α | Assignment 1 Due:<br>Mini Literature Review | Skip advanced psychometrics |
+| **5** | **Data Screening**<br>- Checking for errors<br>- Outlier detection<br>- Visualizing data | Ch 11 | Lab 8: Data Screening (guided)<br>Create boxplots, histograms | — | Emphasize visual methods |
+| **6** | **Missing Data Basics**<br>- Why data go missing<br>- Simple imputation<br>- Complete-case analysis | Ch 12 (intro only) | Lab 9: Multiple Imputation (simplified)<br>Use mice package with defaults | Quiz 2 (Ch 9-12) | Skip MCAR/MAR/MNAR theory |
+| **7** | **Review & Midterm**<br>- Consolidation<br>- Practice problems | — | Work through Project 1 together<br>Open lab time | — | More guided support |
+| **8** | **Exact Tests**<br>- Fisher's exact test<br>- When to use vs. chi-square | Ch 3 (Fisher's exact only) | Lab 2: Exact Tests (Fisher focus)<br>Compare with chi-square | — | Skip permutation tests |
+| **9** | **Nonparametric Tests I**<br>- Mann-Whitney U<br>- When data aren't normal | Ch 4 (Mann-Whitney) | Lab 3: Nonparametric Tests (Part 1)<br>Compare with t-test | Assignment 2 Due:<br>Guided Data Analysis | Focus on one test at a time |
+| **10** | **Nonparametric Tests II**<br>- Wilcoxon signed-rank<br>- Paired comparisons | Ch 4 (Wilcoxon) | Lab 3: Nonparametric Tests (Part 2)<br>Paired data examples | — | Use familiar contexts (pre/post) |
+| **11** | **Effect Sizes**<br>- Cohen's d<br>- Why p-values aren't enough | Ch 13 | Lab 11: Effect Sizes & CIs (Part 1)<br>Calculate by hand, then in R | Quiz 3 (Ch 3-4, 13) | Emphasize practical significance |
+| **12** | **Confidence Intervals**<br>- What CIs tell us<br>- Interpreting uncertainty | Ch 13 | Lab 11: Effect Sizes & CIs (Part 2)<br>Bootstrap CIs (simplified) | — | Focus on interpretation |
+| **13** | **Interpreting Results**<br>- Non-significant results<br>- Avoiding over-interpretation | Ch 15 | Case studies discussion<br>Rewrite bad conclusions | — | Use published examples |
+| **14** | **Visualization**<br>- Creating clear plots<br>- Showing uncertainty<br>- Common mistakes | Ch 16 | Lab 12: Visualization<br>ggplot2 basics<br>Error bars, dot plots | Assignment 3 Draft Due | Provide ggplot2 templates |
+| **15** | **Presentations & Wrap-Up**<br>- Student presentations<br>- Course reflection | Part E (Project 1) | Group presentations (10 min)<br>Peer feedback | Final Presentation<br>Assignment 3 Final Due | Group projects allowed |
+
+#### Undergraduate Grading Breakdown
+
+| Component | Weight | Details |
+|-----------|--------|---------|
+| Quizzes (3) | 15% | 5% each, shorter (10 questions), focus on key concepts |
+| Lab Participation | 20% | Attendance + completion (more weight due to guided nature) |
+| Assignment 1: Literature Review | 15% | Critique 3 small-sample studies (scaffolded template provided) |
+| Assignment 2: Guided Analysis | 20% | Step-by-step analysis with provided data and instructions |
+| Assignment 3: Group Project | 20% | Pairs allowed; analyze dataset + 5-page report |
+| Final Presentation | 10% | 10-min group presentation |
+
+**Total:** 100%
+
+#### Recommended Chapters for Undergraduate Course
+
+**Core (Must Cover):**
+- ✅ Chapter 1: When and Why Small Samples
+- ✅ Chapter 2: Framing Research Questions
+- ✅ Chapter 9: Sampling Strategies (simplified)
+- ✅ Chapter 11: Data Screening
+- ✅ Chapter 3: Exact Tests (Fisher's exact only)
+- ✅ Chapter 4: Nonparametric Methods (Mann-Whitney, Wilcoxon)
+- ✅ Chapter 13: Effect Sizes and Confidence Intervals
+- ✅ Chapter 15: Interpreting Non-Significant Results
+- ✅ Chapter 16: Visualization
+
+**Optional (If Time Permits):**
+- ⭕ Chapter 10: Measurement Quality (basics only)
+- ⭕ Chapter 12: Missing Data (complete-case analysis + simple imputation)
+- ⭕ Part E: Worked Project 1 (walk through together)
+
+**Omit for Undergraduates:**
+- ❌ Chapter 5: Penalized and Bayesian Regression (too advanced)
+- ❌ Chapter 6: Reliability (advanced psychometrics)
+- ❌ Chapter 7: MCDM (specialized application)
+- ❌ Chapter 8: Sparse Counts and Time Series (advanced)
+- ❌ Chapter 14: Transparent Reporting (briefly mention, don't deep-dive)
+- ❌ Part F: Technical Appendices
+- ❌ Labs 4, 5, 7 (Bayesian, MCDM, advanced bootstrap)
+
+---
+
+### 2.3 Graduate vs. Undergraduate Comparison Table
+
+| Aspect | Graduate Course | Undergraduate Course |
+|--------|----------------|---------------------|
+| **Depth** | Theoretical foundations + application | Application-focused, minimal theory |
+| **R Programming** | Write scripts from scratch | Modify provided templates |
+| **Chapters Covered** | All 16 chapters | 9 core chapters |
+| **Labs** | All 12 labs | 6-7 labs (simplified versions) |
+| **Bayesian Methods** | Full coverage (Ch 5, Lab 5) | Omitted |
+| **Assignments** | Independent design + analysis | Guided, scaffolded tasks |
+| **Projects** | Individual work | Groups allowed (pairs) |
+| **Prerequisites** | Intermediate stats + R | Intro stats (t-test, ANOVA, regression) |
+| **Reading Load** | ~60 pages/week | ~30 pages/week |
+| **Assessment Rigor** | APA-style reports, preregistration | Simplified reporting, templates provided |
+
+---
+
+### 2.4 Twelve-Week Semester Course (Condensed Graduate)
+
+**For quarters or accelerated programs**
+
+**Strategy:** Combine weeks, prioritize core methods
+
+| Week | Combined Topics | Readings | Labs | Assessments |
+|------|----------------|----------|------|-------------|
+| 1 | Foundations + Research Design | Ch 1-2 | Setup + Discussion | Quiz 1 |
+| 2 | Sampling + Power | Ch 9 | Lab 1 | Assignment 1 Due |
+| 3 | Measurement Quality | Ch 10 | Lab 6 | — |
+| 4 | Data Screening + Missing Data | Ch 11-12 | Labs 8-9 | Quiz 2 |
+| 5 | Exact Tests + Nonparametric | Ch 3-4 | Labs 2-3 | — |
+| 6 | Regression Methods | Ch 5 | Lab 4 or 5 (choose one) | Assignment 2 Due |
+| 7 | Specialized Methods | Ch 6, 8 | Lab 7 | Quiz 3 |
+| 8 | Reporting I | Ch 13-14 | Lab 11 | — |
+| 9 | Reporting II | Ch 15-16 | Lab 12 | — |
+| 10 | Worked Projects | Part E | Projects 1-2 | — |
+| 11 | Synthesis | Part E | Project 3 | Assignment 3 Due |
+| 12 | Presentations | — | Student presentations | Final Presentation |
+
+---
+
+### 2.5 Five-Day Intensive Workshop
+
+**Target:** Practicing researchers, continuing education  
+**Duration:** 5 days × 6 hours = 30 contact hours
+
+#### Daily Schedule
+
+**Day 1: Foundations & Design**
+- 09:00–10:30: Lectures (Ch 1-2)
+- 10:45–12:00: Power analysis lab
+- 13:00–14:30: Sampling strategies (Ch 9)
+- 14:45–16:00: Study design exercise (groups)
+
+**Day 2: Exact & Nonparametric Methods**
+- 09:00–10:30: Exact tests lecture (Ch 3)
+- 10:45–12:00: Lab 2: Fisher's exact, permutation tests
+- 13:00–14:30: Nonparametric tests lecture (Ch 4)
+- 14:45–16:00: Lab 3: Mann-Whitney, Wilcoxon
+
+**Day 3: Regression & Reliability**
+- 09:00–10:30: Firth logistic regression (Ch 5)
+- 10:45–12:00: Lab 4: Penalized regression
+- 13:00–14:30: Reliability for short scales (Ch 6)
+- 14:45–16:00: Lab 6: Cronbach's alpha, omega
+
+**Day 4: Data Quality & Missing Data**
+- 09:00–10:30: Data screening (Ch 11)
+- 10:45–12:00: Lab 8: Outlier detection
+- 13:00–14:30: Missing data (Ch 12)
+- 14:45–16:00: Lab 9: Multiple imputation with MICE
+
+**Day 5: Reporting & Visualization**
+- 09:00–10:30: Effect sizes, non-significant results (Ch 13, 15)
+- 10:45–12:00: Lab 11: Effect size calculation
+- 13:00–14:30: Visualization (Ch 16)
+- 14:45–16:00: Lab 12: Publication-ready figures, wrap-up
+
+**Assessment:**
+- Daily quizzes (10 questions each, 5% × 5 = 25%)
+- Lab completion certificates (50%)
+- Take-home capstone project (25%)
+
+---
+
+### 2.6 Instructor's Guide: Adapting for Undergraduates
+
+#### Overview of Adaptations
+
+When teaching this material to undergraduates (typically juniors/seniors with introductory statistics background), several strategic adaptations ensure accessibility while maintaining rigor:
+
+**Philosophy:** Focus on **doing** over **deriving**. Undergraduates should master practical application and interpretation, not mathematical proofs.
+
+#### 1. Content Prioritization
+
+**MUST COVER (Core UG Content):**
+
+| Chapter | Topic | Why Essential | Adaptation |
+|---------|-------|---------------|------------|
+| Ch 1 | When & Why Small Samples | Motivation, real-world relevance | Use more familiar examples (sports, psychology studies) |
+| Ch 2 | Research Questions | Foundation for study design | Provide question-writing templates |
+| Ch 9 | Sampling & Power | Critical for understanding limitations | Use online calculators, skip derivations |
+| Ch 11 | Data Screening | Practical necessity | Emphasize visual methods (boxplots, histograms) |
+| Ch 3 | Fisher's Exact Test | Key alternative to chi-square | Focus only on 2×2 tables; skip larger tables |
+| Ch 4 | Mann-Whitney & Wilcoxon | Widely applicable nonparametric tests | One test per week (Week 9, Week 10) |
+| Ch 13 | Effect Sizes & CIs | Counteract p-value obsession | Calculate by hand first, then use R |
+| Ch 15 | Non-Significant Results | Common misinterpretation | Use real published examples to critique |
+| Ch 16 | Visualization | Communication skills | Provide ggplot2 templates to modify |
+
+**MAY COVER (If Time/Background Permits):**
+
+| Chapter | Topic | Condition | Adaptation |
+|---------|-------|-----------|------------|
+| Ch 10 | Measurement Quality | If psychology/health students | Basics only: Cronbach's α, skip omega |
+| Ch 12 | Missing Data | If students have research experience | Complete-case analysis + mice package (default settings) |
+| Part E | Worked Projects | Good for consolidation | Walk through Project 1 together in class |
+
+**OMIT (Too Advanced):**
+
+| Chapter | Topic | Why Omit | Graduate Alternative |
+|---------|-------|----------|---------------------|
+| Ch 5 | Bayesian Regression | Requires prior distributions, MCMC understanding | Graduate: Full brms treatment |
+| Ch 6 | Advanced Reliability | Factor analysis, IRT beyond UG scope | Graduate: Polychoric correlations, omega hierarchical |
+| Ch 7 | MCDM | Specialized application | Graduate: AHP, TOPSIS, VIKOR |
+| Ch 8 | Time Series & Counts | Requires time-series background | Graduate: State-space models, zero-inflation |
+| Ch 14 | Transparent Reporting | Better as guest lecture | Graduate: Preregistration, deviation documentation |
+
+#### 2. Pedagogical Modifications
+
+**A. R Programming Support**
+
+| Challenge | Graduate Approach | Undergraduate Approach |
+|-----------|------------------|----------------------|
+| **Package Installation** | Students install independently | Provide RStudio Cloud workspace (pre-installed) |
+| **Script Writing** | Write from scratch | Fill-in-the-blank templates with TODOs |
+| **Error Debugging** | Google errors, consult Stack Overflow | Debugging cheat sheet with common errors |
+| **Data Import** | Use `read_csv()`, troubleshoot paths | Provide `data()` pre-loaded datasets |
+| **Function Documentation** | Read `?function` help files | Annotated code with plain-English comments |
+
+**Example: UG Template for Mann-Whitney Test**
+
+```r
+# Lab 3: Mann-Whitney U Test (Undergraduate Version)
+# TODO: Load the required package
+library(__________)  # Hint: starts with "r"
+
+# Data: Treatment group scores
+treatment <- c(85, 90, 88, 92, 87, 91, 89, 93)
+control <- c(78, 82, 80, 79, 81, 83, 77, 84)
+
+# TODO: Conduct Mann-Whitney U test
+# Hint: Use wilcox.test()
+result <- wilcox.test(________, ________, 
+                      alternative = "two.sided",
+                      exact = TRUE)
+
+# View results
+print(result)
+
+# INTERPRETATION QUESTIONS (answer below):
+# 1. What is the p-value? ___________
+# 2. Is it less than 0.05? Yes / No
+# 3. What does this mean? (Circle one)
+#    a) Treatment group is significantly different
+#    b) No evidence of difference
+#    c) Treatment group is definitely the same
+```
+
+**B. Assessment Scaffolding**
+
+| Assessment Type | Graduate Version | Undergraduate Version |
+|----------------|------------------|---------------------|
+| **Study Design Proposal** | Open-ended design (any topic) | Choose from 3 pre-approved scenarios |
+| **Data Analysis Report** | Independent variable selection | Guided: "Analyze X using method Y" |
+| **Quizzes** | Conceptual + calculation | More multiple choice, less open-ended |
+| **Lab Write-Ups** | Interpret all output | Answer specific questions about key output |
+| **Final Project** | Individual, novel analysis | Pairs allowed, provided dataset |
+
+**Example UG Assignment 2 Prompt:**
+
+> **Assignment 2: Guided Data Analysis (Undergraduate)**
+> 
+> **Dataset:** `anxiety_study.csv` (pre-loaded in RStudio Cloud)  
+> **Research Question:** Does a 6-week mindfulness intervention reduce anxiety scores?
+> 
+> **Part 1: Data Screening (20 points)**
+> 1. Create a histogram of pre-test anxiety scores. Are there any outliers? (Use boxplot too)
+> 2. Check normality using a Q-Q plot. Does the distribution look roughly normal?
+> 3. Are there any missing values? Report the percentage missing.
+> 
+> **Part 2: Analysis (40 points)**
+> 4. Conduct a paired t-test comparing pre and post scores. Report t, df, p-value.
+> 5. Calculate Cohen's d for the difference. Is this a small, medium, or large effect?
+> 6. Create a plot showing pre and post scores for each participant (use geom_line).
+> 
+> **Part 3: Interpretation (40 points)**
+> 7. Write a Results paragraph (150-200 words) in APA style.
+> 8. Write a Discussion paragraph addressing: Did the intervention work? What are the limitations?
+> 
+> **Deliverable:** RMarkdown file (.Rmd) + knitted PDF. Use the provided template.
+
+**C. Lecture Structure Adjustments**
+
+| Component | Graduate (90 min) | Undergraduate (90 min) |
+|-----------|------------------|----------------------|
+| **Lecture** | 60 min (theory + proofs) | 40 min (concepts + examples) |
+| **Live Coding** | 15 min (students follow along) | 30 min (instructor codes, students observe, then try) |
+| **Discussion** | 15 min (open-ended) | 20 min (structured prompts with think-pair-share) |
+
+**Example UG Lecture Outline (Ch 4: Mann-Whitney U)**
+
+| Time | Activity | Content |
+|------|----------|---------|
+| 0:00–0:10 | **Warm-Up** | Poll: "Have you ever used a t-test? What assumptions does it make?" |
+| 0:10–0:25 | **Concept** | Why ranks? Show skewed data where t-test fails. Introduce Mann-Whitney logic. |
+| 0:25–0:35 | **Demo** | Instructor runs `wilcox.test()` on example data, interprets output. |
+| 0:35–0:50 | **Practice** | Students run on practice dataset (provided), answer worksheet questions. |
+| 0:50–1:05 | **Compare** | "When would you use Mann-Whitney vs. t-test?" Create comparison table. |
+| 1:05–1:20 | **Lab Start** | Begin Lab 3 (Part 1: Mann-Whitney). Students work, instructor circulates. |
+| 1:20–1:30 | **Debrief** | Common errors, preview next week (Wilcoxon). |
+
+#### 3. Lab Modifications
+
+**Undergraduate Lab Philosophy:**
+- **Shorter:** 60 min instead of 90 min
+- **More Guided:** Step-by-step instructions with expected output shown
+- **Checkpoints:** Instructor pauses class every 15 min to ensure everyone is on track
+- **Grading:** Completion-based (not correctness-based) to reduce anxiety
+
+**Example: Lab 2 (Fisher's Exact Test) - UG vs. Graduate**
+
+| Section | Graduate Version | Undergraduate Version |
+|---------|-----------------|---------------------|
+| **Introduction** | "Read about Fisher's exact test and when to use it." | "Watch 5-min video on Fisher's exact test. Take notes on 3 key points." |
+| **Step 1** | "Create a 2×2 contingency table from raw data." | "The table is already created for you: `table_data <- ...` Run this code." |
+| **Step 2** | "Apply Fisher's exact test." | "Run: `fisher.test(table_data)`. What is the p-value? Write it here: ___" |
+| **Step 3** | "Interpret the odds ratio and confidence interval." | "The odds ratio is printed. Is it greater than 1? Yes/No. What does this mean?" |
+| **Checkpoint** | Self-paced | "STOP: Raise hand when you reach this point. Instructor will check." |
+| **Extension** | "Compare with chi-square test. Why do p-values differ?" | (Optional for fast finishers) |
+| **Submission** | Full write-up with interpretation | "Answer the 5 questions in the lab worksheet. Submit via LMS." |
+
+#### 4. Recommended Weekly Pacing (UG 15-Week Course)
+
+**Pacing Philosophy:** One new concept per week. Slow is smooth, smooth is fast.
+
+| Week | New Concept | Consolidation | Lab Time |
+|------|------------|---------------|----------|
+| 1 | Small samples introduction | None (course setup) | 60 min |
+| 2 | Research questions | Ch 1 recap | 60 min |
+| 3 | Power analysis | Ch 2 worksheet | 60 min |
+| 4 | Reliability basics | Quiz 1 review | 60 min |
+| 5 | Data screening | Ch 10 exercises | 60 min |
+| 6 | Missing data | Ch 11 recap | 60 min |
+| 7 | **Midterm Review** | Weeks 1-6 synthesis | 90 min open lab |
+| 8 | Fisher's exact | Quiz 2 review | 60 min |
+| 9 | Mann-Whitney U | Ch 3 recap | 60 min |
+| 10 | Wilcoxon signed-rank | Ch 4 Part 1 recap | 60 min |
+| 11 | Effect sizes | Quiz 3 review | 60 min |
+| 12 | Confidence intervals | Ch 13 Part 1 recap | 60 min |
+| 13 | Non-significant results | Ch 15 case studies | 60 min |
+| 14 | Visualization | Draft feedback | 60 min |
+| 15 | **Presentations** | Peer review | 90 min presentations |
+
+#### 5. Student Support Structures
+
+**For Undergraduates, Provide:**
+
+1. **Pre-Course Checklist:**
+   - ✓ Install R and RStudio (video tutorial provided)
+   - ✓ Complete "Intro to R" module (DataCamp, 2 hours)
+   - ✓ Read syllabus and sign learning contract
+   - ✓ Join course Slack/Discord for help
+
+2. **Weekly Office Hours:**
+   - **R Help Sessions:** Mon/Wed 4-5pm (drop-in, no appointment)
+   - **Concept Review:** Tue 3-4pm (by appointment)
+   - **Assignment Help:** Thu 2-4pm (open door)
+
+3. **Peer Support:**
+   - **Study Groups:** Form groups of 3-4 (sign-up Week 1)
+   - **Peer Tutors:** Upper-level students (if available)
+   - **Slack Channels:** `#r-help`, `#lab-questions`, `#general`
+
+4. **Formative Feedback:**
+   - **Low-Stakes Quizzes:** Can retake once (take higher score)
+   - **Lab Checkpoints:** Graded on completion, not correctness
+   - **Draft Feedback:** Assignment 3 draft reviewed before final submission
+
+5. **Accommodations:**
+   - **Extended Time:** Extra 50% time on quizzes (documented need)
+   - **Alternative Formats:** Oral exams instead of written (case-by-case)
+   - **Flexible Deadlines:** 2-day grace period on assignments (email notification required)
+
+#### 6. Common UG Challenges & Solutions
+
+| Challenge | Symptoms | Solutions |
+|-----------|----------|-----------|
+| **R Anxiety** | "I'm not a programmer!" | RStudio Cloud, fill-in-blanks, peer coding |
+| **Stats Prerequisite Gap** | Weak t-test/ANOVA foundation | Week 0 review session (optional), provide cheat sheet |
+| **Overwhelm** | "Too much new info!" | One concept/week, frequent recaps, visual aids |
+| **Imposter Syndrome** | "Everyone else gets it..." | Normalize struggle, celebrate small wins, growth mindset messages |
+| **Motivation** | "When will I use this?" | Real examples from student interests, guest speakers |
+
+**Example Solutions in Action:**
+
+**R Anxiety → Pair Programming**
+- Assign "Driver" (types code) and "Navigator" (reads instructions, checks output)
+- Rotate roles every 15 min
+- Both submit same lab (collaboration encouraged)
+
+**Stats Gap → Visual Cheat Sheet**
+- Create one-page handout: "T-Test vs. Mann-Whitney: When to Use What"
+- Flowchart format with decision tree
+- Laminate and allow on quizzes
+
+**Overwhelm → Daily Learning Objectives**
+- Start each class: "Today you will learn X, practice Y, and be able to Z"
+- End each class: "Today you learned X. Next time: Y."
+- Weekly email: "This week we covered... Next week we'll cover..."
+
+#### 7. Sample UG Quiz (15 minutes, 10 questions)
+
+**Quiz 2: Data Screening & Missing Data (Chapters 9, 11, 12)**
+
+*Open-book, open-notes. You may use R/RStudio.*
+
+**Part A: Multiple Choice (5 questions, 2 pts each)**
+
+1. **Which is NOT a reason to check for outliers in small samples?**
+   - A) Outliers can dominate the mean
+   - B) Outliers can violate normality assumptions
+   - C) Outliers always indicate data entry errors
+   - D) Outliers can distort correlations
+
+2. **If data are MCAR (Missing Completely at Random), which is true?**
+   - A) Missingness is related to the outcome
+   - B) Missingness is random and unrelated to any variable
+   - C) We should always delete cases with missing data
+   - D) We cannot use multiple imputation
+
+3. **A Q-Q plot shows points far from the diagonal line. This suggests:**
+   - A) Perfect normality
+   - B) Departure from normality
+   - C) No outliers
+   - D) Homoscedasticity
+
+4. **What does a Shapiro-Wilk test p-value of 0.02 mean?**
+   - A) Data are definitely normal
+   - B) Data are likely not normal (reject normality)
+   - C) We need more data
+   - D) The mean is 0.02
+
+5. **Multiple imputation creates:**
+   - A) One perfect dataset with no missing values
+   - B) Many plausible datasets, then pools results
+   - C) Zeros in place of missing values
+   - D) Copies of the original dataset
+
+**Part B: Short Answer (5 questions, 2 pts each)**
+
+6. **You have n = 20 participants. Three have outlier scores (z > 3). Should you delete them? Justify your answer in 1-2 sentences.**
+
+7. **What is the difference between a boxplot and a histogram for detecting outliers?**
+
+8. **If 30% of your data are missing on one variable (n = 25), would you recommend multiple imputation or complete-case analysis? Why?**
+
+9. **A researcher conducts a t-test without checking normality (n = 12 per group). The data are heavily skewed. What should they have done instead?**
+
+10. **Write one sentence interpreting this result: "After multiple imputation (m = 20), the pooled estimate for the intervention effect was β = 0.45 (SE = 0.12, p = 0.001)."**
+
+**Answer Key Provided to Instructor**
+
+---
+
+### 2.7 Assignment 3: Complete Undergraduate Research Report Guide
+
+#### Overview
+
+**Concern:** Can undergraduate students complete a full research project with only 9 core chapters?  
+**Answer:** **Yes**, with proper scaffolding and clear deliverables.
+
+This section provides a **complete assignment template** that undergraduate students can successfully complete using only the simplified content from Chapters 1, 2, 3, 4, 9, 11, 13, 15, 16.
+
+---
+
+#### Assignment 3: Independent Research Report (UG Version)
+
+**Due Dates:**
+- Draft: End of Week 14 (peer review)
+- Final: End of Week 15 (with presentation)
+
+**Format:**
+- 5–7 pages (double-spaced, 12pt font, 1-inch margins)
+- APA 7th edition style
+- RMarkdown (.Rmd) + knitted PDF
+- Groups of 2 allowed (or individual)
+
+**Weight:** 20% of final grade
+
+---
+
+#### Part 1: Assignment Instructions for Students
+
+**ASSIGNMENT 3: Small-Sample Research Report**
+
+**Objective:** Conduct a complete quantitative analysis of a small-sample dataset (n < 30) and report findings following best practices learned in this course.
+
+**Your Task:**
+
+You will analyze one of the provided datasets (or your own data with instructor approval) and write a research report addressing a specific research question. Your report must demonstrate:
+
+1. Proper data screening
+2. Appropriate test selection for small samples
+3. Effect size calculation and interpretation
+4. Appropriate visualization
+5. Transparent reporting of limitations
+
+---
+
+**STEP 1: Choose Your Dataset (Week 11)**
+
+Select ONE dataset from these options:
+
+**Option A: Sleep Study (n = 24, paired)**
+- **Research Question:** Does a sleep hygiene intervention increase sleep duration?
+- **Data:** `sleep_intervention.csv` (pre/post design)
+- **Variables:** participant_id, pre_hours, post_hours, age, gender
+- **Recommended Test:** Wilcoxon signed-rank test (if non-normal) or paired t-test
+
+**Option B: Teaching Methods (n₁ = 14, n₂ = 12)**
+- **Research Question:** Do students taught with active learning score higher than lecture-only students?
+- **Data:** `teaching_methods.csv` (two independent groups)
+- **Variables:** student_id, method (active vs. lecture), exam_score, prior_GPA
+- **Recommended Test:** Mann-Whitney U test (if skewed) or independent t-test
+
+**Option C: Mindfulness & Anxiety (n = 18, paired)**
+- **Research Question:** Does a 6-week mindfulness program reduce anxiety scores?
+- **Data:** `anxiety_study.csv` (pre/post design)
+- **Variables:** participant_id, pre_anxiety, post_anxiety, age, compliance (%)
+- **Recommended Test:** Paired t-test (if normal) or Wilcoxon signed-rank
+
+**Option D: Your Own Data (with approval)**
+- Must have n < 30
+- Must have clear research question
+- Must be approved by instructor by Week 11
+
+---
+
+**STEP 2: Data Screening (Week 12-13)**
+
+Before analyzing, you MUST screen your data and document decisions:
+
+**Required Checks:**
+
+1. **Outliers:** Create boxplots. Calculate z-scores. Any |z| > 3?
+2. **Normality:** Create Q-Q plots. Run Shapiro-Wilk test.
+3. **Missing Data:** Report % missing. Use complete-case or simple imputation.
+4. **Data Entry Errors:** Check for impossible values (e.g., negative scores, out-of-range values).
+
+**Deliverable for Draft:** 1 paragraph + 2-3 plots documenting screening decisions.
+
+---
+
+**STEP 3: Analysis (Week 13-14)**
+
+Conduct your primary analysis using methods from this course:
+
+**Required Components:**
+
+1. **Descriptive Statistics:** Report mean, SD, median, IQR for each group/time.
+2. **Primary Test:** Conduct the appropriate test (t-test, Mann-Whitney, Wilcoxon, or Fisher's exact).
+3. **Effect Size:** Calculate Cohen's d (for t-tests) or rank-biserial correlation (for nonparametric tests).
+4. **Confidence Interval:** Report 95% CI for the effect size.
+5. **Visualization:** Create ONE publication-quality plot showing your key finding.
+
+**Deliverable for Draft:** Results section (2 paragraphs) with all components above.
+
+---
+
+**STEP 4: Write Your Report (Week 14)**
+
+**Required Sections:**
+
+**1. Introduction (1 page, ~300 words)**
+- Background: Why is this question important?
+- Brief literature review: Cite 2-3 relevant studies.
+- Research question and hypothesis: State clearly.
+
+**2. Methods (1–1.5 pages, ~400 words)**
+- **Participants:** Describe sample (n, demographics if available).
+- **Measures:** Describe outcome variable (how measured, scale/range).
+- **Procedure:** Describe how data were collected (even if simulated).
+- **Data Screening:** Summarize outlier/normality checks.
+- **Analysis Plan:** State your test, alpha level (0.05), software (R version).
+
+**3. Results (1.5 pages, ~450 words)**
+- **Descriptive Statistics:** Table or text reporting M, SD, etc.
+- **Assumption Checks:** Report normality test results.
+- **Primary Analysis:** Report test statistic, df, p-value.
+  - Example: "A paired t-test revealed a significant difference, t(17) = 3.45, p = .003."
+- **Effect Size:** Report Cohen's d or r with 95% CI.
+  - Example: "The effect size was large, d = 0.81, 95% CI [0.28, 1.34]."
+- **Figure:** Include your visualization with caption.
+
+**4. Discussion (1.5 pages, ~450 words)**
+- **Summary:** What did you find?
+- **Interpretation:** What does it mean? Is the effect practically significant?
+- **Limitations:** Acknowledge small sample size, lack of random assignment (if applicable), generalizability concerns.
+- **Implications:** What should future research do? What are practical applications?
+
+**5. References (APA format)**
+- At least 3 sources (can include textbook)
+
+**6. Appendix (R Code)**
+- Include all R code used (cleaning, analysis, visualization)
+- Must be reproducible
+
+---
+
+**STEP 5: Create Your Presentation (Week 15)**
+
+**10-Minute Group Presentation**
+
+**Required Slides (7-8 slides):**
+
+1. **Title Slide:** Research question, your names
+2. **Background:** Why does this matter? (1 slide)
+3. **Methods:** Sample, measures, analysis (1-2 slides)
+4. **Results - Descriptives:** Table or simple plot (1 slide)
+5. **Results - Main Finding:** Your key figure + test results (1 slide)
+6. **Discussion:** Interpretation, limitations (1 slide)
+7. **Conclusions:** Take-home message (1 slide)
+8. **Q&A:** Be ready for questions
+
+**Tips:**
+- Rehearse to stay within 10 minutes
+- Use large fonts (≥24pt for body text)
+- Avoid reading slides word-for-word
+- Explain statistics in plain language
+
+---
+
+#### Part 2: Detailed Grading Rubric (100 points)
+
+| Section | Excellent (A) | Proficient (B) | Developing (C) | Needs Improvement (D/F) | Points |
+|---------|--------------|----------------|----------------|------------------------|--------|
+| **Introduction (15 pts)** | Clear research question, strong rationale, 3+ citations, testable hypothesis | Research question clear, adequate rationale, 2 citations | Research question vague, weak rationale, 1 citation | No clear question or rationale | /15 |
+| **Methods - Participants (5 pts)** | Complete description: n, demographics, recruitment | n and basic demographics | Only n reported | Missing or incorrect | /5 |
+| **Methods - Measures (5 pts)** | Clear description of all variables, scales, reliability if applicable | Variables described, some details missing | Vague variable description | Missing or confusing | /5 |
+| **Methods - Analysis Plan (10 pts)** | Justifies test choice for small n, states alpha, software, screening approach | States test and alpha, minimal justification | Test stated, no justification | Inappropriate test or missing | /10 |
+| **Results - Descriptives (10 pts)** | Table/text with M, SD, median, IQR for all groups/conditions | M and SD reported, some missing | Only means reported | Incomplete or incorrect | /10 |
+| **Results - Assumption Checks (5 pts)** | Reports normality tests, outlier checks, decisions documented | Normality test reported, decisions made | Mentions checks, no detail | Missing or ignored | /5 |
+| **Results - Primary Test (15 pts)** | Correct test, accurate reporting (test stat, df, p), proper APA format | Correct test, minor formatting errors | Test reported, major errors in format | Wrong test or missing info | /15 |
+| **Results - Effect Size (10 pts)** | Correct ES for test, 95% CI reported, interpreted (small/med/large) | ES calculated, CI reported, no interpretation | ES reported, no CI | Missing or incorrect | /10 |
+| **Results - Figure (10 pts)** | Publication-quality: clear labels, error bars/uncertainty, follows best practices | Good plot, minor issues (axis labels, legend) | Basic plot, multiple issues | Poor quality or missing | /10 |
+| **Discussion - Interpretation (5 pts)** | Contextualizes findings, distinguishes statistical vs. practical significance | Interprets findings, limited depth | Restates results, minimal interpretation | Misinterprets or missing | /5 |
+| **Discussion - Limitations (10 pts)** | Identifies small n, threats to validity, generalizability, missing data, etc. | Mentions 2-3 limitations with depth | Lists limitations, no elaboration | Generic or missing | /10 |
+| **Writing Quality (5 pts)** | Clear, concise, professional, no grammatical errors | Minor grammatical errors, clear communication | Several errors, somewhat unclear | Poor writing quality | /5 |
+| **APA Format (5 pts)** | Perfect APA 7th: citations, references, headings, numbers | 1-2 APA errors | 3-5 APA errors | Many APA errors or non-compliance | /5 |
+
+**TOTAL:** /100 points (× 0.20 = 20% of final grade)
+
+---
+
+#### Part 3: Provided Support Materials
+
+To ensure UG students succeed, provide these scaffolding materials:
+
+**1. RMarkdown Template (Starter File)**
+
+```r
+---
+title: "Your Research Question Here"
+author: "Your Name(s)"
+date: "`r Sys.Date()`"
+output: 
+  pdf_document:
+    toc: false
+bibliography: references.bib
+---
+
+# Introduction
+
+[Background paragraph: Why is this important?]
+
+[Literature review: Summarize 2-3 studies. Use @citationkey format.]
+
+[Research question and hypothesis]
+
+# Methods
+
+## Participants
+
+We analyzed data from N = [XX] participants. [Add demographics if available.]
+
+## Measures
+
+The outcome variable was [VARIABLE NAME], measured using [DESCRIPTION]. 
+Scores ranged from [MIN] to [MAX], with higher scores indicating [MEANING].
+
+## Data Screening
+
+We checked for outliers using boxplots and z-scores (criterion: |z| > 3). 
+We assessed normality using Q-Q plots and the Shapiro-Wilk test (α = .05).
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(effsize)      # For Cohen's d
+library(ggplot2)
+```
+
+```{r load-data}
+# Load your data
+df <- read_csv("data/your_dataset.csv")
+
+# View first few rows
+head(df)
+```
+
+```{r screening}
+# Check for outliers
+boxplot(df$your_variable, main = "Boxplot of Outcome Variable")
+
+# Calculate z-scores
+df$z_score <- scale(df$your_variable)
+outliers <- df[abs(df$z_score) > 3, ]
+nrow(outliers)  # How many outliers?
+
+# Check normality
+qqnorm(df$your_variable)
+qqline(df$your_variable)
+
+shapiro.test(df$your_variable)
+```
+
+**Decision:** [State whether you will use parametric or nonparametric test based on normality.]
+
+## Analysis Plan
+
+We conducted a [TEST NAME] to compare [GROUP 1] vs. [GROUP 2]. 
+We set alpha at .05 and used R version [X.X.X]. 
+Effect sizes were calculated using [Cohen's d / rank-biserial correlation].
+
+# Results
+
+## Descriptive Statistics
+
+[Report means, SDs, medians for each group/condition]
+
+```{r descriptives}
+# Calculate descriptives by group
+df %>%
+  group_by(group_variable) %>%
+  summarise(
+    n = n(),
+    Mean = mean(outcome, na.rm = TRUE),
+    SD = sd(outcome, na.rm = TRUE),
+    Median = median(outcome, na.rm = TRUE)
+  )
+```
+
+## Assumption Checks
+
+The Shapiro-Wilk test indicated [normality was met / violated], W = [value], p = [p-value].
+[No outliers were detected / X outliers were found and retained/removed because...]
+
+## Primary Analysis
+
+```{r analysis}
+# Conduct your test (example: t-test)
+result <- t.test(outcome ~ group, data = df, var.equal = TRUE)
+print(result)
+
+# Calculate effect size
+es <- cohen.d(df$outcome, df$group)
+print(es)
+```
+
+A [TEST NAME] revealed [a significant difference / no significant difference], 
+t([df]) = [test statistic], p = [p-value]. 
+The effect size was [small/medium/large], d = [value], 95% CI [[lower, upper]].
+
+## Visualization
+
+```{r figure, fig.cap="Figure 1. [Your caption here]"}
+# Create your plot
+ggplot(df, aes(x = group, y = outcome)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.1, alpha = 0.3) +
+  labs(title = "Outcome by Group",
+       x = "Group",
+       y = "Outcome Score") +
+  theme_minimal()
+```
+
+# Discussion
+
+[Interpret your findings: What do the results mean?]
+
+[Practical significance: Is the effect size meaningful?]
+
+[Limitations: Sample size, generalizability, etc.]
+
+[Implications: What should future research do?]
+
+# References
+
+[References automatically populated from references.bib]
+
+# Appendix: R Code
+
+[All code chunks are automatically included when you knit this document]
+```
+
+---
+
+**2. Sample Dataset Files (Provided to Students)**
+
+**File: `sleep_intervention.csv`**
+```csv
+participant_id,pre_hours,post_hours,age,gender
+1,5.2,6.8,22,F
+2,6.1,6.9,24,M
+3,5.8,7.2,21,F
+[... 24 rows total]
+```
+
+**File: `teaching_methods.csv`**
+```csv
+student_id,method,exam_score,prior_GPA
+1,active,85,3.2
+2,active,92,3.6
+3,lecture,78,3.1
+[... 26 rows total]
+```
+
+---
+
+**3. Example Completed Report (Partial - for students to see)**
+
+Provide a 2-page excerpt showing:
+- A well-written Introduction with citations
+- A properly formatted Results section with APA-style statistics
+- A publication-quality figure with caption
+
+**Example Results Section:**
+
+> **Results**
+>
+> **Descriptive Statistics**
+>
+> The active learning group (n = 14) had a mean exam score of M = 86.2 (SD = 8.3), 
+> while the lecture-only group (n = 12) had a mean score of M = 79.5 (SD = 9.1). 
+> Descriptive statistics are presented in Table 1.
+>
+> **Assumption Checks**
+>
+> Visual inspection of Q-Q plots suggested approximate normality for both groups. 
+> The Shapiro-Wilk test indicated that normality was met for the active learning group 
+> (W = 0.94, p = .45) and the lecture group (W = 0.92, p = .28). 
+> One outlier (z = 3.2) was identified in the active learning group but retained 
+> because it represented a plausible score.
+>
+> **Primary Analysis**
+>
+> An independent-samples t-test revealed a statistically significant difference 
+> in exam scores between teaching methods, t(24) = 2.13, p = .044, 95% CI [0.2, 13.2]. 
+> The effect size was moderate, d = 0.78, 95% CI [0.02, 1.53], suggesting that 
+> students in the active learning condition scored approximately three-quarters 
+> of a standard deviation higher than those in the lecture-only condition.
+>
+> **Visualization**
+>
+> Figure 1 displays the distribution of exam scores by teaching method. 
+> The boxplot shows higher median scores and less variability in the 
+> active learning group compared to the lecture-only group.
+
+---
+
+**4. Peer Review Worksheet (Week 14)**
+
+Students exchange drafts and provide feedback using this structured form:
+
+**PEER REVIEW FORM - Assignment 3 Draft**
+
+**Reviewer:** _______________  
+**Author(s):** _______________  
+**Date:** _______________
+
+**Instructions:** Read your peer's draft carefully. Provide constructive feedback on each section.
+
+**1. Introduction (3 points)**
+- [ ] Is the research question clear and specific?
+- [ ] Is there adequate background/rationale?
+- [ ] Are there at least 2 citations?
+
+**Feedback/Suggestions:**
+
+---
+
+**2. Methods (3 points)**
+- [ ] Are participants described (n, demographics)?
+- [ ] Are measures clearly described?
+- [ ] Is the analysis plan justified for small samples?
+
+**Feedback/Suggestions:**
+
+---
+
+**3. Results (3 points)**
+- [ ] Are descriptive statistics reported?
+- [ ] Is the statistical test reported correctly (test stat, df, p)?
+- [ ] Is an effect size reported with CI?
+
+**Feedback/Suggestions:**
+
+---
+
+**4. Figure (1 point)**
+- [ ] Is the figure clear and professional?
+- [ ] Does it have proper axis labels and caption?
+
+**Feedback/Suggestions:**
+
+---
+
+**5. Overall Strengths (what did they do well?):**
+
+---
+
+**6. Overall Suggestions (what could be improved?):**
+
+---
+
+**7. One specific revision you recommend:**
+
+---
+
+#### Part 4: Addressing the "Are They Ready?" Question
+
+**Q: Can UG students complete a research report with only 9 chapters (no Bayesian, no advanced methods)?**
+
+**A: Yes, absolutely.** Here's why:
+
+**1. Content Coverage is Sufficient**
+
+| Research Task | Chapters Needed | UG Content Includes? |
+|---------------|----------------|---------------------|
+| Formulate research question | Ch 2 | ✅ Yes |
+| Justify sample size | Ch 9 | ✅ Yes (simplified power analysis) |
+| Screen data (outliers, normality) | Ch 11 | ✅ Yes |
+| Handle missing data (basic) | Ch 12 | ⭕ Optional (complete-case is fine) |
+| Choose appropriate test | Ch 3, 4 | ✅ Yes (Fisher's, Mann-Whitney, Wilcoxon) |
+| Calculate effect size | Ch 13 | ✅ Yes (Cohen's d, rank-biserial r) |
+| Interpret non-significant results | Ch 15 | ✅ Yes |
+| Create visualizations | Ch 16 | ✅ Yes |
+| Write APA-style report | All chapters | ✅ Yes (combined from all chapters) |
+
+**What Students DON'T Need for a Basic Report:**
+- ❌ Bayesian inference (Ch 5) — frequentist methods are sufficient
+- ❌ Advanced reliability (Ch 6) — not needed unless developing scales
+- ❌ MCDM (Ch 7) — specialized application
+- ❌ Time series (Ch 8) — not applicable to cross-sectional designs
+
+**2. Scaffolding Ensures Success**
+
+The UG version provides:
+- ✅ **Pre-defined research questions** (3 dataset options)
+- ✅ **Step-by-step instructions** (5 clear steps)
+- ✅ **RMarkdown template** (fill-in-the-blanks)
+- ✅ **Example completed sections** (model to follow)
+- ✅ **Peer review process** (formative feedback)
+- ✅ **Draft submission** (instructor feedback before final)
+- ✅ **Detailed rubric** (clear expectations)
+
+**3. Appropriate Scope for UG Level**
+
+The 5–7 page report is:
+- ✅ **Achievable:** Not overwhelming for advanced UGs
+- ✅ **Rigorous:** Requires understanding of all major concepts
+- ✅ **Authentic:** Mirrors real research reporting
+- ✅ **Collaborative:** Pairs reduce individual burden
+
+**4. Timeline Supports Completion**
+
+| Week | Research Task | Support Provided |
+|------|--------------|------------------|
+| 11 | Choose dataset + question | Office hours, approval process |
+| 12 | Data screening | Lab time, checkpoint |
+| 13 | Analysis + effect size | Lab time, instructor circulates |
+| 14 | Draft complete | Peer review, instructor feedback |
+| 15 | Final + presentation | Revisions based on feedback |
+
+**5. Learning Objectives Aligned**
+
+By Week 15, UG students have:
+- ✅ Practiced data screening (Lab 8, Week 5)
+- ✅ Conducted exact tests (Lab 2, Week 8)
+- ✅ Calculated effect sizes (Lab 11, Week 11-12)
+- ✅ Created visualizations (Lab 12, Week 14)
+- ✅ Seen worked examples (Project 1, Week 7)
+
+**They are ready.**
+
+---
+
+#### Part 5: Instructor Checklist for UG Report Success
+
+**Week 11 (Assignment Launch):**
+- [ ] Post all 3 datasets to LMS
+- [ ] Post RMarkdown template
+- [ ] Post example completed section
+- [ ] Hold "Choose Your Dataset" office hour
+- [ ] Approve any student-proposed datasets
+
+**Week 12 (Data Screening):**
+- [ ] Remind students to complete screening
+- [ ] Offer R help session for data cleaning
+- [ ] Check in with struggling students
+
+**Week 13 (Analysis):**
+- [ ] Review effect size calculations in class
+- [ ] Offer "Analysis Troubleshooting" office hour
+- [ ] Provide example APA-style Results paragraph
+
+**Week 14 (Draft & Peer Review):**
+- [ ] Collect drafts by end of week
+- [ ] Facilitate in-class peer review (30 min)
+- [ ] Provide instructor feedback on drafts (brief, 3-5 comments per draft)
+- [ ] Post peer review worksheet to LMS
+
+**Week 15 (Final & Presentations):**
+- [ ] Collect final reports
+- [ ] Run presentations (10 min + 2 min Q&A per group)
+- [ ] Provide feedback using detailed rubric
+- [ ] Celebrate completion!
+
+---
+
+#### Part 6: Sample Student Questions & Instructor Responses
+
+**Q: "Can I use my own data from another class?"**  
+**A:** Yes, with approval. It must have n < 30, a clear research question, and be appropriate for the methods we've learned (t-test, Mann-Whitney, Wilcoxon, or Fisher's exact). Submit a 1-paragraph proposal by Week 11.
+
+**Q: "What if my data aren't normal? Do I have to transform them?"**  
+**A:** No transformation needed. Use a nonparametric test (Mann-Whitney or Wilcoxon) instead of a t-test. That's what Chapter 4 covered—you're prepared for this!
+
+**Q: "How do I cite R packages?"**  
+**A:** In your Methods section, write: "We used R version 4.3.1 (R Core Team, 2023) with packages tidyverse (Wickham et al., 2019) and effsize (Torchiano, 2020)." Then include full citations in your References using `citation("package_name")` in R.
+
+**Q: "Can I have more than 2 figures?"**  
+**A:** You need at least 1 publication-quality figure. You can include 1-2 more if they add value (e.g., Q-Q plot in appendix), but don't exceed the 7-page limit.
+
+**Q: "What if my result is not significant (p > .05)?"**  
+**A:** That's fine! Report it honestly. Discuss the effect size and confidence interval (Ch 15). Acknowledge low power with n < 30. **Do not** conclude "there is no effect"—say "we found insufficient evidence for an effect given our small sample."
+
+**Q: "My peer reviewer said my figure is unclear. Can I fix it after peer review?"**  
+**A:** Yes! That's the point of peer review. Use their feedback to revise before the final submission.
+
+---
+
+### 2.8 Online Asynchronous Course (8 Weeks)
+
+**Platform:** LMS (Canvas, Moodle, Blackboard)  
+**Student Effort:** 6–8 hours/week
+
+#### Weekly Modules
+
+| Week | Content | Activities | Due |
+|------|---------|------------|-----|
+| 1 | Video lectures (Ch 1-2)<br>Reading quiz | Discussion: Share research contexts | Quiz 1 |
+| 2 | Sampling & power (Ch 9)<br>Power analysis tutorial | Lab 1: Calculate MDE for own study | Lab submission |
+| 3 | Measurement quality (Ch 10-11)<br>Reliability video | Lab 6: Cronbach's alpha<br>Lab 8: Outlier detection | Quiz 2 |
+| 4 | Missing data (Ch 12)<br>MICE tutorial | Lab 9: Multiple imputation | Assignment 1 |
+| 5 | Exact & nonparametric (Ch 3-4)<br>Worked examples | Lab 2, Lab 3: Practice datasets | Quiz 3 |
+| 6 | Regression (Ch 5-6)<br>Bayesian intro | Lab 4: Firth regression<br>Lab 5: brms basics | Lab submission |
+| 7 | Reporting (Ch 13-16)<br>APA style guide | Lab 11, Lab 12: Effect sizes, plots | Quiz 4 |
+| 8 | Integration (Part E)<br>Peer review workshop | Final project: Analyze dataset + report | Final submission |
+
+**Grading:**
+- Weekly quizzes (4 × 5% = 20%)
+- Lab submissions (8 × 5% = 40%)
+- Discussion participation (10%)
+- Assignment 1: Study design (10%)
+- Final project (20%)
+
+---
+
+## 3. ANSWER KEYS
+
+### 3.1 Chapter 1 Homework Solutions
+
+**Question 1:** *A study with n = 15 finds d = 0.75 and p = 0.08. The authors conclude "no significant effect." Critique this conclusion.*
+
+**Answer:**
+The conclusion is misleading. With n = 15 and d = 0.75 (a large effect by Cohen's benchmarks), the study likely had low power (approximately 40–50% to detect d = 0.75 at α = 0.05). A p-value of 0.08 indicates the data are marginally inconsistent with the null hypothesis, but insufficient to reject it at α = 0.05. However, p > 0.05 does **not** mean "no effect"—it means "no statistically significant evidence of effect given the sample size." The confidence interval for d would be wide (e.g., 0.0 to 1.5), including both trivial and very large effects. The authors should report the effect size, confidence interval, and acknowledge low power. A better conclusion: "We observed a large effect (d = 0.75), but the small sample (n = 15) yields wide uncertainty (95% CI: X to Y). The result is consistent with both a moderate-to-large effect and sampling variability."
+
+**Grading Rubric (5 points):**
+- Identifies low power (1 pt)
+- Explains p > 0.05 ≠ "no effect" (2 pts)
+- Mentions effect size and CI (1 pt)
+- Proposes better conclusion (1 pt)
+
+---
+
+**Question 2:** *Calculate post-hoc power for a t-test with n₁ = n₂ = 12, d = 0.60, α = 0.05.*
+
+**Answer:**
+
+```r
+library(pwr)
+pwr.t.test(n = 12, d = 0.6, sig.level = 0.05, type = "two.sample")
+```
+
+**Output:**
+```
+     Two-sample t test power calculation 
+
+              n = 12
+              d = 0.6
+      sig.level = 0.05
+          power = 0.34
+    alternative = two.sided
+```
+
+**Interpretation:** The study had only 34% power to detect d = 0.60 at α = 0.05. This is severely underpowered (conventional target: 80%). The likelihood of a Type II error (failing to detect a true effect) is 66%.
+
+**Grading (3 points):**
+- Correct R code (1 pt)
+- Correct power value (1 pt)
+- Interpretation (1 pt)
+
+---
+
+### 3.2 Chapter 3 Homework Solutions
+
+**Question 1:** *A 2×2 table shows Treatment A (10 successes, 2 failures) vs. Treatment B (4 successes, 8 failures). Conduct Fisher's exact test.*
+
+**Answer:**
+
+```r
+# Create contingency table
+table_data <- matrix(c(10, 2, 4, 8), nrow = 2, byrow = TRUE)
+rownames(table_data) <- c("Treatment A", "Treatment B")
+colnames(table_data) <- c("Success", "Failure")
+
+# Fisher's exact test
+fisher.test(table_data)
+```
+
+**Output:**
+```
+Fisher's Exact Test for Count Data
+
+data:  table_data
+p-value = 0.0265
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 1.15 70.89
+sample estimates:
+odds ratio 
+      6.77
+```
+
+**Interpretation:**
+The two-sided p-value is 0.0265, indicating significant evidence (α = 0.05) that success rates differ between treatments. The estimated odds ratio is 6.77 (95% CI: 1.15 to 70.89), suggesting Treatment A has higher odds of success, though the CI is wide due to small sample size.
+
+**Grading (4 points):**
+- Correct table construction (1 pt)
+- Correct function call (1 pt)
+- Correct p-value and OR (1 pt)
+- Interpretation (1 pt)
+
+---
+
+**Question 2:** *Generate a permutation distribution for the difference in means between two groups (n₁ = 8, n₂ = 7).*
+
+**Answer:**
+
+```r
+# Simulated data
+set.seed(123)
+group1 <- c(12, 15, 18, 14, 16, 13, 17, 15)
+group2 <- c(10, 11, 9, 12, 10, 8, 11)
+
+# Observed difference
+obs_diff <- mean(group1) - mean(group2)
+
+# Permutation test
+library(coin)
+perm_test <- oneway_test(c(group1, group2) ~ factor(rep(c("A", "B"), c(8, 7))),
+                         distribution = approximate(nresample = 9999))
+perm_test
+```
+
+**Expected Output:**
+```
+Approximative Two-Sample Fisher-Pitman Permutation Test
+
+data:  ... by factor(...)
+Z = 3.12, p-value = 0.002
+```
+
+**Interpretation:** The permutation test yields p = 0.002, providing strong evidence that the groups differ. The permutation approach is valid even with small, potentially non-normal data.
+
+**Grading (5 points):**
+- Correct data setup (1 pt)
+- Observed difference calculated (1 pt)
+- Correct permutation function (2 pts)
+- Interpretation (1 pt)
+
+---
+
+### 3.3 Chapter 5 Homework Solutions
+
+**Question 1:** *Fit a Firth-penalized logistic regression to predict binary outcome (y) from predictor (x) with separation.*
+
+**Answer:**
+
+```r
+library(logistf)
+
+# Data with separation
+df <- data.frame(
+  x = c(1, 2, 3, 4, 5, 6, 7, 8),
+  y = c(0, 0, 0, 0, 1, 1, 1, 1)
+)
+
+# Standard logistic regression (will warn about separation)
+glm_standard <- glm(y ~ x, data = df, family = binomial)
+summary(glm_standard)
+
+# Firth's penalized logistic regression
+glm_firth <- logistf(y ~ x, data = df)
+summary(glm_firth)
+```
+
+**Expected Results:**
+- **Standard GLM:** Coefficient estimates inflate (e.g., β₁ = 15+), standard errors huge, warning about "fitted probabilities numerically 0 or 1."
+- **Firth GLM:** Finite coefficient (e.g., β₁ ≈ 2.5), reasonable SE (e.g., 1.8), p-value valid.
+
+**Interpretation:** Firth's method applies a penalty that shrinks coefficients away from infinity, yielding stable estimates even with perfect separation.
+
+**Grading (5 points):**
+- Correct data with separation (1 pt)
+- Standard GLM fitted (1 pt)
+- Firth GLM fitted (2 pts)
+- Comparison and interpretation (1 pt)
+
+---
+
+### 3.4 Chapter 9 Homework Solutions
+
+**Question 1:** *Calculate the minimum detectable effect (MDE) for a two-sample t-test with n₁ = n₂ = 10, α = 0.05, power = 0.80.*
+
+**Answer:**
+
+```r
+library(pwr)
+result <- pwr.t.test(n = 10, sig.level = 0.05, power = 0.80, type = "two.sample")
+result$d
+```
+
+**Output:**
+```
+[1] 1.28
+```
+
+**Interpretation:** With n = 10 per group, 80% power, and α = 0.05, the MDE is d = 1.28—a very large effect by Cohen's benchmarks (small = 0.2, medium = 0.5, large = 0.8). This study can only reliably detect extremely large effects. Smaller effects (e.g., d = 0.5) would require n ≈ 64 per group.
+
+**Grading (3 points):**
+- Correct function call (1 pt)
+- Correct MDE (1 pt)
+- Interpretation with context (1 pt)
+
+---
+
+### 3.5 Chapter 12 Homework Solutions
+
+**Question 1:** *Implement multiple imputation with MICE for a dataset with 20% missingness.*
+
+**Answer:**
+
+```r
+library(mice)
+library(VIM)
+
+# Load or simulate data with missingness
+data("nhanes2")  # Built-in dataset with missing values
+
+# Visualize missingness pattern
+md.pattern(nhanes2)
+
+# Multiple imputation (m = 20 datasets)
+imp <- mice(nhanes2, m = 20, method = "pmm", seed = 123, printFlag = FALSE)
+
+# Check convergence
+plot(imp)
+
+# Fit model on imputed data
+fit <- with(imp, lm(bmi ~ age + hyp + chl))
+
+# Pool results
+pooled <- pool(fit)
+summary(pooled)
+```
+
+**Expected Output:**
+```
+         term estimate std.error statistic    df p.value
+1 (Intercept)   20.324     4.123     4.93  12.5   0.000
+2        age    1.234     0.456     2.71   8.9   0.024
+3        hyp    2.145     1.023     2.10  10.2   0.061
+4        chl    0.034     0.012     2.83   9.8   0.018
+```
+
+**Interpretation:** The pooled estimates account for both within-imputation and between-imputation variance (Rubin's rules). Coefficients, SEs, and p-values are valid under MAR assumption.
+
+**Grading (6 points):**
+- Missingness visualization (1 pt)
+- Correct mice() call (2 pts)
+- Convergence check (1 pt)
+- Model fitting and pooling (2 pts)
+
+---
+
+## 4. GRADING RUBRICS
+
+### 4.1 Assignment 1: Study Design Proposal (100 points)
+
+**Components:**
+
+| Section | Points | Criteria |
+|---------|--------|----------|
+| **Research Question** | 15 | Clear, testable hypothesis; appropriate for small sample; practical relevance |
+| **Sampling Plan** | 20 | Justified sample size; realistic recruitment; addresses feasibility |
+| **Power Analysis** | 25 | Correct calculation; sensitivity analysis; interprets MDE; discusses trade-offs |
+| **Measurement** | 15 | Identifies valid, reliable measures; plans pilot testing; acknowledges brevity constraints |
+| **Analytic Plan** | 15 | Specifies primary/secondary analyses; chooses appropriate methods (exact, nonparametric, Bayesian); pre-registers decisions |
+| **Limitations** | 10 | Acknowledges small-sample limitations; discusses generalizability; transparent about power |
+
+**Grading Notes:**
+- **Exemplary (90–100):** Demonstrates deep understanding; creative solutions; pre-registration plan
+- **Proficient (80–89):** Solid grasp of concepts; minor gaps in justification
+- **Developing (70–79):** Basic understanding; missing key elements (e.g., no power analysis)
+- **Needs Improvement (<70):** Major conceptual errors; unrealistic design
+
+---
+
+### 4.2 Assignment 2: Data Analysis (100 points)
+
+Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–7 page report.
+
+| Section | Points | Criteria |
+|---------|--------|----------|
+| **Introduction** | 10 | States research question; reviews relevant literature briefly |
+| **Methods** | 20 | Describes sample, measures, data screening, analytic approach |
+| **Data Screening** | 15 | Checks outliers, normality, missingness; documents decisions |
+| **Primary Analysis** | 25 | Correct test selection (e.g., Wilcoxon if non-normal); appropriate inference; interprets p-value and effect size |
+| **Effect Sizes & CIs** | 15 | Reports Cohen's d or rank-biserial r; computes CI; interprets precision |
+| **Visualization** | 10 | Creates informative plot (e.g., raincloud, dot plot with error bars); follows best practices |
+| **Discussion** | 5 | Acknowledges limitations; avoids over-interpretation; discusses practical significance |
+
+**Common Errors to Watch For:**
+- Using t-test on severely skewed data without transformation or nonparametric alternative
+- Reporting p-values without effect sizes
+- Over-interpreting non-significant results (claiming "no effect")
+- Deleting outliers without justification
+
+---
+
+### 4.3 Lab Participation Rubric (Per Lab, 10 points)
+
+| Criterion | Points | Description |
+|-----------|--------|-------------|
+| **Completion** | 5 | All code chunks run without errors; answers all checkpoint questions |
+| **Interpretation** | 3 | Correctly interprets output; explains what results mean |
+| **Engagement** | 2 | Asks questions; helps peers; attempts discussion questions |
+
+**Late Submission:** -20% per day up to 3 days; 0 points after 3 days.
+
+---
+
+### 4.4 Final Presentation Rubric (50 points)
+
+15-minute presentation of final project (Assignment 3).
+
+| Criterion | Points | Description |
+|-----------|--------|-------------|
+| **Content Clarity** | 15 | Clear research question; logical flow; summarizes methods and results concisely |
+| **Statistical Rigor** | 15 | Appropriate methods; correct interpretation; acknowledges limitations |
+| **Visualization** | 10 | Effective slides; informative figures; no chart junk |
+| **Q&A Handling** | 5 | Answers questions thoughtfully; defends choices; acknowledges uncertainties |
+| **Time Management** | 5 | Stays within 15 minutes; covers all required sections |
+
+---
+
+## 5. COMMON TEACHING CHALLENGES
+
+### 5.1 Challenge: Students Resist Bayesian Methods
+
+**Symptoms:**
+- "Priors are just making up data"
+- "I don't know how to choose priors"
+- Confusion about interpreting credible intervals vs. confidence intervals
+
+**Solutions:**
+1. **Start with weakly informative priors:** Use `brms` defaults (student-t priors) and show sensitivity analyses.
+2. **Compare frequentist and Bayesian results:** Run both `lm()` and `brm()` on same data—show results are similar with weak priors.
+3. **Use prior predictive checks:** Have students simulate data from priors to see what they imply.
+4. **Frame as regularization:** Explain priors as "hedges against overfitting" (like penalized regression).
+
+**Activity:**
+- Lab 5: Students run same model with three priors (very weak, weakly informative, informative) and compare posteriors.
+- Discussion: When would you use informative priors? (e.g., clinical trials with historical data)
+
+---
+
+### 5.2 Challenge: Over-Reliance on P-Values
+
+**Symptoms:**
+- Students report only p-values, ignore effect sizes
+- Statements like "p = 0.06 means it almost worked"
+- Belief that p < 0.05 = "proof"
+
+**Solutions:**
+1. **Ban p-values for one week:** Require reporting only effect sizes and CIs.
+2. **Show p-value variability:** Simulate 100 studies with same population effect; plot histogram of p-values (many > 0.05 even when effect is real).
+3. **Use "new statistics" framework:** Emphasize estimation over testing (Cumming, 2014).
+
+**Activity:**
+- Students replicate a published small-sample study (simulated data) 50 times and plot distribution of p-values and effect sizes. Observe that p-values vary wildly; effect size estimates center on truth.
+
+---
+
+### 5.3 Challenge: Confusion About "No Evidence of Effect" vs. "Evidence of No Effect"
+
+**Symptoms:**
+- p > 0.05 interpreted as "no effect exists"
+- Failure to consider power
+- No discussion of equivalence testing
+
+**Solutions:**
+1. **Introduce TOST early:** Show equivalence testing in Chapter 15.
+2. **Require power analysis in all assignments:** Students must state "we had X% power to detect d = Y."
+3. **Use visualization:** Plot CI overlapping zero—ask "does this rule out meaningful effects?"
+
+**Activity:**
+- Give students underpowered study (n = 12, d = 0.5, p = 0.15). Ask them to:
+  - Calculate 95% CI for d
+  - Calculate post-hoc power
+  - Rewrite conclusion appropriately
+
+---
+
+### 5.4 Challenge: R Programming Struggles
+
+**Symptoms:**
+- Errors with file paths, working directories
+- Confusion about piping (`%>%` vs. `|>`)
+- Cannot install packages
+
+**Solutions:**
+1. **Provide RStudio Cloud workspace:** Pre-installed packages, datasets loaded.
+2. **Live coding in lectures:** Share screen, type slowly, explain each line.
+3. **"Code-along" labs:** Instructor codes alongside students; pause for questions.
+4. **Debugging guide:** Create handout with common errors (e.g., "object not found", "non-numeric argument").
+
+**Resources:**
+- Provide RMarkdown templates for assignments
+- Create video tutorials for common tasks (e.g., "How to install mice package")
+- Office hours dedicated to R troubleshooting
+
+---
+
+### 5.5 Challenge: Diverse Student Backgrounds
+
+**Symptoms:**
+- Some students breeze through labs; others struggle with basic R
+- Different fields have different norms (education vs. health sciences)
+- Uneven prerequisite preparation
+
+**Solutions:**
+1. **Pre-course survey:** Assess R experience, stats background, research area.
+2. **Differentiated labs:** Provide "basic" and "advanced" versions of exercises.
+3. **Pair programming:** Group strong R users with novices.
+4. **Flexible pacing:** Asynchronous modules allow students to work at own pace.
+
+**Example Differentiation (Lab 3):**
+- **Basic:** Run `wilcox.test()` on provided data, interpret output.
+- **Advanced:** Write function to compute rank-biserial correlation manually; compare with package output.
+
+---
+
+## 6. ADDITIONAL RESOURCES
+
+### 6.1 Recommended Textbooks
+
+**Primary Supplementary Texts:**
+1. **Maxwell, S. E., Delaney, H. D., & Kelley, K. (2017).** *Designing Experiments and Analyzing Data: A Model Comparison Perspective* (3rd ed.). Routledge.
+   - Excellent for understanding small-sample ANOVA, power analysis, effect sizes.
+
+2. **Hox, J. J., Moerbeek, M., & van de Schoot, R. (2017).** *Multilevel Analysis: Techniques and Applications* (3rd ed.). Routledge.
+   - Useful for small-cluster designs.
+
+3. **Kruschke, J. K. (2015).** *Doing Bayesian Data Analysis* (2nd ed.). Academic Press.
+   - Accessible intro to Bayesian methods with R/JAGS.
+
+**Applied Examples:**
+4. **Field, A., Miles, J., & Field, Z. (2012).** *Discovering Statistics Using R*. Sage.
+   - Great for students new to R; conversational tone.
+
+5. **Gelman, A., & Hill, J. (2006).** *Data Analysis Using Regression and Multilevel/Hierarchical Models*. Cambridge University Press.
+   - Advanced treatment of small-sample regression issues.
+
+---
+
+### 6.2 R Packages to Highlight
+
+| Package | Purpose | Key Functions |
+|---------|---------|---------------|
+| `pwr` | Power analysis | `pwr.t.test()`, `pwr.anova.test()` |
+| `effectsize` | Effect size calculation | `cohens_d()`, `eta_squared()` |
+| `coin` | Permutation tests | `oneway_test()`, `independence_test()` |
+| `logistf` | Firth logistic regression | `logistf()` |
+| `brms` | Bayesian regression | `brm()`, `prior()`, `pp_check()` |
+| `mice` | Multiple imputation | `mice()`, `pool()` |
+| `psych` | Reliability analysis | `alpha()`, `omega()` |
+| `boot` | Bootstrap methods | `boot()`, `boot.ci()` |
+| `ggplot2` | Visualization | `geom_point()`, `geom_errorbar()` |
+| `ggdist` | Uncertainty visualization | `stat_halfeye()`, `stat_dots()` |
+
+**Installation Script (Provide to Students):**
+
+```r
+# Install all required packages for the course
+install.packages(c(
+  "pwr", "effectsize", "coin", "logistf", "brms",
+  "mice", "psych", "boot", "ggplot2", "ggdist",
+  "tidyverse", "rmarkdown", "knitr"
+))
+```
+
+---
+
+### 6.3 Datasets for Teaching
+
+**Included in Book:**
+- `anxiety_study.csv` — Pre/post anxiety scores (n = 18)
+- `employee_engagement.csv` — Employee survey (n = 25)
+- `mini_marketing.csv` — A/B test (n₁ = 12, n₂ = 14)
+- `process_change.csv` — Before/after process improvement (n = 10)
+- `hospital_readmissions.csv` — Readmission rates (n = 15 hospitals)
+
+**External Datasets:**
+- `palmerpenguins::penguins` — Penguin measurements (subset for small-sample demos)
+- `datasets::PlantGrowth` — Classic small ANOVA dataset (n = 30)
+- `MASS::cats` — Body/heart weight (n = 144; subsample to n = 20)
+
+**Generating Synthetic Data:**
+
+```r
+# Generate small dataset with known effect
+set.seed(42)
+n <- 15
+treatment <- rnorm(n, mean = 100, sd = 15)
+control <- rnorm(n, mean = 85, sd = 15)
+
+df <- data.frame(
+  score = c(treatment, control),
+  group = factor(rep(c("Treatment", "Control"), each = n))
+)
+
+# Save for student use
+write.csv(df, "treatment_study.csv", row.names = FALSE)
+```
+
+---
+
+### 6.4 Online Resources
+
+**Interactive Tutorials:**
+- [**Seeing Theory**](https://seeing-theory.brown.edu/) — Visualizations of probability and statistics
+- [**rpsychologist**](https://rpsychologist.com/d3/CI/) — Interactive CI and effect size demos
+- [**ShinyApps for Stats**](https://shiny.rstudio.com/gallery/) — Dashboards for power analysis, NHST
+
+**Videos:**
+- **StatQuest (Josh Starmer)** — YouTube channel with clear explanations of bootstrap, permutation tests
+- **Richard McElreath's Lectures** — Statistical Rethinking course (Bayesian methods)
+
+**Preprint Repositories:**
+- **PsyArXiv, OSF Preprints** — Examples of preregistered small-sample studies
+
+---
+
+### 6.5 Assessment Item Bank
+
+**Sample Quiz Questions (Multiple Choice):**
+
+1. **Which method is most appropriate for a 2×2 table with expected cell counts < 5?**
+   - A) Chi-square test
+   - B) Fisher's exact test ✓
+   - C) Logistic regression
+   - D) Pearson correlation
+
+2. **A study with n = 20 finds p = 0.12. The authors conclude "no effect exists." What is wrong?**
+   - A) Nothing, p > 0.05 means no effect
+   - B) They should use α = 0.10
+   - C) p > 0.05 only means insufficient evidence, not "no effect" ✓
+   - D) They should have used a one-tailed test
+
+3. **Which of the following increases statistical power?**
+   - A) Larger sample size ✓
+   - B) Smaller effect size
+   - C) Lower alpha level (e.g., 0.01 instead of 0.05)
+   - D) Higher measurement error
+
+**Sample Short-Answer Questions:**
+
+1. *Explain why Cronbach's alpha is attenuated (lower) for short scales (3–5 items) compared to long scales (20+ items).*
+
+2. *A researcher plans a study with n = 10 per group and expects d = 0.5. Calculate power and interpret the result.*
+
+3. *What is the difference between MCAR, MAR, and MNAR? Give an example of each.*
+
+---
+
+## 7. LECTURE NOTES & TIPS
+
+### 7.1 Chapter 1: When and Why Small Samples
+
+**Learning Objectives:**
+- Students should leave knowing: (1) why large-sample methods fail, (2) when small samples are acceptable, (3) how to justify sample size transparently.
+
+**Lecture Outline (90 minutes):**
+
+1. **Motivation (15 min):**
+   - Poll: "What's the smallest sample size in your field?"
+   - Show examples: clinical case studies (n = 1), pilot studies (n = 12), SIDS research (n < 50)
+   - Discuss: When are small samples unavoidable? (rare diseases, endangered species, expensive interventions)
+
+2. **Why Large-Sample Methods Fail (30 min):**
+   - **Asymptotic approximations:** Chi-square test assumes np > 5; violates with small n
+   - **Normality assumptions:** t-test robust with n > 30; questionable with n < 15
+   - **Power:** Demonstrate with simulation (50 studies, n = 10 vs. n = 100)
+   - **Overfitting:** Show regression with p predictors, n = p + 5 (huge standard errors)
+
+3. **When Small Samples Are Sufficient (20 min):**
+   - **Large effects:** d = 1.5+ detectable with n = 10 per group
+   - **Highly controlled settings:** Lab experiments with low noise
+   - **Proof-of-concept:** Early-stage intervention development
+   - **Mechanism testing:** Not aiming for generalization
+
+4. **What Changes with Small Samples (15 min):**
+   - **Methods:** Exact tests, permutation, Bayesian priors, robust estimators
+   - **Reporting:** Emphasize effect sizes and CIs over p-values
+   - **Interpretation:** More cautious; acknowledge uncertainty
+
+5. **Activity (10 min):**
+   - Students pair up and discuss: "Find a published small-sample study (n < 30) in your field. Was the sample size justified? What methods were used?"
+
+**Common Student Questions:**
+- *"Can I just collect more data?"* — Sometimes yes, but often no (cost, time, access). Focus on optimal analysis given constraints.
+- *"Isn't n = 30 the magic number?"* — No. It's a rough heuristic for CLT, not a universal threshold.
+
+---
+
+### 7.2 Chapter 3: Exact Tests and Resampling
+
+**Learning Objectives:**
+- Conduct Fisher's exact test in R
+- Understand when exact tests are conservative
+- Generate permutation distributions
+
+**Lecture Outline (90 minutes):**
+
+1. **Exact vs. Asymptotic Tests (20 min):**
+   - **Chi-square test:** Relies on approximation; poor with small expected counts
+   - **Fisher's exact:** Computes exact p-value from hypergeometric distribution
+   - **Example:** 2×2 table with n = 12; compare chi-square (p = 0.08) vs. Fisher (p = 0.05)
+
+2. **Fisher's Exact Test in R (25 min):**
+   - Live coding: `fisher.test()`
+   - Interpret odds ratio and CI
+   - Show how to extract p-value, OR from output object
+
+3. **Permutation Tests (30 min):**
+   - **Concept:** Null hypothesis = "group labels are exchangeable"
+   - **Procedure:** Randomly shuffle labels, recompute test statistic, repeat 10,000 times
+   - **Example:** Two-sample t-test via permutation (compare with `t.test()`)
+   - **Advantage:** No distributional assumptions
+
+4. **Bootstrap Confidence Intervals (15 min):**
+   - **Concept:** Resample with replacement; estimate sampling distribution
+   - **Example:** Bootstrap CI for Cohen's d
+   - **Caution:** Small samples → few unique resamples; wide CIs
+
+**Activity:**
+- **Lab 2:** Students run Fisher's exact test on `mini_marketing.csv`; compare with chi-square; generate permutation distribution for difference in means.
+
+**Common Pitfalls:**
+- Forgetting to set `set.seed()` for reproducibility
+- Confusing bootstrap (resample with replacement) with permutation (resample without replacement)
+
+---
+
+### 7.3 Chapter 12: Missing Data
+
+**Learning Objectives:**
+- Distinguish MCAR, MAR, MNAR
+- Implement multiple imputation with `mice`
+- Interpret pooled results
+
+**Lecture Outline (90 minutes):**
+
+1. **Missing Data Mechanisms (20 min):**
+   - **MCAR (Missing Completely at Random):** Missingness unrelated to any variable (e.g., data lost in computer crash)
+   - **MAR (Missing at Random):** Missingness related to observed data, not unobserved (e.g., older participants skip exercise questions)
+   - **MNAR (Missing Not at Random):** Missingness related to unobserved value (e.g., depressed individuals don't report mood scores)
+   - **Test:** Little's MCAR test (`mice::mcar()`)
+
+2. **Why Complete-Case Analysis Fails (15 min):**
+   - Loses power (deletes data)
+   - Biased if MAR or MNAR
+   - Example: Study with 20% missingness → effective n drops from 50 to 40
+
+3. **Multiple Imputation Theory (20 min):**
+   - **Idea:** Generate m plausible datasets; analyze each; pool results
+   - **Pooling (Rubin's rules):** Combine estimates and SEs accounting for within- and between-imputation variance
+   - **Assumptions:** MAR; imputation model correctly specified
+
+4. **MICE in R (25 min):**
+   - Live coding: `mice()` with `method = "pmm"` (predictive mean matching)
+   - Check convergence: `plot(imp)`
+   - Fit model: `with(imp, lm(...))`
+   - Pool: `pool()`; interpret `summary(pooled)`
+
+5. **Activity (10 min):**
+   - Students load `anxiety_study.csv` (with missing data), visualize missingness with `md.pattern()`, run MICE, pool a t-test.
+
+**Common Student Questions:**
+- *"How many imputations (m) should I use?"* — Default m = 5; modern recommendation m = 20–40 for more stable SEs.
+- *"What if I have MNAR?"* — Sensitivity analysis; report results with/without imputation; acknowledge limitation.
+
+---
+
+## 8. EXTENDING THE COURSE
+
+### 8.1 Advanced Topics (Optional Modules)
+
+For students who complete core material early or want deeper treatment:
+
+**Module A: Sequential Analysis**
+- **Content:** Group-sequential designs, alpha spending functions, O'Brien-Fleming boundaries
+- **Reading:** Jennison & Turnbull (1999), *Group Sequential Methods with Applications to Clinical Trials*
+- **Activity:** Design a two-stage trial; compute stopping boundaries; simulate operating characteristics
+
+**Module B: Bayesian Hierarchical Models**
+- **Content:** Shrinkage, partial pooling, random effects in `brms`
+- **Reading:** Gelman & Hill (2006), Chapter 12
+- **Activity:** Fit hierarchical model to multi-site small-sample data (e.g., hospital readmissions)
+
+**Module C: Network Meta-Analysis with Few Studies**
+- **Content:** Mixed treatment comparisons, indirect evidence
+- **Reading:** Dias et al. (2013), *Evidence Synthesis for Decision Making*
+- **Activity:** Pool evidence from 3–5 small trials using `netmeta` package
+
+**Module D: Small-Sample Survival Analysis**
+- **Content:** Kaplan-Meier with small n, log-rank test, Cox regression with penalization
+- **Reading:** Collett (2014), *Modelling Survival Data in Medical Research*
+- **Activity:** Analyze time-to-event data (n = 20) with `survival` package
+
+---
+
+### 8.2 Capstone Project Ideas
+
+Students design and execute a complete small-sample study (real or simulated).
+
+**Option 1: Secondary Data Analysis**
+- Obtain small dataset from repository (ICPSR, OSF, Dataverse)
+- Conduct thorough analysis following best practices
+- Write APA-style research report
+
+**Option 2: Pilot Study**
+- Design and conduct pilot (n = 15–25) for student's thesis/dissertation
+- Collect data, analyze, report
+- Discuss implications for full-scale study
+
+**Option 3: Reanalysis of Published Study**
+- Find published small-sample study with data available
+- Replicate original analysis
+- Conduct alternative analyses (e.g., Bayesian instead of frequentist)
+- Compare conclusions
+
+**Option 4: Simulation Study**
+- Investigate performance of method under small-sample conditions
+- Vary n, effect size, distributional assumptions
+- Summarize findings in mini-research paper
+
+**Grading Rubric (200 points):**
+- Proposal (20 pts)
+- Data collection/acquisition (30 pts)
+- Analysis rigor (60 pts)
+- Reporting transparency (40 pts)
+- Presentation (30 pts)
+- Peer review participation (20 pts)
+
+---
+
+### 8.3 Flipped Classroom Implementation
+
+**Structure:**
+- **Before Class:** Students watch 20–30 min lecture video; complete reading quiz (5 questions)
+- **In Class:** Brief recap (10 min) → Lab/activity (60 min) → Discussion (20 min)
+
+**Advantages:**
+- More hands-on time
+- Instructor circulates, provides individual help
+- Students learn by doing, not just listening
+
+**Challenges:**
+- Requires pre-recorded videos (time-intensive to create)
+- Students may not watch videos beforehand
+- Need accountability mechanism (quizzes, participation points)
+
+**Technology:**
+- Use **Panopto** or **Kaltura** for video hosting
+- Embed quizzes in videos (e.g., via **EdPuzzle**)
+- Track completion via LMS analytics
+
+---
+
+### 8.4 Collaborative Learning Activities
+
+**Think-Pair-Share:**
+- Pose question (e.g., "When would you use Fisher's exact vs. chi-square?")
+- Students think individually (2 min)
+- Pair up and discuss (3 min)
+- Share with class (5 min)
+
+**Jigsaw Groups:**
+- Divide class into "home groups" (4 students each)
+- Assign each student a topic (e.g., MCAR, MAR, MNAR, MICE)
+- Students become "experts" on their topic (read, research)
+- Return to home group; teach each other
+
+**Peer Review:**
+- Students complete Assignment 2 (data analysis)
+- Exchange papers anonymously
+- Provide feedback using rubric
+- Revise based on feedback before final submission
+
+**Gallery Walk:**
+- Students create posters of final projects
+- Display around room
+- Class circulates, leaves sticky-note comments
+- Author responds to questions
+
+---
+
+## 9. INSTRUCTOR REFLECTION PROMPTS
+
+After teaching the course, consider these questions to improve future iterations:
+
+1. **What concepts did students struggle with most?** (Power analysis? Bayesian priors? MICE convergence?)
+2. **Which labs were most/least effective?** (Did students finish on time? Were instructions clear?)
+3. **Did students have adequate R skills?** (Should prerequisite be strengthened? More R tutorials needed?)
+4. **Were assessments well-calibrated?** (Too easy? Too hard? Good spread of grades?)
+5. **What would you change next time?** (More examples? Different datasets? Reorder chapters?)
+6. **Did students achieve learning outcomes?** (Administer pre/post concept inventory)
+7. **What feedback did students provide?** (End-of-course evaluations)
+
+---
+
+## 10. ETHICAL CONSIDERATIONS IN TEACHING
+
+### 10.1 Responsible Use of Small Samples
+
+**Teaching Points:**
+- Small samples are sometimes necessary, but researchers must be transparent about limitations
+- Avoid "p-hacking" (running multiple tests until one is significant)
+- Preregister analyses when possible (OSF, AsPredicted)
+- Report all analyses conducted, not just significant ones
+
+**Case Study for Discussion:**
+- Show example of published study with n = 12, p = 0.048, no effect size reported, no preregistration
+- Ask: What are the red flags? How could this study be improved?
+
+---
+
+### 10.2 Diversity and Inclusion
+
+**Small-Sample Research in Underrepresented Populations:**
+- Emphasize that small samples are common when studying marginalized groups (rare diseases, Indigenous communities, LGBTQ+ youth)
+- Discuss community-based participatory research (CBPR) and ethical data collection
+- Highlight researchers from diverse backgrounds
+
+**Inclusive Pedagogy:**
+- Use diverse examples (not just biomedical; include education, social work, ecology)
+- Provide multiple modes of assessment (written, presentation, coding)
+- Offer flexible deadlines for students with caregiving responsibilities
+
+---
+
+### 10.3 Open Science Practices
+
+**Encourage:**
+- **Data sharing:** Deposit anonymized data in repositories (OSF, Dataverse, Zenodo)
+- **Code sharing:** Provide reproducible scripts (RMarkdown, Jupyter Notebooks)
+- **Preregistration:** Template available at AsPredicted.org or OSF
+- **Transparent reporting:** Use CONSORT, STROBE checklists
+
+**Activity:**
+- Students create OSF project for final assignment; upload data, code, preregistration
+
+---
+
+## 11. CONCLUSION
+
+Teaching small-sample methods requires balancing statistical rigor with practical constraints. Students must learn that:
+
+- **Small samples are not inherently bad**, but require appropriate methods and transparent reporting.
+- **P-values are insufficient**; emphasize effect sizes, confidence intervals, and uncertainty quantification.
+- **Context matters**: A well-designed study with n = 15 can be more valuable than a poorly designed study with n = 1,500.
+
+By equipping students with exact tests, resampling methods, Bayesian tools, and robust reporting practices, we prepare them to conduct credible, ethical research even when large samples are infeasible.
+
+**Good luck with your teaching!** For questions or suggestions, contact the authors or visit the companion website.
+
+---
+
+## APPENDIX A: SOLUTIONS TO WORKED PROJECTS
+
+### Project 1: Employee Engagement
+
+**Research Question:** Does a mindfulness intervention improve employee engagement scores?
+
+**Data:** `employee_engagement.csv` (n = 25; pre/post design)
+
+**Full Solution:**
+
+```r
+library(tidyverse)
+library(effsize)
+library(ggplot2)
+
+# Load data
+df <- read_csv("data/employee_engagement.csv")
+
+# Descriptive statistics
+summary(df)
+
+# Check normality
+shapiro.test(df$pre_score)   # p = 0.23 (normal)
+shapiro.test(df$post_score)  # p = 0.18 (normal)
+
+# Paired t-test
+t.test(df$post_score, df$pre_score, paired = TRUE)
+
+# Effect size (Cohen's d for paired samples)
+cohen.d(df$post_score, df$pre_score, paired = TRUE)
+
+# Visualization
+df_long <- df %>%
+  pivot_longer(cols = c(pre_score, post_score), 
+               names_to = "time", values_to = "score")
+
+ggplot(df_long, aes(x = time, y = score)) +
+  geom_boxplot() +
+  geom_line(aes(group = employee_id), alpha = 0.3) +
+  labs(title = "Employee Engagement: Pre vs. Post",
+       y = "Engagement Score", x = "") +
+  theme_minimal()
+```
+
+**Expected Results:**
+- t(24) = 3.45, p = 0.002
+- d = 0.69 (95% CI: 0.25 to 1.13)
+- Conclusion: Significant moderate-to-large improvement in engagement.
+
+**Discussion Points:**
+- Sample size adequate for d ≈ 0.70 (post-hoc power ≈ 75%)
+- No control group—cannot rule out placebo effects, time trends
+- Generalizability limited to this organization
+
+---
+
+### Project 2: A/B Test
+
+**Research Question:** Does Email Version B increase click-through rate vs. Version A?
+
+**Data:** `mini_marketing.csv` (n₁ = 12, n₂ = 14)
+
+**Full Solution:**
+
+```r
+library(tidyverse)
+
+# Load data
+df <- read_csv("data/mini_marketing.csv")
+
+# Create contingency table
+table_data <- table(df$version, df$clicked)
+
+# Fisher's exact test (small expected counts)
+fisher.test(table_data)
+
+# Effect size: Odds ratio (from Fisher output)
+# OR = 4.2 (95% CI: 0.9 to 25.3)
+
+# Visualization
+df %>%
+  group_by(version) %>%
+  summarise(click_rate = mean(clicked)) %>%
+  ggplot(aes(x = version, y = click_rate)) +
+  geom_col(fill = "steelblue") +
+  ylim(0, 1) +
+  labs(title = "Click-Through Rate by Email Version",
+       y = "Proportion Clicked", x = "Version") +
+  theme_minimal()
+```
+
+**Expected Results:**
+- p = 0.08 (two-sided)
+- OR = 4.2 (very wide CI due to small n)
+- Conclusion: Suggestive evidence favoring Version B, but underpowered.
+
+**Discussion Points:**
+- Recommend larger follow-up study (power analysis: need n ≈ 100 per group for 80% power)
+- Report CI to show uncertainty
+- Consider Bayesian approach with informative prior from past A/B tests
+
+---
+
+### Project 3: Hospital Readmissions
+
+**Research Question:** Do hospitals differ in 30-day readmission rates?
+
+**Data:** `hospital_readmissions.csv` (k = 15 hospitals, n = 10–30 per hospital)
+
+**Full Solution:**
+
+```r
+library(tidyverse)
+library(lme4)
+library(broom.mixed)
+
+# Load data
+df <- read_csv("data/hospital_readmissions.csv")
+
+# Calculate readmission rates by hospital
+rates <- df %>%
+  group_by(hospital_id) %>%
+  summarise(
+    n_patients = n(),
+    n_readmit = sum(readmitted),
+    rate = mean(readmitted)
+  )
+
+# Visualization
+ggplot(rates, aes(x = reorder(hospital_id, rate), y = rate)) +
+  geom_point(size = 3) +
+  geom_errorbar(aes(ymin = rate - 1.96*sqrt(rate*(1-rate)/n_patients),
+                    ymax = rate + 1.96*sqrt(rate*(1-rate)/n_patients)),
+                width = 0.2) +
+  coord_flip() +
+  labs(title = "30-Day Readmission Rates by Hospital",
+       y = "Readmission Rate", x = "Hospital") +
+  theme_minimal()
+
+# Hierarchical logistic regression
+model <- glmer(readmitted ~ 1 + (1 | hospital_id), 
+               data = df, family = binomial)
+summary(model)
+```
+
+**Expected Results:**
+- Readmission rates vary from 8% to 25%
+- Random intercept variance = 0.42 (significant heterogeneity)
+- Conclusion: Hospitals differ in readmission risk; further investigation needed.
+
+**Discussion Points:**
+- Small sample per hospital → wide CIs
+- Hierarchical model pools information across hospitals (shrinkage)
+- Could add covariates (patient age, comorbidities) to explain variation
+
+---
+
+## APPENDIX B: SAMPLE FINAL EXAM (Take-Home, 48 Hours)
+
+**Instructions:** Answer all questions. Show all R code. Submit RMarkdown file + PDF.
+
+### Question 1 (20 points): Conceptual Understanding
+
+A researcher plans a study with n = 20 participants. They want to detect a "medium" effect (d = 0.5) with 80% power at α = 0.05.
+
+a) Calculate the required sample size per group for a two-sample t-test. (5 pts)  
+b) Interpret the result. Is n = 20 adequate? (5 pts)  
+c) If they proceed with n = 20, what is the achieved power? (5 pts)  
+d) Suggest two alternative strategies if they cannot increase sample size. (5 pts)
+
+**Answer Key:**
+
+```r
+# a) Required sample size
+pwr::pwr.t.test(d = 0.5, power = 0.80, sig.level = 0.05, type = "two.sample")
+# n = 64 per group
+
+# b) No, n = 20 total (10 per group) is severely inadequate.
+
+# c) Achieved power with n = 10 per group
+pwr::pwr.t.test(n = 10, d = 0.5, sig.level = 0.05, type = "two.sample")
+# Power = 0.18 (only 18% chance of detecting d = 0.5)
+
+# d) Alternatives:
+# 1. Target larger effect (focus on contexts where d > 0.8)
+# 2. Use Bayesian methods with informative priors
+# 3. Accept lower power; report as pilot study
+```
+
+---
+
+### Question 2 (30 points): Data Analysis
+
+Analyze the provided dataset (`quiz_final.csv`) containing exam scores for two teaching methods (n₁ = 14, n₂ = 12).
+
+a) Check assumptions (normality, homogeneity of variance). (10 pts)  
+b) Conduct an appropriate test. (10 pts)  
+c) Compute effect size with CI. (5 pts)  
+d) Create a visualization. (5 pts)
+
+**Answer Key:**
+
+```r
+library(tidyverse)
+library(car)
+library(effectsize)
+
+# Load data
+df <- read_csv("quiz_final.csv")
+
+# a) Check assumptions
+# Normality
+tapply(df$score, df$method, shapiro.test)
+# Method A: p = 0.08; Method B: p = 0.12 (both roughly normal)
+
+# Homogeneity of variance
+leveneTest(score ~ method, data = df)
+# p = 0.45 (variances equal)
+
+# b) Independent-samples t-test
+t.test(score ~ method, data = df, var.equal = TRUE)
+
+# c) Effect size
+cohens_d(score ~ method, data = df)
+
+# d) Visualization
+ggplot(df, aes(x = method, y = score)) +
+  geom_boxplot() +
+  geom_jitter(width = 0.1, alpha = 0.5) +
+  labs(title = "Exam Scores by Teaching Method",
+       y = "Score", x = "Method") +
+  theme_minimal()
+```
+
+---
+
+### Question 3 (25 points): Missing Data
+
+The dataset `quiz_missing.csv` has 30% missing values on variable `outcome`.
+
+a) Diagnose missingness mechanism. (10 pts)  
+b) Implement multiple imputation (m = 20). (10 pts)  
+c) Compare complete-case vs. imputed results. (5 pts)
+
+**Answer Key:**
+
+```r
+library(mice)
+library(naniar)
+
+# Load data
+df <- read_csv("quiz_missing.csv")
+
+# a) Diagnose missingness
+# Visualize pattern
+vis_miss(df)
+
+# Test MCAR
+mcar_test(df)
+# p = 0.03 (reject MCAR; likely MAR)
+
+# b) Multiple imputation
+imp <- mice(df, m = 20, method = "pmm", seed = 123, printFlag = FALSE)
+plot(imp)  # Check convergence
+
+# Fit model
+fit_imp <- with(imp, lm(outcome ~ predictor))
+pooled <- pool(fit_imp)
+summary(pooled)
+
+# c) Compare
+# Complete-case
+fit_cc <- lm(outcome ~ predictor, data = df)
+summary(fit_cc)
+
+# Comparison: Imputed SE smaller, coefficient similar
+```
+
+---
+
+### Question 4 (25 points): Reporting
+
+Write a Results section (300 words) reporting the analysis from Question 2. Include:
+- Descriptive statistics
+- Test results
+- Effect size with CI
+- Interpretation (avoid over-interpreting non-significant results if applicable)
+
+**Grading Rubric:**
+- APA format (5 pts)
+- Descriptive stats reported (5 pts)
+- Test results with df, t, p (5 pts)
+- Effect size and CI (5 pts)
+- Appropriate interpretation (5 pts)
+
+---
+
+**END OF INSTRUCTOR'S MANUAL**
+

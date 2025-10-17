@@ -28,6 +28,12 @@ book:
     - part: "Part F: Technical Appendices"
       chapters:
         - chapters/part-f-technical-appendices.qmd
+    - part: "Part G: Guided Lab Practicals"
+      chapters:
+        - chapters/part-g-lab-practicals.qmd
+    - part: "Part H: Instructor's Manual"
+      chapters:
+        - chapters/part-h-instructors-manual.qmd
     - references.qmd
 
 bibliography: references.bib
