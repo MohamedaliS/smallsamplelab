@@ -1,0 +1,1928 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.24">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>1&nbsp; Part A: Foundations – Quantitative Analysis with Small Samples</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/part-b-data-collection.html" rel="next">
+<link href="../index.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dc55a5b9e770e841cd82e46aadbfb9b0.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-fc52e084097f5e82659c47ea4c4460c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part-a-foundations.html">Part A: Foundations</a></li><li class="breadcrumb-item"><a href="../chapters/part-a-foundations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Part A: Foundations</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header sidebar-header-stacked">
+      <a href="../index.html" class="sidebar-logo-link">
+      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Quantitative Analysis with Small Samples</a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Preface</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part A: Foundations</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-a-foundations.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Part A: Foundations</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part B: Data Collection and Preparation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-b-data-collection.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Part B: Data Collection and Preparation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part C: Analysis Methods</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-c-analysis-methods.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Part C: Analysis Methods</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part D: Reporting and Interpretation</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-d-reporting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Part D: Reporting and Interpretation</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part E: Worked Projects</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-e-worked-projects.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Part E: Worked Projects</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part F: Technical Appendices</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-6" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-6" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-f-technical-appendices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Part F: Technical Appendices</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part G: Guided Lab Practicals</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-7" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-7" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-g-lab-practicals.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Part G: Guided Lab Practicals</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part H: Instructor’s Manual</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-8" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-8" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/part-h-instructors-manual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Part H: Instructor’s Manual</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">References</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#chapter-1.-why-small-sample-research-matters" id="toc-chapter-1.-why-small-sample-research-matters" class="nav-link active" data-scroll-target="#chapter-1.-why-small-sample-research-matters"><span class="header-section-number">1.1</span> Chapter 1. Why Small-Sample Research Matters</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives" id="toc-learning-objectives" class="nav-link" data-scroll-target="#learning-objectives"><span class="header-section-number">1.1.1</span> Learning Objectives</a></li>
+  <li><a href="#why-small-samples-are-often-unavoidable" id="toc-why-small-samples-are-often-unavoidable" class="nav-link" data-scroll-target="#why-small-samples-are-often-unavoidable"><span class="header-section-number">1.1.2</span> Why Small Samples Are Often Unavoidable</a></li>
+  <li><a href="#when-large-sample-approximations-fail" id="toc-when-large-sample-approximations-fail" class="nav-link" data-scroll-target="#when-large-sample-approximations-fail"><span class="header-section-number">1.1.3</span> When Large-Sample Approximations Fail</a></li>
+  <li><a href="#visualising-power-trade-offs" id="toc-visualising-power-trade-offs" class="nav-link" data-scroll-target="#visualising-power-trade-offs"><span class="header-section-number">1.1.4</span> Visualising Power Trade-offs</a></li>
+  <li><a href="#appropriate-methods-for-small-samples" id="toc-appropriate-methods-for-small-samples" class="nav-link" data-scroll-target="#appropriate-methods-for-small-samples"><span class="header-section-number">1.1.5</span> Appropriate Methods for Small Samples</a></li>
+  <li><a href="#example-comparing-two-small-groups" id="toc-example-comparing-two-small-groups" class="nav-link" data-scroll-target="#example-comparing-two-small-groups"><span class="header-section-number">1.1.6</span> Example: Comparing Two Small Groups</a></li>
+  <li><a href="#key-takeaways" id="toc-key-takeaways" class="nav-link" data-scroll-target="#key-takeaways"><span class="header-section-number">1.1.7</span> Key Takeaways</a></li>
+  <li><a href="#self-assessment-quiz" id="toc-self-assessment-quiz" class="nav-link" data-scroll-target="#self-assessment-quiz"><span class="header-section-number">1.1.8</span> Self-Assessment Quiz</a></li>
+  <li><a href="#smoke-test" id="toc-smoke-test" class="nav-link" data-scroll-target="#smoke-test"><span class="header-section-number">1.1.9</span> Smoke Test</a></li>
+  </ul></li>
+  <li><a href="#chapter-2.-questions-and-outcomes-that-fit-small-n" id="toc-chapter-2.-questions-and-outcomes-that-fit-small-n" class="nav-link" data-scroll-target="#chapter-2.-questions-and-outcomes-that-fit-small-n"><span class="header-section-number">1.2</span> Chapter 2. Questions and Outcomes that Fit Small n</a>
+  <ul class="collapse">
+  <li><a href="#learning-objectives-1" id="toc-learning-objectives-1" class="nav-link" data-scroll-target="#learning-objectives-1"><span class="header-section-number">1.2.1</span> Learning Objectives</a></li>
+  <li><a href="#framing-realistic-research-questions" id="toc-framing-realistic-research-questions" class="nav-link" data-scroll-target="#framing-realistic-research-questions"><span class="header-section-number">1.2.2</span> Framing Realistic Research Questions</a></li>
+  <li><a href="#choosing-appropriate-outcomes" id="toc-choosing-appropriate-outcomes" class="nav-link" data-scroll-target="#choosing-appropriate-outcomes"><span class="header-section-number">1.2.3</span> Choosing Appropriate Outcomes</a></li>
+  <li><a href="#effect-sizes-and-estimation" id="toc-effect-sizes-and-estimation" class="nav-link" data-scroll-target="#effect-sizes-and-estimation"><span class="header-section-number">1.2.4</span> Effect Sizes and Estimation</a></li>
+  <li><a href="#example-outcome-selection-in-a-pilot-study" id="toc-example-outcome-selection-in-a-pilot-study" class="nav-link" data-scroll-target="#example-outcome-selection-in-a-pilot-study"><span class="header-section-number">1.2.5</span> Example: Outcome Selection in a Pilot Study</a></li>
+  <li><a href="#research-design-considerations" id="toc-research-design-considerations" class="nav-link" data-scroll-target="#research-design-considerations"><span class="header-section-number">1.2.6</span> Research Design Considerations</a></li>
+  <li><a href="#designing-pilot-studies" id="toc-designing-pilot-studies" class="nav-link" data-scroll-target="#designing-pilot-studies"><span class="header-section-number">1.2.7</span> Designing Pilot Studies</a></li>
+  <li><a href="#key-takeaways-1" id="toc-key-takeaways-1" class="nav-link" data-scroll-target="#key-takeaways-1"><span class="header-section-number">1.2.8</span> Key Takeaways</a></li>
+  <li><a href="#self-assessment-quiz-1" id="toc-self-assessment-quiz-1" class="nav-link" data-scroll-target="#self-assessment-quiz-1"><span class="header-section-number">1.2.9</span> Self-Assessment Quiz</a></li>
+  <li><a href="#smoke-test-1" id="toc-smoke-test-1" class="nav-link" data-scroll-target="#smoke-test-1"><span class="header-section-number">1.2.10</span> Smoke Test</a></li>
+  </ul></li>
+  <li><a href="#summary-of-part-a" id="toc-summary-of-part-a" class="nav-link" data-scroll-target="#summary-of-part-a"><span class="header-section-number">1.3</span> Summary of Part A</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../chapters/part-a-foundations.html">Part A: Foundations</a></li><li class="breadcrumb-item"><a href="../chapters/part-a-foundations.html"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Part A: Foundations</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Part A: Foundations</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>This part establishes why small-sample research is important and how to frame research questions that align with limited data availability.</p>
+<hr>
+<section id="chapter-1.-why-small-sample-research-matters" class="level2" data-number="1.1">
+<h2 data-number="1.1" class="anchored" data-anchor-id="chapter-1.-why-small-sample-research-matters"><span class="header-section-number">1.1</span> Chapter 1. Why Small-Sample Research Matters</h2>
+<section id="learning-objectives" class="level3" data-number="1.1.1">
+<h3 data-number="1.1.1" class="anchored" data-anchor-id="learning-objectives"><span class="header-section-number">1.1.1</span> Learning Objectives</h3>
+<p>By the end of this chapter, you will be able to:</p>
+<p><strong>Conceptual Understanding</strong> - ✓ Explain why small samples are common in applied research settings - ✓ Identify practical, ethical, and logistical constraints that limit sample size - ✓ Understand how large-sample approximations fail with modest datasets - ✓ Recognize contexts where small-sample methods are necessary and appropriate</p>
+<p><strong>Practical Skills</strong> - ✓ Calculate statistical power for different sample sizes - ✓ Create power curves to visualize sample size trade-offs - ✓ Distinguish between situations requiring small-sample vs large-sample methods</p>
+<p><strong>Critical Evaluation</strong> - ✓ Assess when conventional parametric tests become unreliable - ✓ Evaluate the impact of outliers and assumption violations in small samples - ✓ Critique the “apologetic” framing of small-sample research</p>
+<p><strong>Application</strong> - ✓ Justify research decisions when large samples are infeasible - ✓ Select appropriate statistical methods given sample size constraints - ✓ Communicate small-sample research findings with appropriate caveats</p>
+</section>
+<section id="why-small-samples-are-often-unavoidable" class="level3" data-number="1.1.2">
+<h3 data-number="1.1.2" class="anchored" data-anchor-id="why-small-samples-are-often-unavoidable"><span class="header-section-number">1.1.2</span> Why Small Samples Are Often Unavoidable</h3>
+<p>Many textbooks assume that researchers can collect hundreds or thousands of observations. In practice, however, numerous research contexts yield small samples. Clinical studies of rare diseases, evaluations of pilot programmes, <strong>classroom-based educational interventions</strong>, community-based participatory research, and studies in Small Island Developing States (SIDS) often involve fewer than 100 participants. Resource constraints, logistical barriers, and ethical considerations (such as minimising burden on vulnerable populations) make small samples the norm rather than the exception.</p>
+<p><strong>Examples of small-sample contexts:</strong></p>
+<ul>
+<li><strong>Health sciences:</strong> Clinical trials for rare diseases (n &lt; 30), pilot studies testing feasibility before large RCTs, single-site hospital studies.</li>
+<li><strong>Education:</strong> Evaluating a new teaching method in a single classroom (n = 15-25), assessing specialized programs for gifted/special education students, teacher professional development studies.</li>
+<li><strong>Business:</strong> A/B tests in niche markets, customer satisfaction surveys for small businesses, startup product testing with limited users.</li>
+<li><strong>Social sciences:</strong> Studies in remote communities, indigenous populations, or specialized occupational groups where the total accessible population is small.</li>
+</ul>
+<p>Despite their ubiquity, small samples are often treated as deficient or temporary. Researchers may apologise for limited data, or reviewers may demand larger samples without considering feasibility. This mindset overlooks the fact that many important questions can only be addressed with small datasets. Rather than apologising, researchers should select methods that are appropriate for the sample size at hand.</p>
+</section>
+<section id="when-large-sample-approximations-fail" class="level3" data-number="1.1.3">
+<h3 data-number="1.1.3" class="anchored" data-anchor-id="when-large-sample-approximations-fail"><span class="header-section-number">1.1.3</span> When Large-Sample Approximations Fail</h3>
+<p>Classical parametric tests (t-tests, ANOVA, standard logistic regression) rely on asymptotic theory. They assume that sampling distributions approximate normality as sample size increases. With small samples, these approximations can be inaccurate. P-values may be misleading, confidence intervals may have poor coverage, and maximum likelihood estimates may be unstable or even undefined (for example, in logistic regression with separation).</p>
+<p>Small samples also amplify the impact of outliers and violations of distributional assumptions. A single extreme value can dominate a mean or distort a regression slope. Skewed or heavy-tailed distributions, which cause few problems in large samples, become serious concerns when n is small.</p>
+</section>
+<section id="visualising-power-trade-offs" class="level3" data-number="1.1.4">
+<h3 data-number="1.1.4" class="anchored" data-anchor-id="visualising-power-trade-offs"><span class="header-section-number">1.1.4</span> Visualising Power Trade-offs</h3>
+<p>Even modest reductions in sample size can have a dramatic impact on statistical power. The figure below uses the exact <code>power.t.test()</code> function to illustrate how power declines for medium-sized effects as per-group sample size drops from 60 to 10. Curves are shown for three standardised effect sizes (Cohen’s <em>d</em> = 0.3, 0.5, and 0.8).</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>effect_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>n_values <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">60</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>power_grid <span class="ot">&lt;-</span> <span class="fu">crossing</span>(<span class="at">n =</span> n_values, <span class="at">d =</span> effect_sizes) <span class="sc">%&gt;%</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">power =</span> <span class="fu">map2_dbl</span>(</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    n,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    d,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">power.t.test</span>(</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> .x,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">delta =</span> .y,</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> <span class="dv">1</span>,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">sig.level =</span> alpha,</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">alternative =</span> <span class="st">"two.sided"</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">$</span>power</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(power_grid, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power, <span class="at">colour =</span> <span class="fu">factor</span>(d))) <span class="sc">+</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.80</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>, <span class="at">name =</span> <span class="st">"Effect size (d)"</span>) <span class="sc">+</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>(<span class="at">accuracy =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Sample size per group"</span>,</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Power"</span>,</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Power drops steeply as per-group sample size decreases"</span>,</span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Dashed line marks the conventional 80% power threshold"</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="part-a-foundations_files/figure-html/power-curve-plot-1.png" class="img-fluid figure-img" width="672"></p>
+<figcaption>Power curves illustrating sensitivity to sample size.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Interpretation: With medium effects (<em>d</em> ≈ 0.5), power slips below 50% once per-group sample size falls beneath about 20 participants. Detecting smaller effects (<em>d</em> ≈ 0.3) would require many more observations than are typically feasible in small-sample settings. This visual reinforces the need to report minimum detectable effects and to focus on estimation rather than binary significance testing when <em>n</em> is limited.</p>
+</section>
+<section id="appropriate-methods-for-small-samples" class="level3" data-number="1.1.5">
+<h3 data-number="1.1.5" class="anchored" data-anchor-id="appropriate-methods-for-small-samples"><span class="header-section-number">1.1.5</span> Appropriate Methods for Small Samples</h3>
+<p>Fortunately, a suite of exact, resampling-based, and robust methods can provide valid inferences with limited data. Exact tests (such as Fisher’s exact test, exact binomial tests, and exact Poisson tests) compute p-values directly from the combinatorial distribution of the data, without relying on asymptotic approximations. Resampling methods (bootstrap and permutation tests) use the observed data to approximate the sampling distribution, often yielding more accurate inferences than large-sample formulas.</p>
+<p>Nonparametric rank-based tests (Mann–Whitney U, Wilcoxon signed-rank, Kruskal–Wallis) make fewer distributional assumptions and are less sensitive to outliers. Penalised regression (Firth logistic regression, ridge, LASSO) can stabilise coefficient estimates when events are sparse. Bayesian methods incorporate prior information and quantify uncertainty through posterior distributions, which remain well-defined even when data are limited.</p>
+</section>
+<section id="example-comparing-two-small-groups" class="level3" data-number="1.1.6">
+<h3 data-number="1.1.6" class="anchored" data-anchor-id="example-comparing-two-small-groups"><span class="header-section-number">1.1.6</span> Example: Comparing Two Small Groups</h3>
+<p>Suppose we wish to compare customer satisfaction scores (on a 1–10 scale) between two service branches, each with only 12 observations. The scores are ordinal and may not be normally distributed.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>branch_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">8</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>branch_b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">6</span>)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>data_satisfaction <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(branch_a, branch_b),</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">branch =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each =</span> <span class="dv">12</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Mann–Whitney U test (Wilcoxon rank-sum)</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">wilcox_test</span>(data_satisfaction, score <span class="sc">~</span> branch, <span class="at">detailed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  estimate .y.   group1 group2    n1    n2 statistic       p conf.low conf.high
+*    &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1     2.00 score A      B         12    12       127 0.00119     1.00      2.00
+# ℹ 2 more variables: method &lt;chr&gt;, alternative &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p>The Mann–Whitney U test compares the distributions of the two groups without assuming normality. The p-value indicates whether the observed difference in ranks is unlikely under the null hypothesis of identical distributions. Because the test is based on ranks, it is robust to skewness and outliers.</p>
+<p>Interpretation: If the p-value is small (typically p &lt; 0.05), we have evidence that customer satisfaction differs between the two branches. The effect size (such as rank-biserial correlation) quantifies the magnitude of the difference.</p>
+</section>
+<section id="key-takeaways" class="level3" data-number="1.1.7">
+<h3 data-number="1.1.7" class="anchored" data-anchor-id="key-takeaways"><span class="header-section-number">1.1.7</span> Key Takeaways</h3>
+<ul>
+<li>Small samples are common and legitimate in many research contexts, particularly in SIDS, clinical studies, and community-based research.</li>
+<li>Large-sample approximations can fail when n is small, leading to inaccurate p-values and confidence intervals.</li>
+<li>Exact tests, resampling methods, and rank-based procedures provide valid inferences without requiring large samples.</li>
+<li>The choice of method should match the research question, the type of outcome, and the sample size actually available.</li>
+</ul>
+<hr>
+</section>
+<section id="self-assessment-quiz" class="level3" data-number="1.1.8">
+<h3 data-number="1.1.8" class="anchored" data-anchor-id="self-assessment-quiz"><span class="header-section-number">1.1.8</span> Self-Assessment Quiz</h3>
+<p>Test your understanding of the key concepts from Chapter 1. Answers and explanations are provided at the end.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Q1.</strong> A study with n=12 per group has 25% power to detect d=0.5. What does this mean?</p>
+<p>A. There is a 25% chance the treatment is effective<br>
+B. If the true effect is d=0.5, there is a 25% probability of detecting it (p&lt;0.05)<br>
+C. The Type I error rate is 25%<br>
+D. 25% of participants will show the effect</p>
+<hr>
+<p><strong>Q2.</strong> Why might large-sample approximations fail with n=15?</p>
+<p>A. Computers cannot process small datasets<br>
+B. Sampling distributions may not be approximately normal<br>
+C. Effect sizes cannot be calculated<br>
+D. P-values are always incorrect</p>
+<hr>
+<p><strong>Q3.</strong> Which research question is MOST appropriate for n=20?</p>
+<p>A. “What are all factors that predict customer loyalty?” (testing 15 predictors)<br>
+B. “Is there a difference in satisfaction between two service approaches?”<br>
+C. “How do age, gender, income, education, and occupation interact to predict outcomes?”<br>
+D. “Can we build a machine learning model to predict customer behavior?”</p>
+<hr>
+<p><strong>Q4.</strong> A pilot study with n=8 finds a mean difference of 5 points (95% CI: [-2, 12], p=0.14). The correct interpretation is:</p>
+<p>A. There is no effect<br>
+B. The effect is exactly 5 points<br>
+C. The study is underpowered; effects from -2 to 12 points are plausible<br>
+D. The null hypothesis is proven true</p>
+<hr>
+<p><strong>Q5.</strong> Which outcome measure provides the MOST statistical information per observation?</p>
+<p>A. Binary (pass/fail)<br>
+B. Ordinal (grade A-F)<br>
+C. Continuous (test score 0-100)<br>
+D. All provide equal information</p>
+<hr>
+<p><strong>Q6.</strong> With n=10 per group, which statement about power is TRUE?</p>
+<p>A. Power is always 50% regardless of effect size<br>
+B. Power increases as the true effect size increases<br>
+C. Power is unrelated to sample size<br>
+D. Power cannot be calculated for small samples</p>
+<hr>
+<p><strong>Q7.</strong> A study finds p=0.048 with n=8 per group. Which concern is MOST valid?</p>
+<p>A. The result is definitely a false positive<br>
+B. With small n, results near the significance threshold should be interpreted cautiously<br>
+C. Small samples always produce spurious results<br>
+D. The p-value is meaningless with n&lt;30</p>
+<hr>
+<p><strong>Q8.</strong> When is a small sample (n&lt;30) potentially SUFFICIENT?</p>
+<p>A. Never—all research requires n≥100<br>
+B. When the effect is very large and variance is low<br>
+C. Only for qualitative research<br>
+D. When using machine learning methods</p>
+<hr>
+<p><strong>Q9.</strong> Which is a legitimate reason for small sample size?</p>
+<p>A. The researcher is lazy<br>
+B. The population is rare (e.g., a genetic disorder affecting 1 in 100,000)<br>
+C. The researcher wants to save time<br>
+D. Small samples are always preferable</p>
+<hr>
+<p><strong>Q10.</strong> A researcher states: “My study has n=15, so I’ll just use nonparametric tests.” What is the problem with this reasoning?</p>
+<p>A. Nonparametric tests require n≥30<br>
+B. The choice of test should depend on the data characteristics and research question, not just sample size<br>
+C. Nonparametric tests are always inferior<br>
+D. Parametric tests always work regardless of assumptions</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers and Explanations
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Q1. Answer: B</strong><br>
+<em>Explanation</em>: Statistical power is the probability of correctly rejecting a false null hypothesis when a specific effect size exists. With 25% power, there is a 75% chance of a Type II error (failing to detect a real effect of d=0.5). This concept is directly illustrated in the power curve figure in this chapter, which shows how power declines as sample size decreases.</p>
+<p><strong>Q2. Answer: B</strong><br>
+<em>Explanation</em>: The Central Limit Theorem requires sufficient sample size for sampling distributions to approximate normality. With n=15, especially if data are skewed or have outliers, parametric test assumptions may be violated. This is why the chapter emphasizes that “large-sample approximations can fail when n is small, leading to inaccurate p-values and confidence intervals.”</p>
+<p><strong>Q3. Answer: B</strong><br>
+<em>Explanation</em>: Focused, binary comparisons are feasible with small samples. Complex multivariate questions (A, C, D) require much larger samples to avoid overfitting and ensure stable estimates. The chapter states: “focused questions about a single outcome or a few key comparisons can often be addressed with modest samples.”</p>
+<p><strong>Q4. Answer: C</strong><br>
+<em>Explanation</em>: The wide confidence interval reflects substantial uncertainty. The study cannot rule out small negative effects (-2) or large positive effects (12). Non-significance with small n indicates insufficient evidence, not absence of effect. This aligns with the chapter’s emphasis on focusing “on estimation rather than binary significance testing when n is limited.”</p>
+<p><strong>Q5. Answer: C</strong><br>
+<em>Explanation</em>: Continuous measures preserve all variation in the data. Dichotomizing or coarsening into categories discards information, reduces statistical power, and limits the ability to detect effects. This principle underlies the recommendation to select outcome measures carefully when working with small samples.</p>
+<p><strong>Q6. Answer: B</strong><br>
+<em>Explanation</em>: Statistical power increases with larger effect sizes, larger sample sizes, and lower variance. Even with n=10, a very large effect (d=1.5) might have adequate power, while a small effect (d=0.2) would not. This is demonstrated in the power curve plot showing different effect sizes (d=0.3, 0.5, 0.8).</p>
+<p><strong>Q7. Answer: B</strong><br>
+<em>Explanation</em>: P-values near cutoffs (0.05) are highly variable with small samples. A slight change in data or analysis could flip the result. Emphasis should be on effect size magnitude and confidence intervals, not borderline p-values. The chapter warns that “small samples amplify the impact of outliers and violations of distributional assumptions.”</p>
+<p><strong>Q8. Answer: B</strong><br>
+<em>Explanation</em>: If the true effect is very large (e.g., d=2.0) and within-group variability is small, even modest samples can provide clear evidence. Examples: a new drug that doubles survival rates, or a teaching method that improves scores by 30 points. The chapter acknowledges that some questions “can only be addressed with small datasets.”</p>
+<p><strong>Q9. Answer: B</strong><br>
+<em>Explanation</em>: Rare populations, pilot studies, ethical constraints (minimizing burden on vulnerable groups), and resource limitations in SIDS contexts are all legitimate reasons for small samples. The chapter explicitly mentions “clinical studies of rare diseases” as one context where “small samples are the norm rather than the exception.”</p>
+<p><strong>Q10. Answer: B</strong><br>
+<em>Explanation</em>: Test selection should consider: outcome type (continuous, ordinal, binary), distributional properties (normality, skewness), and research question. Small n is ONE consideration, but not the sole criterion. The chapter states: “The choice of method should match the research question, the type of outcome, and the sample size actually available.”</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="smoke-test" class="level3" data-number="1.1.9">
+<h3 data-number="1.1.9" class="anchored" data-anchor-id="smoke-test"><span class="header-section-number">1.1.9</span> Smoke Test</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run a simple Mann–Whitney test to verify code</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">8</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(x, y), <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"X"</span>, <span class="st">"Y"</span>), <span class="at">each =</span> <span class="dv">6</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox_test</span>(test_data, value <span class="sc">~</span> group)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 7
+  .y.   group1 group2    n1    n2 statistic      p
+* &lt;chr&gt; &lt;chr&gt;  &lt;chr&gt;  &lt;int&gt; &lt;int&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+1 value X      Y          6     6        33 0.0175</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="chapter-2.-questions-and-outcomes-that-fit-small-n" class="level2" data-number="1.2">
+<h2 data-number="1.2" class="anchored" data-anchor-id="chapter-2.-questions-and-outcomes-that-fit-small-n"><span class="header-section-number">1.2</span> Chapter 2. Questions and Outcomes that Fit Small n</h2>
+<section id="learning-objectives-1" class="level3" data-number="1.2.1">
+<h3 data-number="1.2.1" class="anchored" data-anchor-id="learning-objectives-1"><span class="header-section-number">1.2.1</span> Learning Objectives</h3>
+<p>By the end of this chapter, you will be able to:</p>
+<p><strong>Conceptual Understanding</strong> - ✓ Distinguish between exploratory and confirmatory research aims - ✓ Understand when to prioritize effect size estimation over hypothesis testing - ✓ Recognize which research questions are realistic for small samples - ✓ Explain the relationship between outcome measurement and sample size requirements</p>
+<p><strong>Practical Skills</strong> - ✓ Formulate focused research questions appropriate for limited data - ✓ Select outcome measures that yield interpretable results with small n - ✓ Design studies that maximize information from modest samples - ✓ Calculate minimum detectable effects for planned sample sizes</p>
+<p><strong>Critical Evaluation</strong> - ✓ Assess whether complex multivariate questions are feasible with available data - ✓ Evaluate trade-offs between breadth (many variables) and depth (focused questions) - ✓ Critique overly ambitious research designs given sample constraints</p>
+<p><strong>Application</strong> - ✓ Design pilot studies with clear, answerable questions - ✓ Choose between continuous, ordinal, and binary outcome measures - ✓ Justify research scope and question framing in proposals and manuscripts</p>
+</section>
+<section id="framing-realistic-research-questions" class="level3" data-number="1.2.2">
+<h3 data-number="1.2.2" class="anchored" data-anchor-id="framing-realistic-research-questions"><span class="header-section-number">1.2.2</span> Framing Realistic Research Questions</h3>
+<p>Not all research questions are equally suited to small samples. Broad, multivariate questions (such as identifying dozens of predictors or testing complex mediation models) typically require large datasets. In contrast, focused questions about a single outcome or a few key comparisons can often be addressed with modest samples.</p>
+<p>When planning a small-sample study, prioritise clarity and specificity. Instead of asking “What are all the factors that influence patient adherence?” ask “Does a brief reminder intervention improve adherence compared to standard care?” The latter question is binary, focused, and testable with a small randomised trial.</p>
+<p>Similarly, consider whether the study is exploratory or confirmatory. Exploratory studies generate hypotheses, describe patterns, and refine measurement instruments. They do not require large samples, but results should be interpreted cautiously and replicated before drawing firm conclusions. Confirmatory studies test prespecified hypotheses and require sufficient statistical power. With small samples, power is limited, so confirmatory aims should be modest and well-justified.</p>
+</section>
+<section id="choosing-appropriate-outcomes" class="level3" data-number="1.2.3">
+<h3 data-number="1.2.3" class="anchored" data-anchor-id="choosing-appropriate-outcomes"><span class="header-section-number">1.2.3</span> Choosing Appropriate Outcomes</h3>
+<p>The type of outcome variable influences which methods are feasible and how much information can be extracted from limited data. Binary outcomes (yes/no, success/failure) are common but carry less information per observation than continuous or ordinal measures. If your sample is small, consider whether a continuous or ordinal outcome might capture more variation and yield more precise inferences.</p>
+<p>For example, rather than dichotomising patient improvement into “improved” versus “not improved”, use a continuous measure of symptom severity or an ordinal scale with several levels. This preserves information and increases statistical efficiency. However, if the outcome is inherently binary (such as survival within 30 days), do not force it into a continuous form.</p>
+<p>Count outcomes (number of adverse events, number of customer complaints) are also informative but may be sparse when samples are small. Exact Poisson tests and negative binomial models can handle low counts, but very sparse data (many zeros, few events) may require careful interpretation or resampling methods.</p>
+<section id="outcome-selection-decision-guide" class="level4" data-number="1.2.3.1">
+<h4 data-number="1.2.3.1" class="anchored" data-anchor-id="outcome-selection-decision-guide"><span class="header-section-number">1.2.3.1</span> Outcome Selection Decision Guide</h4>
+<ol type="1">
+<li><strong>Start with the construct of interest.</strong> Can it be measured on a genuine numeric scale (e.g., duration, dosage, test score)?</li>
+</ol>
+<ul>
+<li><strong>Yes</strong> → Prefer a continuous measure. Report means/medians with confidence intervals; consider transformations if the scale is skewed.</li>
+<li><strong>No/uncertain</strong> → Proceed to step 2.</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Can respondents make ordered distinctions beyond “yes/no”?</strong></li>
+</ol>
+<ul>
+<li><strong>Yes</strong> → Use an ordinal scale with 4–7 categories. Analyse with rank-based or ordinal models; report medians or cumulative odds ratios.</li>
+<li><strong>No</strong> → Retain a binary outcome. Use exact or penalised methods and emphasise risk differences or odds ratios with wide intervals.</li>
+</ul>
+<ol start="3" type="1">
+<li><strong>Is the event a count that can exceed one per subject?</strong></li>
+</ol>
+<ul>
+<li><strong>Yes</strong> → Model counts directly (Poisson, negative binomial, or exact tests). Report event rates and their uncertainty.</li>
+</ul>
+<ol start="4" type="1">
+<li><strong>Document the rationale.</strong> Explain why the chosen outcome scale is the most informative and feasible given participant burden, measurement error, and sample size.</li>
+</ol>
+</section>
+</section>
+<section id="effect-sizes-and-estimation" class="level3" data-number="1.2.4">
+<h3 data-number="1.2.4" class="anchored" data-anchor-id="effect-sizes-and-estimation"><span class="header-section-number">1.2.4</span> Effect Sizes and Estimation</h3>
+<p>In small-sample research, point estimates of effect sizes (differences in means, odds ratios, correlation coefficients) are often more useful than p-values alone. A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect.</p>
+<p>When reporting results, emphasise effect sizes and uncertainty intervals. For example, “The median difference in satisfaction scores was 1.5 points (95% CI: 0.5 to 2.5)” is more informative than “The difference was statistically significant (p = 0.03)”. Effect size estimates help readers judge practical importance and facilitate meta-analysis or future sample size planning.</p>
+</section>
+<section id="example-outcome-selection-in-a-pilot-study" class="level3" data-number="1.2.5">
+<h3 data-number="1.2.5" class="anchored" data-anchor-id="example-outcome-selection-in-a-pilot-study"><span class="header-section-number">1.2.5</span> Example: Outcome Selection in a Pilot Study</h3>
+<p>Suppose you are evaluating a pilot training programme with 18 participants. You have two outcome options: (1) binary pass/fail on a final assessment, or (2) a continuous score (0–100) on the same assessment.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">18</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate continuous scores</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">68</span>, <span class="at">sd =</span> <span class="dv">12</span>))</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="fu">pmin</span>(<span class="dv">100</span>, scores))  <span class="co"># clamp to [0, 100]</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Create binary outcome: pass if score &gt;= 60</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>pass_fail <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(scores <span class="sc">&gt;=</span> <span class="dv">60</span>, <span class="st">"Pass"</span>, <span class="st">"Fail"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>data_pilot <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">participant =</span> <span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">score =</span> scores,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome =</span> pass_fail</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics for continuous outcome</span></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data_pilot<span class="sc">$</span>score)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+   47.0    66.0    70.0    69.9    75.8    83.0 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Frequency table for binary outcome</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data_pilot<span class="sc">$</span>outcome)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Fail Pass 
+   1   17 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The continuous outcome carries more information</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># We can estimate a mean and standard error:</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mean_score <span class="ot">&lt;-</span> <span class="fu">mean</span>(data_pilot<span class="sc">$</span>score)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>se_score <span class="ot">&lt;-</span> <span class="fu">sd</span>(data_pilot<span class="sc">$</span>score) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> mean_score <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se_score</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> mean_score <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se_score</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean score:"</span>, <span class="fu">round</span>(mean_score, <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean score: 69.9 </code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"95% CI: ["</span>, <span class="fu">round</span>(ci_lower, <span class="dv">1</span>), <span class="st">","</span>, <span class="fu">round</span>(ci_upper, <span class="dv">1</span>), <span class="st">"]</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>95% CI: [66,73.8]</code></pre>
+</div>
+</div>
+<p>By retaining the continuous score, we obtain a precise estimate of average performance with a confidence interval. Had we dichotomised into pass/fail, we would only know that 14 out of 18 passed, which provides less information about the central tendency and spread of performance.</p>
+<p>Interpretation: The continuous outcome allows us to estimate the mean score with reasonable precision. The confidence interval indicates the range of plausible population means. If the goal is to understand typical performance (not just pass rates), the continuous measure is more informative.</p>
+</section>
+<section id="research-design-considerations" class="level3" data-number="1.2.6">
+<h3 data-number="1.2.6" class="anchored" data-anchor-id="research-design-considerations"><span class="header-section-number">1.2.6</span> Research Design Considerations</h3>
+<p>Small-sample studies benefit from tight experimental control. Paired or matched designs (before–after, crossover, matched-pair comparisons) reduce variability by comparing each unit to itself or a closely matched control. This within-unit comparison can yield precise inferences even when the number of units is small.</p>
+<p>Stratification and blocking can also improve efficiency by accounting for known sources of variation. For example, if you are comparing two teaching methods in a small class, stratify by prior achievement level to reduce heterogeneity within each comparison.</p>
+<p>Finally, consider sequential or adaptive designs if feasible. Rather than committing to a fixed sample size in advance, you might plan an interim analysis and decide whether to stop early (if results are clear) or continue (if uncertainty remains). Bayesian methods are well-suited to adaptive designs, as they naturally update beliefs as data accumulate.</p>
+</section>
+<section id="designing-pilot-studies" class="level3" data-number="1.2.7">
+<h3 data-number="1.2.7" class="anchored" data-anchor-id="designing-pilot-studies"><span class="header-section-number">1.2.7</span> Designing Pilot Studies</h3>
+<p>Pilot studies serve specific purposes: assessing feasibility (recruitment rates, attrition, protocol adherence), refining measurement instruments, and estimating variability to inform future sample size calculations. With very small <em>n</em> (often 10–30 participants), focus on collecting process metrics and precision estimates rather than hypothesis testing. Report:</p>
+<ul>
+<li><strong>Primary feasibility outcomes</strong> (e.g., proportion screened who consent, time to complete assessments).</li>
+<li><strong>Preliminary effect estimates</strong> with wide confidence intervals, making clear that they are exploratory.</li>
+<li><strong>Adaptations for the main study</strong>, especially where procedures proved onerous or data quality issues emerged.</li>
+</ul>
+<p>Guidance: choose a pilot sample large enough to detect major logistical problems (often 12–20 per arm is sufficient), prespecify success criteria (such as acceptable recruitment rate), and plan in advance how you will decide whether to proceed to a full trial.</p>
+</section>
+<section id="key-takeaways-1" class="level3" data-number="1.2.8">
+<h3 data-number="1.2.8" class="anchored" data-anchor-id="key-takeaways-1"><span class="header-section-number">1.2.8</span> Key Takeaways</h3>
+<ul>
+<li>Frame research questions narrowly and realistically given the sample size constraints.</li>
+<li>Distinguish between exploratory (hypothesis-generating) and confirmatory (hypothesis-testing) aims.</li>
+<li>Prefer continuous or ordinal outcomes over binary outcomes when possible, to maximise information per observation.</li>
+<li>Report effect sizes and confidence intervals, not just p-values, to convey magnitude and precision.</li>
+<li>Use paired, matched, or stratified designs to reduce variability and improve efficiency.</li>
+<li>Consider adaptive or sequential designs if ethically and practically feasible.</li>
+</ul>
+<hr>
+</section>
+<section id="self-assessment-quiz-1" class="level3" data-number="1.2.9">
+<h3 data-number="1.2.9" class="anchored" data-anchor-id="self-assessment-quiz-1"><span class="header-section-number">1.2.9</span> Self-Assessment Quiz</h3>
+<p>Test your understanding of the key concepts from Chapter 2. Answers and explanations are provided at the end.</p>
+<div class="callout callout-style-default callout-note no-icon callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Questions
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Q1.</strong> Which research question is better suited to small samples?</p>
+<p>A. “What is the relationship between 20 personality traits and job performance?”<br>
+B. “Does a brief mindfulness intervention reduce test anxiety compared to control?”<br>
+C. “Can we predict customer churn using all available behavioral data?”<br>
+D. “How do socioeconomic factors interact to predict health outcomes?”</p>
+<hr>
+<p><strong>Q2.</strong> An exploratory study (n=20) finds that meditation reduces anxiety (p=0.04, d=0.7). How should this be framed?</p>
+<p>A. “Meditation is proven effective”<br>
+B. “Preliminary evidence suggests meditation may reduce anxiety; replication needed”<br>
+C. “No conclusions can be drawn from n=20”<br>
+D. “The effect is definitely due to chance”</p>
+<hr>
+<p><strong>Q3.</strong> A researcher dichotomizes a continuous outcome (0-100 scale) into “high” (≥70) vs “low” (&lt;70). With n=25, what is the consequence?</p>
+<p>A. Power increases because binary outcomes are simpler<br>
+B. Power decreases because information is discarded<br>
+C. No effect on statistical power<br>
+D. Analysis becomes impossible</p>
+<hr>
+<p><strong>Q4.</strong> A study aims to detect a “small” effect (d=0.2) with 80% power. Approximately how many participants per group are needed?</p>
+<p>A. n=20 per group<br>
+B. n=50 per group<br>
+C. n=200 per group<br>
+D. n=500 per group</p>
+<hr>
+<p><strong>Q5.</strong> Which statement about pilot studies is CORRECT?</p>
+<p>A. Pilot studies should always test hypotheses<br>
+B. Pilot studies assess feasibility and refine procedures<br>
+C. Pilot studies require the same sample size as main studies<br>
+D. Pilot studies never provide useful effect size estimates</p>
+<hr>
+<p><strong>Q6.</strong> A researcher plans a study with n=15 per group but calculates they need n=50 per group for 80% power. What should they do?</p>
+<p>A. Proceed with n=15 and interpret p-values cautiously<br>
+B. Reframe the study as exploratory/pilot<br>
+C. Report minimum detectable effect (MDE) given n=15<br>
+D. All of the above</p>
+<hr>
+<p><strong>Q7.</strong> Which outcome is LEAST appropriate for n=20?</p>
+<p>A. Binary outcome (success/failure)<br>
+B. Ordinal outcome (1-7 Likert scale)<br>
+C. Continuous outcome (0-100 scale)<br>
+D. 50-item questionnaire with subscale factor analysis</p>
+<hr>
+<p><strong>Q8.</strong> A study comparing two teaching methods (n=12 per class) finds no significant difference (p=0.18, d=0.45). The conclusion should be:</p>
+<p>A. “The two methods are equally effective”<br>
+B. “The study found no evidence of a difference, but was underpowered to detect medium effects”<br>
+C. “Teaching method has no effect on learning”<br>
+D. “The null hypothesis is confirmed”</p>
+<hr>
+<p><strong>Q9.</strong> When choosing between a paired and independent-groups design with small samples, which is generally preferable?</p>
+<p>A. Always use independent groups—pairing is only for large samples<br>
+B. Paired designs reduce within-subject variability and increase power<br>
+C. The choice makes no difference statistically<br>
+D. Paired designs require larger samples than independent designs</p>
+<hr>
+<p><strong>Q10.</strong> A pilot study with n=18 yields a mean difference of 5 points (95% CI: [0.2, 9.8]). What is the appropriate next step?</p>
+<p>A. Conclude the intervention is effective and implement widely<br>
+B. Use this estimate to plan a fully-powered confirmatory study<br>
+C. Abandon the research because the sample was too small<br>
+D. Report only the p-value and ignore the confidence interval</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip no-icon callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Answers and Explanations
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p><strong>Q1. Answer: B</strong><br>
+<em>Explanation</em>: Focused, binary comparisons with a single primary outcome are feasible with small samples. Multivariate questions (A, C, D) require large samples to estimate many parameters reliably. The chapter emphasizes: “focused questions about a single outcome or a few key comparisons can often be addressed with modest samples.”</p>
+<p><strong>Q2. Answer: B</strong><br>
+<em>Explanation</em>: Exploratory studies with small samples generate hypotheses but require replication. Results should be framed as preliminary, with acknowledgment of limited power and potential for Type I error. As stated in the chapter: “Exploratory studies generate hypotheses, describe patterns… They do not require large samples, but results should be interpreted cautiously and replicated before drawing firm conclusions.”</p>
+<p><strong>Q3. Answer: B</strong><br>
+<em>Explanation</em>: Dichotomizing continuous variables discards information about the magnitude of differences, reduces statistical power, and can create spurious findings at arbitrary cut-points. The chapter clearly states: “rather than dichotomising patient improvement into ‘improved’ versus ‘not improved’, use a continuous measure… This preserves information and increases statistical efficiency.”</p>
+<p><strong>Q4. Answer: C</strong><br>
+<em>Explanation</em>: Detecting small effects requires large samples. For d=0.2 with 80% power and α=0.05 (two-tailed), approximately n=393 per group is needed. With small samples, only large effects (d≥0.8) can be reliably detected. This aligns with the power curve from Chapter 1 showing that detecting d=0.3 effects is beyond reach of small samples.</p>
+<p><strong>Q5. Answer: B</strong><br>
+<em>Explanation</em>: Pilot studies (typically n=10-30) assess feasibility (recruitment rates, protocol adherence, measurement properties), refine procedures, and provide preliminary effect size estimates for sample size planning—but are not powered for definitive hypothesis testing. The chapter’s “Designing Pilot Studies” section explicitly states: “focus on collecting process metrics and precision estimates rather than hypothesis testing.”</p>
+<p><strong>Q6. Answer: D</strong><br>
+<em>Explanation</em>: When desired sample size is infeasible: (1) proceed but interpret with appropriate caution, (2) frame as exploratory, (3) report what effect sizes CAN be detected (MDE), (4) emphasize effect size estimation over hypothesis testing. This integrates guidance from both the “Framing Realistic Research Questions” and “Effect Sizes and Estimation” sections.</p>
+<p><strong>Q7. Answer: D</strong><br>
+<em>Explanation</em>: Factor analysis requires n≥100-200 (ideally 5-10 observations per item). With n=20 and 50 items, factor analysis would be completely unreliable. This reflects general principles about matching analysis complexity to sample size discussed throughout the chapter.</p>
+<p><strong>Q8. Answer: B</strong><br>
+<em>Explanation</em>: Non-significance with small samples indicates insufficient evidence, not proof of no effect. A medium effect (d=0.45) is plausible given the CI, but the study lacked power to detect it definitively. The chapter emphasizes: “A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect.”</p>
+<p><strong>Q9. Answer: B</strong><br>
+<em>Explanation</em>: Paired designs reduce within-subject variability and increase power. The chapter’s “Research Design Considerations” section states: “Paired or matched designs (before–after, crossover, matched-pair comparisons) reduce variability by comparing each unit to itself or a closely matched control. This within-unit comparison can yield precise inferences even when the number of units is small.”</p>
+<p><strong>Q10. Answer: B</strong><br>
+<em>Explanation</em>: Use this estimate to plan a fully-powered confirmatory study. Pilot studies provide preliminary effect estimates and variability information needed for sample size planning. The “Designing Pilot Studies” section recommends reporting “Preliminary effect estimates with wide confidence intervals, making clear that they are exploratory” and using pilots to “estimating variability to inform future sample size calculations.”</p>
+</div>
+</div>
+</div>
+<hr>
+</section>
+<section id="smoke-test-1" class="level3" data-number="1.2.10">
+<h3 data-number="1.2.10" class="anchored" data-anchor-id="smoke-test-1"><span class="header-section-number">1.2.10</span> Smoke Test</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run outcome comparison example</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>scores_test <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">70</span>, <span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(scores_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 73.6</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(scores_test)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 5.103</code></pre>
+</div>
+</div>
+<hr>
+</section>
+</section>
+<section id="summary-of-part-a" class="level2" data-number="1.3">
+<h2 data-number="1.3" class="anchored" data-anchor-id="summary-of-part-a"><span class="header-section-number">1.3</span> Summary of Part A</h2>
+<p>In Part A, we established that small-sample research is both common and legitimate. We reviewed why large-sample approximations can fail with limited data and introduced exact, resampling, and robust methods as alternatives. We also discussed how to formulate research questions and select outcomes that are realistic and informative given small sample sizes. The next part will address data collection and preparation strategies tailored to small studies.</p>
+
+
+<!-- -->
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../index.html" class="pagination-link" aria-label="Preface">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Preface</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/part-b-data-collection.html" class="pagination-link" aria-label="Part B: Data Collection and Preparation">
+        <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Part B: Data Collection and Preparation</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Part A: Foundations</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>This part establishes why small-sample research is important and how to frame research questions that align with limited data availability.</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## Chapter 1. Why Small-Sample Research Matters</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="fu">### Learning Objectives</span></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>**Conceptual Understanding**</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Explain why small samples are common in applied research settings</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Identify practical, ethical, and logistical constraints that limit sample size</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Understand how large-sample approximations fail with modest datasets</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Recognize contexts where small-sample methods are necessary and appropriate</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>**Practical Skills**</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Calculate statistical power for different sample sizes</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Create power curves to visualize sample size trade-offs</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Distinguish between situations requiring small-sample vs large-sample methods</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a>**Critical Evaluation**</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Assess when conventional parametric tests become unreliable</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Evaluate the impact of outliers and assumption violations in small samples</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Critique the "apologetic" framing of small-sample research</span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a>**Application**</span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Justify research decisions when large samples are infeasible</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Select appropriate statistical methods given sample size constraints</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Communicate small-sample research findings with appropriate caveats</span>
+<span id="cb18-33"><a href="#cb18-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-34"><a href="#cb18-34" aria-hidden="true" tabindex="-1"></a><span class="fu">### Why Small Samples Are Often Unavoidable</span></span>
+<span id="cb18-35"><a href="#cb18-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-36"><a href="#cb18-36" aria-hidden="true" tabindex="-1"></a>Many textbooks assume that researchers can collect hundreds or thousands of observations. In practice, however, numerous research contexts yield small samples. Clinical studies of rare diseases, evaluations of pilot programmes, **classroom-based educational interventions**, community-based participatory research, and studies in Small Island Developing States (SIDS) often involve fewer than 100 participants. Resource constraints, logistical barriers, and ethical considerations (such as minimising burden on vulnerable populations) make small samples the norm rather than the exception.</span>
+<span id="cb18-37"><a href="#cb18-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-38"><a href="#cb18-38" aria-hidden="true" tabindex="-1"></a>**Examples of small-sample contexts:**</span>
+<span id="cb18-39"><a href="#cb18-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-40"><a href="#cb18-40" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Health sciences:** Clinical trials for rare diseases (n &lt; 30), pilot studies testing feasibility before large RCTs, single-site hospital studies.</span>
+<span id="cb18-41"><a href="#cb18-41" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Education:** Evaluating a new teaching method in a single classroom (n = 15-25), assessing specialized programs for gifted/special education students, teacher professional development studies.</span>
+<span id="cb18-42"><a href="#cb18-42" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Business:** A/B tests in niche markets, customer satisfaction surveys for small businesses, startup product testing with limited users.</span>
+<span id="cb18-43"><a href="#cb18-43" aria-hidden="true" tabindex="-1"></a><span class="ss">-   </span>**Social sciences:** Studies in remote communities, indigenous populations, or specialized occupational groups where the total accessible population is small.</span>
+<span id="cb18-44"><a href="#cb18-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-45"><a href="#cb18-45" aria-hidden="true" tabindex="-1"></a>Despite their ubiquity, small samples are often treated as deficient or temporary. Researchers may apologise for limited data, or reviewers may demand larger samples without considering feasibility. This mindset overlooks the fact that many important questions can only be addressed with small datasets. Rather than apologising, researchers should select methods that are appropriate for the sample size at hand.</span>
+<span id="cb18-46"><a href="#cb18-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-47"><a href="#cb18-47" aria-hidden="true" tabindex="-1"></a><span class="fu">### When Large-Sample Approximations Fail</span></span>
+<span id="cb18-48"><a href="#cb18-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-49"><a href="#cb18-49" aria-hidden="true" tabindex="-1"></a>Classical parametric tests (t-tests, ANOVA, standard logistic regression) rely on asymptotic theory. They assume that sampling distributions approximate normality as sample size increases. With small samples, these approximations can be inaccurate. P-values may be misleading, confidence intervals may have poor coverage, and maximum likelihood estimates may be unstable or even undefined (for example, in logistic regression with separation).</span>
+<span id="cb18-50"><a href="#cb18-50" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-51"><a href="#cb18-51" aria-hidden="true" tabindex="-1"></a>Small samples also amplify the impact of outliers and violations of distributional assumptions. A single extreme value can dominate a mean or distort a regression slope. Skewed or heavy-tailed distributions, which cause few problems in large samples, become serious concerns when n is small.</span>
+<span id="cb18-52"><a href="#cb18-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-53"><a href="#cb18-53" aria-hidden="true" tabindex="-1"></a><span class="fu">### Visualising Power Trade-offs</span></span>
+<span id="cb18-54"><a href="#cb18-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-55"><a href="#cb18-55" aria-hidden="true" tabindex="-1"></a>Even modest reductions in sample size can have a dramatic impact on statistical power. The figure below uses the exact <span class="in">`power.t.test()`</span> function to illustrate how power declines for medium-sized effects as per-group sample size drops from 60 to 10. Curves are shown for three standardised effect sizes (Cohen's *d* = 0.3, 0.5, and 0.8).</span>
+<span id="cb18-56"><a href="#cb18-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-59"><a href="#cb18-59" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-60"><a href="#cb18-60" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: power-curve-plot</span></span>
+<span id="cb18-61"><a href="#cb18-61" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Power curves illustrating sensitivity to sample size."</span></span>
+<span id="cb18-62"><a href="#cb18-62" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-63"><a href="#cb18-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-64"><a href="#cb18-64" aria-hidden="true" tabindex="-1"></a>effect_sizes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.8</span>)</span>
+<span id="cb18-65"><a href="#cb18-65" aria-hidden="true" tabindex="-1"></a>n_values <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">10</span>, <span class="dv">60</span>, <span class="at">by =</span> <span class="dv">5</span>)</span>
+<span id="cb18-66"><a href="#cb18-66" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fl">0.05</span></span>
+<span id="cb18-67"><a href="#cb18-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-68"><a href="#cb18-68" aria-hidden="true" tabindex="-1"></a>power_grid <span class="ot">&lt;-</span> <span class="fu">crossing</span>(<span class="at">n =</span> n_values, <span class="at">d =</span> effect_sizes) <span class="sc">%&gt;%</span></span>
+<span id="cb18-69"><a href="#cb18-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">power =</span> <span class="fu">map2_dbl</span>(</span>
+<span id="cb18-70"><a href="#cb18-70" aria-hidden="true" tabindex="-1"></a>    n,</span>
+<span id="cb18-71"><a href="#cb18-71" aria-hidden="true" tabindex="-1"></a>    d,</span>
+<span id="cb18-72"><a href="#cb18-72" aria-hidden="true" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">power.t.test</span>(</span>
+<span id="cb18-73"><a href="#cb18-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">n =</span> .x,</span>
+<span id="cb18-74"><a href="#cb18-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">delta =</span> .y,</span>
+<span id="cb18-75"><a href="#cb18-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">sd =</span> <span class="dv">1</span>,</span>
+<span id="cb18-76"><a href="#cb18-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">sig.level =</span> alpha,</span>
+<span id="cb18-77"><a href="#cb18-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">type =</span> <span class="st">"two.sample"</span>,</span>
+<span id="cb18-78"><a href="#cb18-78" aria-hidden="true" tabindex="-1"></a>      <span class="at">alternative =</span> <span class="st">"two.sided"</span></span>
+<span id="cb18-79"><a href="#cb18-79" aria-hidden="true" tabindex="-1"></a>    )<span class="sc">$</span>power</span>
+<span id="cb18-80"><a href="#cb18-80" aria-hidden="true" tabindex="-1"></a>  ))</span>
+<span id="cb18-81"><a href="#cb18-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-82"><a href="#cb18-82" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(power_grid, <span class="fu">aes</span>(<span class="at">x =</span> n, <span class="at">y =</span> power, <span class="at">colour =</span> <span class="fu">factor</span>(d))) <span class="sc">+</span></span>
+<span id="cb18-83"><a href="#cb18-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">linewidth =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb18-84"><a href="#cb18-84" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb18-85"><a href="#cb18-85" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.80</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"grey40"</span>) <span class="sc">+</span></span>
+<span id="cb18-86"><a href="#cb18-86" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_brewer</span>(<span class="at">palette =</span> <span class="st">"Set1"</span>, <span class="at">name =</span> <span class="st">"Effect size (d)"</span>) <span class="sc">+</span></span>
+<span id="cb18-87"><a href="#cb18-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">percent_format</span>(<span class="at">accuracy =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb18-88"><a href="#cb18-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb18-89"><a href="#cb18-89" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Sample size per group"</span>,</span>
+<span id="cb18-90"><a href="#cb18-90" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Power"</span>,</span>
+<span id="cb18-91"><a href="#cb18-91" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Power drops steeply as per-group sample size decreases"</span>,</span>
+<span id="cb18-92"><a href="#cb18-92" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Dashed line marks the conventional 80% power threshold"</span></span>
+<span id="cb18-93"><a href="#cb18-93" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb18-94"><a href="#cb18-94" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">12</span>)</span>
+<span id="cb18-95"><a href="#cb18-95" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-96"><a href="#cb18-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-97"><a href="#cb18-97" aria-hidden="true" tabindex="-1"></a>Interpretation: With medium effects (*d* ≈ 0.5), power slips below 50% once per-group sample size falls beneath about 20 participants. Detecting smaller effects (*d* ≈ 0.3) would require many more observations than are typically feasible in small-sample settings. This visual reinforces the need to report minimum detectable effects and to focus on estimation rather than binary significance testing when *n* is limited.</span>
+<span id="cb18-98"><a href="#cb18-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-99"><a href="#cb18-99" aria-hidden="true" tabindex="-1"></a><span class="fu">### Appropriate Methods for Small Samples</span></span>
+<span id="cb18-100"><a href="#cb18-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-101"><a href="#cb18-101" aria-hidden="true" tabindex="-1"></a>Fortunately, a suite of exact, resampling-based, and robust methods can provide valid inferences with limited data. Exact tests (such as Fisher's exact test, exact binomial tests, and exact Poisson tests) compute p-values directly from the combinatorial distribution of the data, without relying on asymptotic approximations. Resampling methods (bootstrap and permutation tests) use the observed data to approximate the sampling distribution, often yielding more accurate inferences than large-sample formulas.</span>
+<span id="cb18-102"><a href="#cb18-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-103"><a href="#cb18-103" aria-hidden="true" tabindex="-1"></a>Nonparametric rank-based tests (Mann–Whitney U, Wilcoxon signed-rank, Kruskal–Wallis) make fewer distributional assumptions and are less sensitive to outliers. Penalised regression (Firth logistic regression, ridge, LASSO) can stabilise coefficient estimates when events are sparse. Bayesian methods incorporate prior information and quantify uncertainty through posterior distributions, which remain well-defined even when data are limited.</span>
+<span id="cb18-104"><a href="#cb18-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-105"><a href="#cb18-105" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example: Comparing Two Small Groups</span></span>
+<span id="cb18-106"><a href="#cb18-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-107"><a href="#cb18-107" aria-hidden="true" tabindex="-1"></a>Suppose we wish to compare customer satisfaction scores (on a 1–10 scale) between two service branches, each with only 12 observations. The scores are ordinal and may not be normally distributed.</span>
+<span id="cb18-108"><a href="#cb18-108" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-111"><a href="#cb18-111" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-112"><a href="#cb18-112" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: example-mann-whitney</span></span>
+<span id="cb18-113"><a href="#cb18-113" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-114"><a href="#cb18-114" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
+<span id="cb18-115"><a href="#cb18-115" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-116"><a href="#cb18-116" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb18-117"><a href="#cb18-117" aria-hidden="true" tabindex="-1"></a>branch_a <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">8</span>)</span>
+<span id="cb18-118"><a href="#cb18-118" aria-hidden="true" tabindex="-1"></a>branch_b <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">6</span>)</span>
+<span id="cb18-119"><a href="#cb18-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-120"><a href="#cb18-120" aria-hidden="true" tabindex="-1"></a>data_satisfaction <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb18-121"><a href="#cb18-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">score =</span> <span class="fu">c</span>(branch_a, branch_b),</span>
+<span id="cb18-122"><a href="#cb18-122" aria-hidden="true" tabindex="-1"></a>  <span class="at">branch =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"B"</span>), <span class="at">each =</span> <span class="dv">12</span>)</span>
+<span id="cb18-123"><a href="#cb18-123" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-124"><a href="#cb18-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-125"><a href="#cb18-125" aria-hidden="true" tabindex="-1"></a><span class="co"># Mann–Whitney U test (Wilcoxon rank-sum)</span></span>
+<span id="cb18-126"><a href="#cb18-126" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">wilcox_test</span>(data_satisfaction, score <span class="sc">~</span> branch, <span class="at">detailed =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb18-127"><a href="#cb18-127" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb18-128"><a href="#cb18-128" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-129"><a href="#cb18-129" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-130"><a href="#cb18-130" aria-hidden="true" tabindex="-1"></a>The Mann–Whitney U test compares the distributions of the two groups without assuming normality. The p-value indicates whether the observed difference in ranks is unlikely under the null hypothesis of identical distributions. Because the test is based on ranks, it is robust to skewness and outliers.</span>
+<span id="cb18-131"><a href="#cb18-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-132"><a href="#cb18-132" aria-hidden="true" tabindex="-1"></a>Interpretation: If the p-value is small (typically p &lt; 0.05), we have evidence that customer satisfaction differs between the two branches. The effect size (such as rank-biserial correlation) quantifies the magnitude of the difference.</span>
+<span id="cb18-133"><a href="#cb18-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-134"><a href="#cb18-134" aria-hidden="true" tabindex="-1"></a><span class="fu">### Key Takeaways</span></span>
+<span id="cb18-135"><a href="#cb18-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-136"><a href="#cb18-136" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Small samples are common and legitimate in many research contexts, particularly in SIDS, clinical studies, and community-based research.</span>
+<span id="cb18-137"><a href="#cb18-137" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Large-sample approximations can fail when n is small, leading to inaccurate p-values and confidence intervals.</span>
+<span id="cb18-138"><a href="#cb18-138" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Exact tests, resampling methods, and rank-based procedures provide valid inferences without requiring large samples.</span>
+<span id="cb18-139"><a href="#cb18-139" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The choice of method should match the research question, the type of outcome, and the sample size actually available.</span>
+<span id="cb18-140"><a href="#cb18-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-141"><a href="#cb18-141" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-142"><a href="#cb18-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-143"><a href="#cb18-143" aria-hidden="true" tabindex="-1"></a><span class="fu">### Self-Assessment Quiz</span></span>
+<span id="cb18-144"><a href="#cb18-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-145"><a href="#cb18-145" aria-hidden="true" tabindex="-1"></a>Test your understanding of the key concepts from Chapter 1. Answers and explanations are provided at the end.</span>
+<span id="cb18-146"><a href="#cb18-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-147"><a href="#cb18-147" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon=false}</span>
+<span id="cb18-148"><a href="#cb18-148" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions</span></span>
+<span id="cb18-149"><a href="#cb18-149" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-150"><a href="#cb18-150" aria-hidden="true" tabindex="-1"></a>**Q1.** A study with n=12 per group has 25% power to detect d=0.5. What does this mean?</span>
+<span id="cb18-151"><a href="#cb18-151" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-152"><a href="#cb18-152" aria-hidden="true" tabindex="-1"></a>A. There is a 25% chance the treatment is effective  </span>
+<span id="cb18-153"><a href="#cb18-153" aria-hidden="true" tabindex="-1"></a>B. If the true effect is d=0.5, there is a 25% probability of detecting it (p&lt;0.05)  </span>
+<span id="cb18-154"><a href="#cb18-154" aria-hidden="true" tabindex="-1"></a>C. The Type I error rate is 25%  </span>
+<span id="cb18-155"><a href="#cb18-155" aria-hidden="true" tabindex="-1"></a>D. 25% of participants will show the effect</span>
+<span id="cb18-156"><a href="#cb18-156" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-157"><a href="#cb18-157" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-158"><a href="#cb18-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-159"><a href="#cb18-159" aria-hidden="true" tabindex="-1"></a>**Q2.** Why might large-sample approximations fail with n=15?</span>
+<span id="cb18-160"><a href="#cb18-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-161"><a href="#cb18-161" aria-hidden="true" tabindex="-1"></a>A. Computers cannot process small datasets  </span>
+<span id="cb18-162"><a href="#cb18-162" aria-hidden="true" tabindex="-1"></a>B. Sampling distributions may not be approximately normal  </span>
+<span id="cb18-163"><a href="#cb18-163" aria-hidden="true" tabindex="-1"></a>C. Effect sizes cannot be calculated  </span>
+<span id="cb18-164"><a href="#cb18-164" aria-hidden="true" tabindex="-1"></a>D. P-values are always incorrect</span>
+<span id="cb18-165"><a href="#cb18-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-166"><a href="#cb18-166" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-167"><a href="#cb18-167" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-168"><a href="#cb18-168" aria-hidden="true" tabindex="-1"></a>**Q3.** Which research question is MOST appropriate for n=20?</span>
+<span id="cb18-169"><a href="#cb18-169" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-170"><a href="#cb18-170" aria-hidden="true" tabindex="-1"></a>A. "What are all factors that predict customer loyalty?" (testing 15 predictors)  </span>
+<span id="cb18-171"><a href="#cb18-171" aria-hidden="true" tabindex="-1"></a>B. "Is there a difference in satisfaction between two service approaches?"  </span>
+<span id="cb18-172"><a href="#cb18-172" aria-hidden="true" tabindex="-1"></a>C. "How do age, gender, income, education, and occupation interact to predict outcomes?"  </span>
+<span id="cb18-173"><a href="#cb18-173" aria-hidden="true" tabindex="-1"></a>D. "Can we build a machine learning model to predict customer behavior?"</span>
+<span id="cb18-174"><a href="#cb18-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-175"><a href="#cb18-175" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-176"><a href="#cb18-176" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-177"><a href="#cb18-177" aria-hidden="true" tabindex="-1"></a>**Q4.** A pilot study with n=8 finds a mean difference of 5 points (95% CI: <span class="co">[</span><span class="ot">-2, 12</span><span class="co">]</span>, p=0.14). The correct interpretation is:</span>
+<span id="cb18-178"><a href="#cb18-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-179"><a href="#cb18-179" aria-hidden="true" tabindex="-1"></a>A. There is no effect  </span>
+<span id="cb18-180"><a href="#cb18-180" aria-hidden="true" tabindex="-1"></a>B. The effect is exactly 5 points  </span>
+<span id="cb18-181"><a href="#cb18-181" aria-hidden="true" tabindex="-1"></a>C. The study is underpowered; effects from -2 to 12 points are plausible  </span>
+<span id="cb18-182"><a href="#cb18-182" aria-hidden="true" tabindex="-1"></a>D. The null hypothesis is proven true</span>
+<span id="cb18-183"><a href="#cb18-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-184"><a href="#cb18-184" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-185"><a href="#cb18-185" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-186"><a href="#cb18-186" aria-hidden="true" tabindex="-1"></a>**Q5.** Which outcome measure provides the MOST statistical information per observation?</span>
+<span id="cb18-187"><a href="#cb18-187" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-188"><a href="#cb18-188" aria-hidden="true" tabindex="-1"></a>A. Binary (pass/fail)  </span>
+<span id="cb18-189"><a href="#cb18-189" aria-hidden="true" tabindex="-1"></a>B. Ordinal (grade A-F)  </span>
+<span id="cb18-190"><a href="#cb18-190" aria-hidden="true" tabindex="-1"></a>C. Continuous (test score 0-100)  </span>
+<span id="cb18-191"><a href="#cb18-191" aria-hidden="true" tabindex="-1"></a>D. All provide equal information</span>
+<span id="cb18-192"><a href="#cb18-192" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-193"><a href="#cb18-193" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-194"><a href="#cb18-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-195"><a href="#cb18-195" aria-hidden="true" tabindex="-1"></a>**Q6.** With n=10 per group, which statement about power is TRUE?</span>
+<span id="cb18-196"><a href="#cb18-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-197"><a href="#cb18-197" aria-hidden="true" tabindex="-1"></a>A. Power is always 50% regardless of effect size  </span>
+<span id="cb18-198"><a href="#cb18-198" aria-hidden="true" tabindex="-1"></a>B. Power increases as the true effect size increases  </span>
+<span id="cb18-199"><a href="#cb18-199" aria-hidden="true" tabindex="-1"></a>C. Power is unrelated to sample size  </span>
+<span id="cb18-200"><a href="#cb18-200" aria-hidden="true" tabindex="-1"></a>D. Power cannot be calculated for small samples</span>
+<span id="cb18-201"><a href="#cb18-201" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-202"><a href="#cb18-202" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-203"><a href="#cb18-203" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-204"><a href="#cb18-204" aria-hidden="true" tabindex="-1"></a>**Q7.** A study finds p=0.048 with n=8 per group. Which concern is MOST valid?</span>
+<span id="cb18-205"><a href="#cb18-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-206"><a href="#cb18-206" aria-hidden="true" tabindex="-1"></a>A. The result is definitely a false positive  </span>
+<span id="cb18-207"><a href="#cb18-207" aria-hidden="true" tabindex="-1"></a>B. With small n, results near the significance threshold should be interpreted cautiously  </span>
+<span id="cb18-208"><a href="#cb18-208" aria-hidden="true" tabindex="-1"></a>C. Small samples always produce spurious results  </span>
+<span id="cb18-209"><a href="#cb18-209" aria-hidden="true" tabindex="-1"></a>D. The p-value is meaningless with n&lt;30</span>
+<span id="cb18-210"><a href="#cb18-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-211"><a href="#cb18-211" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-212"><a href="#cb18-212" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-213"><a href="#cb18-213" aria-hidden="true" tabindex="-1"></a>**Q8.** When is a small sample (n&lt;30) potentially SUFFICIENT?</span>
+<span id="cb18-214"><a href="#cb18-214" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-215"><a href="#cb18-215" aria-hidden="true" tabindex="-1"></a>A. Never—all research requires n≥100  </span>
+<span id="cb18-216"><a href="#cb18-216" aria-hidden="true" tabindex="-1"></a>B. When the effect is very large and variance is low  </span>
+<span id="cb18-217"><a href="#cb18-217" aria-hidden="true" tabindex="-1"></a>C. Only for qualitative research  </span>
+<span id="cb18-218"><a href="#cb18-218" aria-hidden="true" tabindex="-1"></a>D. When using machine learning methods</span>
+<span id="cb18-219"><a href="#cb18-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-220"><a href="#cb18-220" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-221"><a href="#cb18-221" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-222"><a href="#cb18-222" aria-hidden="true" tabindex="-1"></a>**Q9.** Which is a legitimate reason for small sample size?</span>
+<span id="cb18-223"><a href="#cb18-223" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-224"><a href="#cb18-224" aria-hidden="true" tabindex="-1"></a>A. The researcher is lazy  </span>
+<span id="cb18-225"><a href="#cb18-225" aria-hidden="true" tabindex="-1"></a>B. The population is rare (e.g., a genetic disorder affecting 1 in 100,000)  </span>
+<span id="cb18-226"><a href="#cb18-226" aria-hidden="true" tabindex="-1"></a>C. The researcher wants to save time  </span>
+<span id="cb18-227"><a href="#cb18-227" aria-hidden="true" tabindex="-1"></a>D. Small samples are always preferable</span>
+<span id="cb18-228"><a href="#cb18-228" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-229"><a href="#cb18-229" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-230"><a href="#cb18-230" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-231"><a href="#cb18-231" aria-hidden="true" tabindex="-1"></a>**Q10.** A researcher states: "My study has n=15, so I'll just use nonparametric tests." What is the problem with this reasoning?</span>
+<span id="cb18-232"><a href="#cb18-232" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-233"><a href="#cb18-233" aria-hidden="true" tabindex="-1"></a>A. Nonparametric tests require n≥30  </span>
+<span id="cb18-234"><a href="#cb18-234" aria-hidden="true" tabindex="-1"></a>B. The choice of test should depend on the data characteristics and research question, not just sample size  </span>
+<span id="cb18-235"><a href="#cb18-235" aria-hidden="true" tabindex="-1"></a>C. Nonparametric tests are always inferior  </span>
+<span id="cb18-236"><a href="#cb18-236" aria-hidden="true" tabindex="-1"></a>D. Parametric tests always work regardless of assumptions</span>
+<span id="cb18-237"><a href="#cb18-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-238"><a href="#cb18-238" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb18-239"><a href="#cb18-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-240"><a href="#cb18-240" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip icon=false collapse="true"}</span>
+<span id="cb18-241"><a href="#cb18-241" aria-hidden="true" tabindex="-1"></a><span class="fu">## Answers and Explanations</span></span>
+<span id="cb18-242"><a href="#cb18-242" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-243"><a href="#cb18-243" aria-hidden="true" tabindex="-1"></a>**Q1. Answer: B**  </span>
+<span id="cb18-244"><a href="#cb18-244" aria-hidden="true" tabindex="-1"></a>*Explanation*: Statistical power is the probability of correctly rejecting a false null hypothesis when a specific effect size exists. With 25% power, there is a 75% chance of a Type II error (failing to detect a real effect of d=0.5). This concept is directly illustrated in the power curve figure in this chapter, which shows how power declines as sample size decreases.</span>
+<span id="cb18-245"><a href="#cb18-245" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-246"><a href="#cb18-246" aria-hidden="true" tabindex="-1"></a>**Q2. Answer: B**  </span>
+<span id="cb18-247"><a href="#cb18-247" aria-hidden="true" tabindex="-1"></a>*Explanation*: The Central Limit Theorem requires sufficient sample size for sampling distributions to approximate normality. With n=15, especially if data are skewed or have outliers, parametric test assumptions may be violated. This is why the chapter emphasizes that "large-sample approximations can fail when n is small, leading to inaccurate p-values and confidence intervals."</span>
+<span id="cb18-248"><a href="#cb18-248" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-249"><a href="#cb18-249" aria-hidden="true" tabindex="-1"></a>**Q3. Answer: B**  </span>
+<span id="cb18-250"><a href="#cb18-250" aria-hidden="true" tabindex="-1"></a>*Explanation*: Focused, binary comparisons are feasible with small samples. Complex multivariate questions (A, C, D) require much larger samples to avoid overfitting and ensure stable estimates. The chapter states: "focused questions about a single outcome or a few key comparisons can often be addressed with modest samples."</span>
+<span id="cb18-251"><a href="#cb18-251" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-252"><a href="#cb18-252" aria-hidden="true" tabindex="-1"></a>**Q4. Answer: C**  </span>
+<span id="cb18-253"><a href="#cb18-253" aria-hidden="true" tabindex="-1"></a>*Explanation*: The wide confidence interval reflects substantial uncertainty. The study cannot rule out small negative effects (-2) or large positive effects (12). Non-significance with small n indicates insufficient evidence, not absence of effect. This aligns with the chapter's emphasis on focusing "on estimation rather than binary significance testing when n is limited."</span>
+<span id="cb18-254"><a href="#cb18-254" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-255"><a href="#cb18-255" aria-hidden="true" tabindex="-1"></a>**Q5. Answer: C**  </span>
+<span id="cb18-256"><a href="#cb18-256" aria-hidden="true" tabindex="-1"></a>*Explanation*: Continuous measures preserve all variation in the data. Dichotomizing or coarsening into categories discards information, reduces statistical power, and limits the ability to detect effects. This principle underlies the recommendation to select outcome measures carefully when working with small samples.</span>
+<span id="cb18-257"><a href="#cb18-257" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-258"><a href="#cb18-258" aria-hidden="true" tabindex="-1"></a>**Q6. Answer: B**  </span>
+<span id="cb18-259"><a href="#cb18-259" aria-hidden="true" tabindex="-1"></a>*Explanation*: Statistical power increases with larger effect sizes, larger sample sizes, and lower variance. Even with n=10, a very large effect (d=1.5) might have adequate power, while a small effect (d=0.2) would not. This is demonstrated in the power curve plot showing different effect sizes (d=0.3, 0.5, 0.8).</span>
+<span id="cb18-260"><a href="#cb18-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-261"><a href="#cb18-261" aria-hidden="true" tabindex="-1"></a>**Q7. Answer: B**  </span>
+<span id="cb18-262"><a href="#cb18-262" aria-hidden="true" tabindex="-1"></a>*Explanation*: P-values near cutoffs (0.05) are highly variable with small samples. A slight change in data or analysis could flip the result. Emphasis should be on effect size magnitude and confidence intervals, not borderline p-values. The chapter warns that "small samples amplify the impact of outliers and violations of distributional assumptions."</span>
+<span id="cb18-263"><a href="#cb18-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-264"><a href="#cb18-264" aria-hidden="true" tabindex="-1"></a>**Q8. Answer: B**  </span>
+<span id="cb18-265"><a href="#cb18-265" aria-hidden="true" tabindex="-1"></a>*Explanation*: If the true effect is very large (e.g., d=2.0) and within-group variability is small, even modest samples can provide clear evidence. Examples: a new drug that doubles survival rates, or a teaching method that improves scores by 30 points. The chapter acknowledges that some questions "can only be addressed with small datasets."</span>
+<span id="cb18-266"><a href="#cb18-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-267"><a href="#cb18-267" aria-hidden="true" tabindex="-1"></a>**Q9. Answer: B**  </span>
+<span id="cb18-268"><a href="#cb18-268" aria-hidden="true" tabindex="-1"></a>*Explanation*: Rare populations, pilot studies, ethical constraints (minimizing burden on vulnerable groups), and resource limitations in SIDS contexts are all legitimate reasons for small samples. The chapter explicitly mentions "clinical studies of rare diseases" as one context where "small samples are the norm rather than the exception."</span>
+<span id="cb18-269"><a href="#cb18-269" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-270"><a href="#cb18-270" aria-hidden="true" tabindex="-1"></a>**Q10. Answer: B**  </span>
+<span id="cb18-271"><a href="#cb18-271" aria-hidden="true" tabindex="-1"></a>*Explanation*: Test selection should consider: outcome type (continuous, ordinal, binary), distributional properties (normality, skewness), and research question. Small n is ONE consideration, but not the sole criterion. The chapter states: "The choice of method should match the research question, the type of outcome, and the sample size actually available."</span>
+<span id="cb18-272"><a href="#cb18-272" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-273"><a href="#cb18-273" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb18-274"><a href="#cb18-274" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-275"><a href="#cb18-275" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-276"><a href="#cb18-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-277"><a href="#cb18-277" aria-hidden="true" tabindex="-1"></a><span class="fu">### Smoke Test</span></span>
+<span id="cb18-278"><a href="#cb18-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-281"><a href="#cb18-281" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-282"><a href="#cb18-282" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: smoke-test-mwu</span></span>
+<span id="cb18-283"><a href="#cb18-283" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run a simple Mann–Whitney test to verify code</span></span>
+<span id="cb18-284"><a href="#cb18-284" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rstatix)</span>
+<span id="cb18-285"><a href="#cb18-285" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb18-286"><a href="#cb18-286" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">8</span>)</span>
+<span id="cb18-287"><a href="#cb18-287" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">5</span>)</span>
+<span id="cb18-288"><a href="#cb18-288" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">tibble</span>(<span class="at">value =</span> <span class="fu">c</span>(x, y), <span class="at">group =</span> <span class="fu">rep</span>(<span class="fu">c</span>(<span class="st">"X"</span>, <span class="st">"Y"</span>), <span class="at">each =</span> <span class="dv">6</span>))</span>
+<span id="cb18-289"><a href="#cb18-289" aria-hidden="true" tabindex="-1"></a><span class="fu">wilcox_test</span>(test_data, value <span class="sc">~</span> group)</span>
+<span id="cb18-290"><a href="#cb18-290" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-291"><a href="#cb18-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-292"><a href="#cb18-292" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-293"><a href="#cb18-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-294"><a href="#cb18-294" aria-hidden="true" tabindex="-1"></a><span class="fu">## Chapter 2. Questions and Outcomes that Fit Small n</span></span>
+<span id="cb18-295"><a href="#cb18-295" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-296"><a href="#cb18-296" aria-hidden="true" tabindex="-1"></a><span class="fu">### Learning Objectives</span></span>
+<span id="cb18-297"><a href="#cb18-297" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-298"><a href="#cb18-298" aria-hidden="true" tabindex="-1"></a>By the end of this chapter, you will be able to:</span>
+<span id="cb18-299"><a href="#cb18-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-300"><a href="#cb18-300" aria-hidden="true" tabindex="-1"></a>**Conceptual Understanding**</span>
+<span id="cb18-301"><a href="#cb18-301" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Distinguish between exploratory and confirmatory research aims</span>
+<span id="cb18-302"><a href="#cb18-302" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Understand when to prioritize effect size estimation over hypothesis testing</span>
+<span id="cb18-303"><a href="#cb18-303" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Recognize which research questions are realistic for small samples</span>
+<span id="cb18-304"><a href="#cb18-304" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Explain the relationship between outcome measurement and sample size requirements</span>
+<span id="cb18-305"><a href="#cb18-305" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-306"><a href="#cb18-306" aria-hidden="true" tabindex="-1"></a>**Practical Skills**</span>
+<span id="cb18-307"><a href="#cb18-307" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Formulate focused research questions appropriate for limited data</span>
+<span id="cb18-308"><a href="#cb18-308" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Select outcome measures that yield interpretable results with small n</span>
+<span id="cb18-309"><a href="#cb18-309" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Design studies that maximize information from modest samples</span>
+<span id="cb18-310"><a href="#cb18-310" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Calculate minimum detectable effects for planned sample sizes</span>
+<span id="cb18-311"><a href="#cb18-311" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-312"><a href="#cb18-312" aria-hidden="true" tabindex="-1"></a>**Critical Evaluation**</span>
+<span id="cb18-313"><a href="#cb18-313" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Assess whether complex multivariate questions are feasible with available data</span>
+<span id="cb18-314"><a href="#cb18-314" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Evaluate trade-offs between breadth (many variables) and depth (focused questions)</span>
+<span id="cb18-315"><a href="#cb18-315" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Critique overly ambitious research designs given sample constraints</span>
+<span id="cb18-316"><a href="#cb18-316" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-317"><a href="#cb18-317" aria-hidden="true" tabindex="-1"></a>**Application**</span>
+<span id="cb18-318"><a href="#cb18-318" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Design pilot studies with clear, answerable questions</span>
+<span id="cb18-319"><a href="#cb18-319" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Choose between continuous, ordinal, and binary outcome measures</span>
+<span id="cb18-320"><a href="#cb18-320" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>✓ Justify research scope and question framing in proposals and manuscripts</span>
+<span id="cb18-321"><a href="#cb18-321" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-322"><a href="#cb18-322" aria-hidden="true" tabindex="-1"></a><span class="fu">### Framing Realistic Research Questions</span></span>
+<span id="cb18-323"><a href="#cb18-323" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-324"><a href="#cb18-324" aria-hidden="true" tabindex="-1"></a>Not all research questions are equally suited to small samples. Broad, multivariate questions (such as identifying dozens of predictors or testing complex mediation models) typically require large datasets. In contrast, focused questions about a single outcome or a few key comparisons can often be addressed with modest samples.</span>
+<span id="cb18-325"><a href="#cb18-325" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-326"><a href="#cb18-326" aria-hidden="true" tabindex="-1"></a>When planning a small-sample study, prioritise clarity and specificity. Instead of asking "What are all the factors that influence patient adherence?" ask "Does a brief reminder intervention improve adherence compared to standard care?" The latter question is binary, focused, and testable with a small randomised trial.</span>
+<span id="cb18-327"><a href="#cb18-327" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-328"><a href="#cb18-328" aria-hidden="true" tabindex="-1"></a>Similarly, consider whether the study is exploratory or confirmatory. Exploratory studies generate hypotheses, describe patterns, and refine measurement instruments. They do not require large samples, but results should be interpreted cautiously and replicated before drawing firm conclusions. Confirmatory studies test prespecified hypotheses and require sufficient statistical power. With small samples, power is limited, so confirmatory aims should be modest and well-justified.</span>
+<span id="cb18-329"><a href="#cb18-329" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-330"><a href="#cb18-330" aria-hidden="true" tabindex="-1"></a><span class="fu">### Choosing Appropriate Outcomes</span></span>
+<span id="cb18-331"><a href="#cb18-331" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-332"><a href="#cb18-332" aria-hidden="true" tabindex="-1"></a>The type of outcome variable influences which methods are feasible and how much information can be extracted from limited data. Binary outcomes (yes/no, success/failure) are common but carry less information per observation than continuous or ordinal measures. If your sample is small, consider whether a continuous or ordinal outcome might capture more variation and yield more precise inferences.</span>
+<span id="cb18-333"><a href="#cb18-333" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-334"><a href="#cb18-334" aria-hidden="true" tabindex="-1"></a>For example, rather than dichotomising patient improvement into "improved" versus "not improved", use a continuous measure of symptom severity or an ordinal scale with several levels. This preserves information and increases statistical efficiency. However, if the outcome is inherently binary (such as survival within 30 days), do not force it into a continuous form.</span>
+<span id="cb18-335"><a href="#cb18-335" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-336"><a href="#cb18-336" aria-hidden="true" tabindex="-1"></a>Count outcomes (number of adverse events, number of customer complaints) are also informative but may be sparse when samples are small. Exact Poisson tests and negative binomial models can handle low counts, but very sparse data (many zeros, few events) may require careful interpretation or resampling methods.</span>
+<span id="cb18-337"><a href="#cb18-337" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-338"><a href="#cb18-338" aria-hidden="true" tabindex="-1"></a><span class="fu">#### Outcome Selection Decision Guide</span></span>
+<span id="cb18-339"><a href="#cb18-339" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-340"><a href="#cb18-340" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**Start with the construct of interest.** Can it be measured on a genuine numeric scale (e.g., duration, dosage, test score)?</span>
+<span id="cb18-341"><a href="#cb18-341" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Yes** → Prefer a continuous measure. Report means/medians with confidence intervals; consider transformations if the scale is skewed.</span>
+<span id="cb18-342"><a href="#cb18-342" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**No/uncertain** → Proceed to step 2.</span>
+<span id="cb18-343"><a href="#cb18-343" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Can respondents make ordered distinctions beyond "yes/no"?**</span>
+<span id="cb18-344"><a href="#cb18-344" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Yes** → Use an ordinal scale with 4–7 categories. Analyse with rank-based or ordinal models; report medians or cumulative odds ratios.</span>
+<span id="cb18-345"><a href="#cb18-345" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**No** → Retain a binary outcome. Use exact or penalised methods and emphasise risk differences or odds ratios with wide intervals.</span>
+<span id="cb18-346"><a href="#cb18-346" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Is the event a count that can exceed one per subject?**</span>
+<span id="cb18-347"><a href="#cb18-347" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>**Yes** → Model counts directly (Poisson, negative binomial, or exact tests). Report event rates and their uncertainty.</span>
+<span id="cb18-348"><a href="#cb18-348" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Document the rationale.** Explain why the chosen outcome scale is the most informative and feasible given participant burden, measurement error, and sample size.</span>
+<span id="cb18-349"><a href="#cb18-349" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-350"><a href="#cb18-350" aria-hidden="true" tabindex="-1"></a><span class="fu">### Effect Sizes and Estimation</span></span>
+<span id="cb18-351"><a href="#cb18-351" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-352"><a href="#cb18-352" aria-hidden="true" tabindex="-1"></a>In small-sample research, point estimates of effect sizes (differences in means, odds ratios, correlation coefficients) are often more useful than p-values alone. A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect.</span>
+<span id="cb18-353"><a href="#cb18-353" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-354"><a href="#cb18-354" aria-hidden="true" tabindex="-1"></a>When reporting results, emphasise effect sizes and uncertainty intervals. For example, "The median difference in satisfaction scores was 1.5 points (95% CI: 0.5 to 2.5)" is more informative than "The difference was statistically significant (p = 0.03)". Effect size estimates help readers judge practical importance and facilitate meta-analysis or future sample size planning.</span>
+<span id="cb18-355"><a href="#cb18-355" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-356"><a href="#cb18-356" aria-hidden="true" tabindex="-1"></a><span class="fu">### Example: Outcome Selection in a Pilot Study</span></span>
+<span id="cb18-357"><a href="#cb18-357" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-358"><a href="#cb18-358" aria-hidden="true" tabindex="-1"></a>Suppose you are evaluating a pilot training programme with 18 participants. You have two outcome options: (1) binary pass/fail on a final assessment, or (2) a continuous score (0–100) on the same assessment.</span>
+<span id="cb18-359"><a href="#cb18-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-362"><a href="#cb18-362" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-363"><a href="#cb18-363" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: pilot-outcome-simulation</span></span>
+<span id="cb18-364"><a href="#cb18-364" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb18-365"><a href="#cb18-365" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-366"><a href="#cb18-366" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb18-367"><a href="#cb18-367" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">18</span></span>
+<span id="cb18-368"><a href="#cb18-368" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-369"><a href="#cb18-369" aria-hidden="true" tabindex="-1"></a><span class="co"># Simulate continuous scores</span></span>
+<span id="cb18-370"><a href="#cb18-370" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">68</span>, <span class="at">sd =</span> <span class="dv">12</span>))</span>
+<span id="cb18-371"><a href="#cb18-371" aria-hidden="true" tabindex="-1"></a>scores <span class="ot">&lt;-</span> <span class="fu">pmax</span>(<span class="dv">0</span>, <span class="fu">pmin</span>(<span class="dv">100</span>, scores))  <span class="co"># clamp to [0, 100]</span></span>
+<span id="cb18-372"><a href="#cb18-372" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-373"><a href="#cb18-373" aria-hidden="true" tabindex="-1"></a><span class="co"># Create binary outcome: pass if score &gt;= 60</span></span>
+<span id="cb18-374"><a href="#cb18-374" aria-hidden="true" tabindex="-1"></a>pass_fail <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(scores <span class="sc">&gt;=</span> <span class="dv">60</span>, <span class="st">"Pass"</span>, <span class="st">"Fail"</span>)</span>
+<span id="cb18-375"><a href="#cb18-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-376"><a href="#cb18-376" aria-hidden="true" tabindex="-1"></a>data_pilot <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb18-377"><a href="#cb18-377" aria-hidden="true" tabindex="-1"></a>  <span class="at">participant =</span> <span class="dv">1</span><span class="sc">:</span>n,</span>
+<span id="cb18-378"><a href="#cb18-378" aria-hidden="true" tabindex="-1"></a>  <span class="at">score =</span> scores,</span>
+<span id="cb18-379"><a href="#cb18-379" aria-hidden="true" tabindex="-1"></a>  <span class="at">outcome =</span> pass_fail</span>
+<span id="cb18-380"><a href="#cb18-380" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb18-381"><a href="#cb18-381" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-382"><a href="#cb18-382" aria-hidden="true" tabindex="-1"></a><span class="co"># Summary statistics for continuous outcome</span></span>
+<span id="cb18-383"><a href="#cb18-383" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data_pilot<span class="sc">$</span>score)</span>
+<span id="cb18-384"><a href="#cb18-384" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-385"><a href="#cb18-385" aria-hidden="true" tabindex="-1"></a><span class="co"># Frequency table for binary outcome</span></span>
+<span id="cb18-386"><a href="#cb18-386" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>(data_pilot<span class="sc">$</span>outcome)</span>
+<span id="cb18-387"><a href="#cb18-387" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-388"><a href="#cb18-388" aria-hidden="true" tabindex="-1"></a><span class="co"># The continuous outcome carries more information</span></span>
+<span id="cb18-389"><a href="#cb18-389" aria-hidden="true" tabindex="-1"></a><span class="co"># We can estimate a mean and standard error:</span></span>
+<span id="cb18-390"><a href="#cb18-390" aria-hidden="true" tabindex="-1"></a>mean_score <span class="ot">&lt;-</span> <span class="fu">mean</span>(data_pilot<span class="sc">$</span>score)</span>
+<span id="cb18-391"><a href="#cb18-391" aria-hidden="true" tabindex="-1"></a>se_score <span class="ot">&lt;-</span> <span class="fu">sd</span>(data_pilot<span class="sc">$</span>score) <span class="sc">/</span> <span class="fu">sqrt</span>(n)</span>
+<span id="cb18-392"><a href="#cb18-392" aria-hidden="true" tabindex="-1"></a>ci_lower <span class="ot">&lt;-</span> mean_score <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> se_score</span>
+<span id="cb18-393"><a href="#cb18-393" aria-hidden="true" tabindex="-1"></a>ci_upper <span class="ot">&lt;-</span> mean_score <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> se_score</span>
+<span id="cb18-394"><a href="#cb18-394" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-395"><a href="#cb18-395" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Mean score:"</span>, <span class="fu">round</span>(mean_score, <span class="dv">1</span>), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb18-396"><a href="#cb18-396" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"95% CI: ["</span>, <span class="fu">round</span>(ci_lower, <span class="dv">1</span>), <span class="st">","</span>, <span class="fu">round</span>(ci_upper, <span class="dv">1</span>), <span class="st">"]</span><span class="sc">\n</span><span class="st">"</span>, <span class="at">sep =</span> <span class="st">""</span>)</span>
+<span id="cb18-397"><a href="#cb18-397" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-398"><a href="#cb18-398" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-399"><a href="#cb18-399" aria-hidden="true" tabindex="-1"></a>By retaining the continuous score, we obtain a precise estimate of average performance with a confidence interval. Had we dichotomised into pass/fail, we would only know that 14 out of 18 passed, which provides less information about the central tendency and spread of performance.</span>
+<span id="cb18-400"><a href="#cb18-400" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-401"><a href="#cb18-401" aria-hidden="true" tabindex="-1"></a>Interpretation: The continuous outcome allows us to estimate the mean score with reasonable precision. The confidence interval indicates the range of plausible population means. If the goal is to understand typical performance (not just pass rates), the continuous measure is more informative.</span>
+<span id="cb18-402"><a href="#cb18-402" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-403"><a href="#cb18-403" aria-hidden="true" tabindex="-1"></a><span class="fu">### Research Design Considerations</span></span>
+<span id="cb18-404"><a href="#cb18-404" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-405"><a href="#cb18-405" aria-hidden="true" tabindex="-1"></a>Small-sample studies benefit from tight experimental control. Paired or matched designs (before–after, crossover, matched-pair comparisons) reduce variability by comparing each unit to itself or a closely matched control. This within-unit comparison can yield precise inferences even when the number of units is small.</span>
+<span id="cb18-406"><a href="#cb18-406" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-407"><a href="#cb18-407" aria-hidden="true" tabindex="-1"></a>Stratification and blocking can also improve efficiency by accounting for known sources of variation. For example, if you are comparing two teaching methods in a small class, stratify by prior achievement level to reduce heterogeneity within each comparison.</span>
+<span id="cb18-408"><a href="#cb18-408" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-409"><a href="#cb18-409" aria-hidden="true" tabindex="-1"></a>Finally, consider sequential or adaptive designs if feasible. Rather than committing to a fixed sample size in advance, you might plan an interim analysis and decide whether to stop early (if results are clear) or continue (if uncertainty remains). Bayesian methods are well-suited to adaptive designs, as they naturally update beliefs as data accumulate.</span>
+<span id="cb18-410"><a href="#cb18-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-411"><a href="#cb18-411" aria-hidden="true" tabindex="-1"></a><span class="fu">### Designing Pilot Studies</span></span>
+<span id="cb18-412"><a href="#cb18-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-413"><a href="#cb18-413" aria-hidden="true" tabindex="-1"></a>Pilot studies serve specific purposes: assessing feasibility (recruitment rates, attrition, protocol adherence), refining measurement instruments, and estimating variability to inform future sample size calculations. With very small *n* (often 10–30 participants), focus on collecting process metrics and precision estimates rather than hypothesis testing. Report:</span>
+<span id="cb18-414"><a href="#cb18-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-415"><a href="#cb18-415" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Primary feasibility outcomes** (e.g., proportion screened who consent, time to complete assessments).</span>
+<span id="cb18-416"><a href="#cb18-416" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Preliminary effect estimates** with wide confidence intervals, making clear that they are exploratory.</span>
+<span id="cb18-417"><a href="#cb18-417" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Adaptations for the main study**, especially where procedures proved onerous or data quality issues emerged.</span>
+<span id="cb18-418"><a href="#cb18-418" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-419"><a href="#cb18-419" aria-hidden="true" tabindex="-1"></a>Guidance: choose a pilot sample large enough to detect major logistical problems (often 12–20 per arm is sufficient), prespecify success criteria (such as acceptable recruitment rate), and plan in advance how you will decide whether to proceed to a full trial.</span>
+<span id="cb18-420"><a href="#cb18-420" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-421"><a href="#cb18-421" aria-hidden="true" tabindex="-1"></a><span class="fu">### Key Takeaways</span></span>
+<span id="cb18-422"><a href="#cb18-422" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-423"><a href="#cb18-423" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Frame research questions narrowly and realistically given the sample size constraints.</span>
+<span id="cb18-424"><a href="#cb18-424" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Distinguish between exploratory (hypothesis-generating) and confirmatory (hypothesis-testing) aims.</span>
+<span id="cb18-425"><a href="#cb18-425" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Prefer continuous or ordinal outcomes over binary outcomes when possible, to maximise information per observation.</span>
+<span id="cb18-426"><a href="#cb18-426" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Report effect sizes and confidence intervals, not just p-values, to convey magnitude and precision.</span>
+<span id="cb18-427"><a href="#cb18-427" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Use paired, matched, or stratified designs to reduce variability and improve efficiency.</span>
+<span id="cb18-428"><a href="#cb18-428" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Consider adaptive or sequential designs if ethically and practically feasible.</span>
+<span id="cb18-429"><a href="#cb18-429" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-430"><a href="#cb18-430" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-431"><a href="#cb18-431" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-432"><a href="#cb18-432" aria-hidden="true" tabindex="-1"></a><span class="fu">### Self-Assessment Quiz</span></span>
+<span id="cb18-433"><a href="#cb18-433" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-434"><a href="#cb18-434" aria-hidden="true" tabindex="-1"></a>Test your understanding of the key concepts from Chapter 2. Answers and explanations are provided at the end.</span>
+<span id="cb18-435"><a href="#cb18-435" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-436"><a href="#cb18-436" aria-hidden="true" tabindex="-1"></a>::: {.callout-note icon=false}</span>
+<span id="cb18-437"><a href="#cb18-437" aria-hidden="true" tabindex="-1"></a><span class="fu">## Questions</span></span>
+<span id="cb18-438"><a href="#cb18-438" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-439"><a href="#cb18-439" aria-hidden="true" tabindex="-1"></a>**Q1.** Which research question is better suited to small samples?</span>
+<span id="cb18-440"><a href="#cb18-440" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-441"><a href="#cb18-441" aria-hidden="true" tabindex="-1"></a>A. "What is the relationship between 20 personality traits and job performance?"  </span>
+<span id="cb18-442"><a href="#cb18-442" aria-hidden="true" tabindex="-1"></a>B. "Does a brief mindfulness intervention reduce test anxiety compared to control?"  </span>
+<span id="cb18-443"><a href="#cb18-443" aria-hidden="true" tabindex="-1"></a>C. "Can we predict customer churn using all available behavioral data?"  </span>
+<span id="cb18-444"><a href="#cb18-444" aria-hidden="true" tabindex="-1"></a>D. "How do socioeconomic factors interact to predict health outcomes?"</span>
+<span id="cb18-445"><a href="#cb18-445" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-446"><a href="#cb18-446" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-447"><a href="#cb18-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-448"><a href="#cb18-448" aria-hidden="true" tabindex="-1"></a>**Q2.** An exploratory study (n=20) finds that meditation reduces anxiety (p=0.04, d=0.7). How should this be framed?</span>
+<span id="cb18-449"><a href="#cb18-449" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-450"><a href="#cb18-450" aria-hidden="true" tabindex="-1"></a>A. "Meditation is proven effective"  </span>
+<span id="cb18-451"><a href="#cb18-451" aria-hidden="true" tabindex="-1"></a>B. "Preliminary evidence suggests meditation may reduce anxiety; replication needed"  </span>
+<span id="cb18-452"><a href="#cb18-452" aria-hidden="true" tabindex="-1"></a>C. "No conclusions can be drawn from n=20"  </span>
+<span id="cb18-453"><a href="#cb18-453" aria-hidden="true" tabindex="-1"></a>D. "The effect is definitely due to chance"</span>
+<span id="cb18-454"><a href="#cb18-454" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-455"><a href="#cb18-455" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-456"><a href="#cb18-456" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-457"><a href="#cb18-457" aria-hidden="true" tabindex="-1"></a>**Q3.** A researcher dichotomizes a continuous outcome (0-100 scale) into "high" (≥70) vs "low" (&lt;70). With n=25, what is the consequence?</span>
+<span id="cb18-458"><a href="#cb18-458" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-459"><a href="#cb18-459" aria-hidden="true" tabindex="-1"></a>A. Power increases because binary outcomes are simpler  </span>
+<span id="cb18-460"><a href="#cb18-460" aria-hidden="true" tabindex="-1"></a>B. Power decreases because information is discarded  </span>
+<span id="cb18-461"><a href="#cb18-461" aria-hidden="true" tabindex="-1"></a>C. No effect on statistical power  </span>
+<span id="cb18-462"><a href="#cb18-462" aria-hidden="true" tabindex="-1"></a>D. Analysis becomes impossible</span>
+<span id="cb18-463"><a href="#cb18-463" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-464"><a href="#cb18-464" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-465"><a href="#cb18-465" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-466"><a href="#cb18-466" aria-hidden="true" tabindex="-1"></a>**Q4.** A study aims to detect a "small" effect (d=0.2) with 80% power. Approximately how many participants per group are needed?</span>
+<span id="cb18-467"><a href="#cb18-467" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-468"><a href="#cb18-468" aria-hidden="true" tabindex="-1"></a>A. n=20 per group  </span>
+<span id="cb18-469"><a href="#cb18-469" aria-hidden="true" tabindex="-1"></a>B. n=50 per group  </span>
+<span id="cb18-470"><a href="#cb18-470" aria-hidden="true" tabindex="-1"></a>C. n=200 per group  </span>
+<span id="cb18-471"><a href="#cb18-471" aria-hidden="true" tabindex="-1"></a>D. n=500 per group</span>
+<span id="cb18-472"><a href="#cb18-472" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-473"><a href="#cb18-473" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-474"><a href="#cb18-474" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-475"><a href="#cb18-475" aria-hidden="true" tabindex="-1"></a>**Q5.** Which statement about pilot studies is CORRECT?</span>
+<span id="cb18-476"><a href="#cb18-476" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-477"><a href="#cb18-477" aria-hidden="true" tabindex="-1"></a>A. Pilot studies should always test hypotheses  </span>
+<span id="cb18-478"><a href="#cb18-478" aria-hidden="true" tabindex="-1"></a>B. Pilot studies assess feasibility and refine procedures  </span>
+<span id="cb18-479"><a href="#cb18-479" aria-hidden="true" tabindex="-1"></a>C. Pilot studies require the same sample size as main studies  </span>
+<span id="cb18-480"><a href="#cb18-480" aria-hidden="true" tabindex="-1"></a>D. Pilot studies never provide useful effect size estimates</span>
+<span id="cb18-481"><a href="#cb18-481" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-482"><a href="#cb18-482" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-483"><a href="#cb18-483" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-484"><a href="#cb18-484" aria-hidden="true" tabindex="-1"></a>**Q6.** A researcher plans a study with n=15 per group but calculates they need n=50 per group for 80% power. What should they do?</span>
+<span id="cb18-485"><a href="#cb18-485" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-486"><a href="#cb18-486" aria-hidden="true" tabindex="-1"></a>A. Proceed with n=15 and interpret p-values cautiously  </span>
+<span id="cb18-487"><a href="#cb18-487" aria-hidden="true" tabindex="-1"></a>B. Reframe the study as exploratory/pilot  </span>
+<span id="cb18-488"><a href="#cb18-488" aria-hidden="true" tabindex="-1"></a>C. Report minimum detectable effect (MDE) given n=15  </span>
+<span id="cb18-489"><a href="#cb18-489" aria-hidden="true" tabindex="-1"></a>D. All of the above</span>
+<span id="cb18-490"><a href="#cb18-490" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-491"><a href="#cb18-491" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-492"><a href="#cb18-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-493"><a href="#cb18-493" aria-hidden="true" tabindex="-1"></a>**Q7.** Which outcome is LEAST appropriate for n=20?</span>
+<span id="cb18-494"><a href="#cb18-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-495"><a href="#cb18-495" aria-hidden="true" tabindex="-1"></a>A. Binary outcome (success/failure)  </span>
+<span id="cb18-496"><a href="#cb18-496" aria-hidden="true" tabindex="-1"></a>B. Ordinal outcome (1-7 Likert scale)  </span>
+<span id="cb18-497"><a href="#cb18-497" aria-hidden="true" tabindex="-1"></a>C. Continuous outcome (0-100 scale)  </span>
+<span id="cb18-498"><a href="#cb18-498" aria-hidden="true" tabindex="-1"></a>D. 50-item questionnaire with subscale factor analysis</span>
+<span id="cb18-499"><a href="#cb18-499" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-500"><a href="#cb18-500" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-501"><a href="#cb18-501" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-502"><a href="#cb18-502" aria-hidden="true" tabindex="-1"></a>**Q8.** A study comparing two teaching methods (n=12 per class) finds no significant difference (p=0.18, d=0.45). The conclusion should be:</span>
+<span id="cb18-503"><a href="#cb18-503" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-504"><a href="#cb18-504" aria-hidden="true" tabindex="-1"></a>A. "The two methods are equally effective"  </span>
+<span id="cb18-505"><a href="#cb18-505" aria-hidden="true" tabindex="-1"></a>B. "The study found no evidence of a difference, but was underpowered to detect medium effects"  </span>
+<span id="cb18-506"><a href="#cb18-506" aria-hidden="true" tabindex="-1"></a>C. "Teaching method has no effect on learning"  </span>
+<span id="cb18-507"><a href="#cb18-507" aria-hidden="true" tabindex="-1"></a>D. "The null hypothesis is confirmed"</span>
+<span id="cb18-508"><a href="#cb18-508" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-509"><a href="#cb18-509" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-510"><a href="#cb18-510" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-511"><a href="#cb18-511" aria-hidden="true" tabindex="-1"></a>**Q9.** When choosing between a paired and independent-groups design with small samples, which is generally preferable?</span>
+<span id="cb18-512"><a href="#cb18-512" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-513"><a href="#cb18-513" aria-hidden="true" tabindex="-1"></a>A. Always use independent groups—pairing is only for large samples  </span>
+<span id="cb18-514"><a href="#cb18-514" aria-hidden="true" tabindex="-1"></a>B. Paired designs reduce within-subject variability and increase power  </span>
+<span id="cb18-515"><a href="#cb18-515" aria-hidden="true" tabindex="-1"></a>C. The choice makes no difference statistically  </span>
+<span id="cb18-516"><a href="#cb18-516" aria-hidden="true" tabindex="-1"></a>D. Paired designs require larger samples than independent designs</span>
+<span id="cb18-517"><a href="#cb18-517" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-518"><a href="#cb18-518" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-519"><a href="#cb18-519" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-520"><a href="#cb18-520" aria-hidden="true" tabindex="-1"></a>**Q10.** A pilot study with n=18 yields a mean difference of 5 points (95% CI: <span class="co">[</span><span class="ot">0.2, 9.8</span><span class="co">]</span>). What is the appropriate next step?</span>
+<span id="cb18-521"><a href="#cb18-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-522"><a href="#cb18-522" aria-hidden="true" tabindex="-1"></a>A. Conclude the intervention is effective and implement widely  </span>
+<span id="cb18-523"><a href="#cb18-523" aria-hidden="true" tabindex="-1"></a>B. Use this estimate to plan a fully-powered confirmatory study  </span>
+<span id="cb18-524"><a href="#cb18-524" aria-hidden="true" tabindex="-1"></a>C. Abandon the research because the sample was too small  </span>
+<span id="cb18-525"><a href="#cb18-525" aria-hidden="true" tabindex="-1"></a>D. Report only the p-value and ignore the confidence interval</span>
+<span id="cb18-526"><a href="#cb18-526" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-527"><a href="#cb18-527" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb18-528"><a href="#cb18-528" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-529"><a href="#cb18-529" aria-hidden="true" tabindex="-1"></a>::: {.callout-tip icon=false collapse="true"}</span>
+<span id="cb18-530"><a href="#cb18-530" aria-hidden="true" tabindex="-1"></a><span class="fu">## Answers and Explanations</span></span>
+<span id="cb18-531"><a href="#cb18-531" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-532"><a href="#cb18-532" aria-hidden="true" tabindex="-1"></a>**Q1. Answer: B**  </span>
+<span id="cb18-533"><a href="#cb18-533" aria-hidden="true" tabindex="-1"></a>*Explanation*: Focused, binary comparisons with a single primary outcome are feasible with small samples. Multivariate questions (A, C, D) require large samples to estimate many parameters reliably. The chapter emphasizes: "focused questions about a single outcome or a few key comparisons can often be addressed with modest samples."</span>
+<span id="cb18-534"><a href="#cb18-534" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-535"><a href="#cb18-535" aria-hidden="true" tabindex="-1"></a>**Q2. Answer: B**  </span>
+<span id="cb18-536"><a href="#cb18-536" aria-hidden="true" tabindex="-1"></a>*Explanation*: Exploratory studies with small samples generate hypotheses but require replication. Results should be framed as preliminary, with acknowledgment of limited power and potential for Type I error. As stated in the chapter: "Exploratory studies generate hypotheses, describe patterns... They do not require large samples, but results should be interpreted cautiously and replicated before drawing firm conclusions."</span>
+<span id="cb18-537"><a href="#cb18-537" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-538"><a href="#cb18-538" aria-hidden="true" tabindex="-1"></a>**Q3. Answer: B**  </span>
+<span id="cb18-539"><a href="#cb18-539" aria-hidden="true" tabindex="-1"></a>*Explanation*: Dichotomizing continuous variables discards information about the magnitude of differences, reduces statistical power, and can create spurious findings at arbitrary cut-points. The chapter clearly states: "rather than dichotomising patient improvement into 'improved' versus 'not improved', use a continuous measure... This preserves information and increases statistical efficiency."</span>
+<span id="cb18-540"><a href="#cb18-540" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-541"><a href="#cb18-541" aria-hidden="true" tabindex="-1"></a>**Q4. Answer: C**  </span>
+<span id="cb18-542"><a href="#cb18-542" aria-hidden="true" tabindex="-1"></a>*Explanation*: Detecting small effects requires large samples. For d=0.2 with 80% power and α=0.05 (two-tailed), approximately n=393 per group is needed. With small samples, only large effects (d≥0.8) can be reliably detected. This aligns with the power curve from Chapter 1 showing that detecting d=0.3 effects is beyond reach of small samples.</span>
+<span id="cb18-543"><a href="#cb18-543" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-544"><a href="#cb18-544" aria-hidden="true" tabindex="-1"></a>**Q5. Answer: B**  </span>
+<span id="cb18-545"><a href="#cb18-545" aria-hidden="true" tabindex="-1"></a>*Explanation*: Pilot studies (typically n=10-30) assess feasibility (recruitment rates, protocol adherence, measurement properties), refine procedures, and provide preliminary effect size estimates for sample size planning—but are not powered for definitive hypothesis testing. The chapter's "Designing Pilot Studies" section explicitly states: "focus on collecting process metrics and precision estimates rather than hypothesis testing."</span>
+<span id="cb18-546"><a href="#cb18-546" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-547"><a href="#cb18-547" aria-hidden="true" tabindex="-1"></a>**Q6. Answer: D**  </span>
+<span id="cb18-548"><a href="#cb18-548" aria-hidden="true" tabindex="-1"></a>*Explanation*: When desired sample size is infeasible: (1) proceed but interpret with appropriate caution, (2) frame as exploratory, (3) report what effect sizes CAN be detected (MDE), (4) emphasize effect size estimation over hypothesis testing. This integrates guidance from both the "Framing Realistic Research Questions" and "Effect Sizes and Estimation" sections.</span>
+<span id="cb18-549"><a href="#cb18-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-550"><a href="#cb18-550" aria-hidden="true" tabindex="-1"></a>**Q7. Answer: D**  </span>
+<span id="cb18-551"><a href="#cb18-551" aria-hidden="true" tabindex="-1"></a>*Explanation*: Factor analysis requires n≥100-200 (ideally 5-10 observations per item). With n=20 and 50 items, factor analysis would be completely unreliable. This reflects general principles about matching analysis complexity to sample size discussed throughout the chapter.</span>
+<span id="cb18-552"><a href="#cb18-552" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-553"><a href="#cb18-553" aria-hidden="true" tabindex="-1"></a>**Q8. Answer: B**  </span>
+<span id="cb18-554"><a href="#cb18-554" aria-hidden="true" tabindex="-1"></a>*Explanation*: Non-significance with small samples indicates insufficient evidence, not proof of no effect. A medium effect (d=0.45) is plausible given the CI, but the study lacked power to detect it definitively. The chapter emphasizes: "A small sample may lack power to detect a meaningful effect, but the estimated effect size and its confidence interval indicate the likely magnitude and precision of the effect."</span>
+<span id="cb18-555"><a href="#cb18-555" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-556"><a href="#cb18-556" aria-hidden="true" tabindex="-1"></a>**Q9. Answer: B**  </span>
+<span id="cb18-557"><a href="#cb18-557" aria-hidden="true" tabindex="-1"></a>*Explanation*: Paired designs reduce within-subject variability and increase power. The chapter's "Research Design Considerations" section states: "Paired or matched designs (before–after, crossover, matched-pair comparisons) reduce variability by comparing each unit to itself or a closely matched control. This within-unit comparison can yield precise inferences even when the number of units is small."</span>
+<span id="cb18-558"><a href="#cb18-558" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-559"><a href="#cb18-559" aria-hidden="true" tabindex="-1"></a>**Q10. Answer: B**  </span>
+<span id="cb18-560"><a href="#cb18-560" aria-hidden="true" tabindex="-1"></a>*Explanation*: Use this estimate to plan a fully-powered confirmatory study. Pilot studies provide preliminary effect estimates and variability information needed for sample size planning. The "Designing Pilot Studies" section recommends reporting "Preliminary effect estimates with wide confidence intervals, making clear that they are exploratory" and using pilots to "estimating variability to inform future sample size calculations."</span>
+<span id="cb18-561"><a href="#cb18-561" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-562"><a href="#cb18-562" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb18-563"><a href="#cb18-563" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-564"><a href="#cb18-564" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-565"><a href="#cb18-565" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-566"><a href="#cb18-566" aria-hidden="true" tabindex="-1"></a><span class="fu">### Smoke Test</span></span>
+<span id="cb18-567"><a href="#cb18-567" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-570"><a href="#cb18-570" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb18-571"><a href="#cb18-571" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: smoke-test-outcome</span></span>
+<span id="cb18-572"><a href="#cb18-572" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run outcome comparison example</span></span>
+<span id="cb18-573"><a href="#cb18-573" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2025</span>)</span>
+<span id="cb18-574"><a href="#cb18-574" aria-hidden="true" tabindex="-1"></a>scores_test <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fu">rnorm</span>(<span class="dv">10</span>, <span class="at">mean =</span> <span class="dv">70</span>, <span class="at">sd =</span> <span class="dv">10</span>))</span>
+<span id="cb18-575"><a href="#cb18-575" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(scores_test)</span>
+<span id="cb18-576"><a href="#cb18-576" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(scores_test)</span>
+<span id="cb18-577"><a href="#cb18-577" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb18-578"><a href="#cb18-578" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-579"><a href="#cb18-579" aria-hidden="true" tabindex="-1"></a>---</span>
+<span id="cb18-580"><a href="#cb18-580" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-581"><a href="#cb18-581" aria-hidden="true" tabindex="-1"></a><span class="fu">## Summary of Part A</span></span>
+<span id="cb18-582"><a href="#cb18-582" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-583"><a href="#cb18-583" aria-hidden="true" tabindex="-1"></a>In Part A, we established that small-sample research is both common and legitimate. We reviewed why large-sample approximations can fail with limited data and introduced exact, resampling, and robust methods as alternatives. We also discussed how to formulate research questions and select outcomes that are realistic and informative given small sample sizes. The next part will address data collection and preparation strategies tailored to small studies.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
