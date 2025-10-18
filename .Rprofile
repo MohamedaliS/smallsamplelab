@@ -56,4 +56,9 @@ suppressPackageStartupMessages({
   if (requireNamespace("tidyverse", quietly = TRUE)) {
     library(tidyverse)
   }
+  
+  # Load package fallbacks for missing packages
+  if (file.exists("R/package_fallbacks.R")) {
+    source("R/package_fallbacks.R", local = TRUE)
+  }
 })

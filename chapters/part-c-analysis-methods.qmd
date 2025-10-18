@@ -143,17 +143,24 @@ When both tests are available, Barnard's test may be preferred for exploratory a
 # For this example, we'll demonstrate the concept using Fisher's exact test
 # which is more commonly available and serves a similar purpose
 
-library(exact2x2)
-
-# Using exact2x2 function which provides exact tests for 2x2 tables
-# This will give similar results to what Barnard's test would provide
-barnard_result <- exact2x2(table_data, alternative = "two.sided")
-print(barnard_result)
-
-# Alternative: You could also use Fisher's test as a comparison
-cat("\nFor comparison, Fisher's exact test:\n")
-fisher_comparison <- fisher.test(table_data)
-print(fisher_comparison)
+if (requireNamespace("exact2x2", quietly = TRUE)) {
+  library(exact2x2)
+  
+  # Using exact2x2 function which provides exact tests for 2x2 tables
+  # This will give similar results to what Barnard's test would provide
+  barnard_result <- exact2x2(table_data, alternative = "two.sided")
+  print(barnard_result)
+  
+  cat("\nFor comparison, Fisher's exact test:\n")
+  fisher_comparison <- fisher.test(table_data)
+  print(fisher_comparison)
+} else {
+  cat("Package exact2x2 not available. Using Fisher's exact test instead:\n")
+  fisher_result <- fisher.test(table_data, alternative = "two.sided")
+  print(fisher_result)
+  # Create barnard_result as an alias to fisher_result for compatibility
+  barnard_result <- fisher_result
+}
 ```
 
 Interpretation: The exact2x2 function provides exact inference for 2×2 tables, similar to what Barnard's test would provide. Compare the p-value to Fisher's result. The exact2x2 approach may have different power characteristics than Fisher's exact test. Both tests provide confidence intervals for the odds ratio to help interpret the strength of association.

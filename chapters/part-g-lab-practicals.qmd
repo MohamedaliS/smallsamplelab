@@ -2806,8 +2806,8 @@ Create realistic dataset with missing data:
 ```{r lab9-data}
 library(tidyverse)
 library(mice)
-library(naniar)  # For missing data visualization
-library(VIM)     # For missing data patterns
+if (requireNamespace("naniar", quietly = TRUE)) library(naniar)  # For missing data visualization
+if (requireNamespace("VIM", quietly = TRUE)) library(VIM)     # For missing data patterns
 
 # Set seed for reproducibility
 set.seed(2025)
