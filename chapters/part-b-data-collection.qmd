@@ -1144,18 +1144,22 @@ Little's MCAR test evaluates whether missingness is consistent with the MCAR mec
 ```{r}
 #| label: part-b-chunk-15
 # Test if data are Missing Completely At Random (MCAR)
-library(naniar)
-
-# Little's MCAR test
-mcar_test(study_data)
-
-# Interpretation:
-# p > 0.05: Data consistent with MCAR (missingness random)
-# p < 0.05: Evidence against MCAR (missingness not random)
-
-# Visualise missing data patterns
-gg_miss_var(study_data, show_pct = TRUE)
-vis_miss(study_data)
+if (requireNamespace("naniar", quietly = TRUE)) {
+  library(naniar)
+  
+  # Little's MCAR test
+  mcar_test(study_data)
+  
+  # Interpretation:
+  # p > 0.05: Data consistent with MCAR (missingness random)
+  # p < 0.05: Evidence against MCAR (missingness not random)
+  
+  # Visualise missing data patterns
+  gg_miss_var(study_data, show_pct = TRUE)
+  vis_miss(study_data)
+} else {
+  cat("Note: naniar package not available. Install with: install.packages('naniar')\n")
+}
 ```
 
 Little's MCAR test assesses whether missing data patterns are completely random. However, with small samples (n < 50), this test has low power and should be supplemented with:
@@ -1632,8 +1636,14 @@ summary(pooled_result)
 ```{r}
 #| label: part-b-mi-diag-10
 # Step 1: Describe missingness
-library(naniar)
-miss_var_summary(mi_data_large)
+if (requireNamespace("naniar", quietly = TRUE)) {
+  library(naniar)
+  miss_var_summary(mi_data_large)
+} else {
+  cat("Note: naniar package not available for missingness summary.\n")
+  cat("Showing simple NA count instead:\n")
+  print(colSums(is.na(mi_data_large)))
+}
 
 # Step 2: Perform MI with adequate m and maxit
 imp_final <- mice(mi_data_large, m = 20, maxit = 30, seed = 2025, print = FALSE)
