@@ -25,9 +25,9 @@ book:
     - part: "Part E: Worked Projects"
       chapters:
         - chapters/part-e-worked-projects.qmd
-    # - part: "Part F: Technical Appendices"
-    #   chapters:
-    #     - chapters/part-f-technical-appendices.qmd
+    - part: "Part F: Technical Appendices"
+      chapters:
+        - chapters/part-f-technical-appendices.qmd
     - part: "Part G: Guided Lab Practicals"
       chapters:
         - chapters/part-g-lab-practicals.qmd
@@ -47,6 +47,11 @@ format:
     code-fold: false
     code-tools: true
     self-contained: false
+  pdf:
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    colorlinks: true
   docx:
     toc: true
     number-sections: true

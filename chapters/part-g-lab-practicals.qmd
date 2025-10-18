@@ -426,7 +426,6 @@ cat("   With skewed data and n=15, this assumption is violated.\n")
 
 ```{r}
 #| label: lab2-step3
-#| eval: false
 # Manual bootstrap (for teaching purposes)
 n_boot <- 5000
 boot_medians <- numeric(n_boot)
@@ -462,7 +461,6 @@ tibble(boot_medians) %>%
 
 ```{r}
 #| label: lab2-step4
-#| eval: false
 # Percentile method: 2.5th and 97.5th percentiles
 ci_lower_boot <- quantile(boot_medians, 0.025)
 ci_upper_boot <- quantile(boot_medians, 0.975)
@@ -481,7 +479,6 @@ cat("Observed median:", median(vit_d), "ng/mL\n")
 
 ```{r}
 #| label: lab2-step5
-#| eval: false
 # Define statistic function for boot package
 median_func <- function(data, indices) {
   return(median(data[indices]))
@@ -535,7 +532,6 @@ comparison %>%
 
 ```{r}
 #| label: lab2-step7
-#| eval: false
 # Check for duplicate bootstrap samples (quality check)
 unique_samples <- length(unique(boot_medians))
 cat("Unique bootstrap medians:", unique_samples, "out of", n_boot, "\n")
@@ -561,7 +557,6 @@ cat("(Small bias is expected; large bias suggests problems)\n")
 
 ```{r}
 #| label: lab2-step8
-#| eval: false
 #| fig-cap: "Vitamin D levels with bootstrap 95% CI for median"
 # Box plot with bootstrap CI overlay
 tibble(vit_d) %>%
