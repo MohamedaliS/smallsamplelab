@@ -1,0 +1,5 @@
+# Part G: Guided Lab Practicals {.unnumbered}
+
+This section provides hands-on, step-by-step lab walkthroughs for key statistical methods covered in the book. Each lab includes:
+
+- **Clear learning objectives** for what you'll master
