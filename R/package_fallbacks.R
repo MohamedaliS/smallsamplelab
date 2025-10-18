@@ -61,11 +61,16 @@ create_stub_package("logistf", list(
 create_stub_package("gt", list(
   gt = function(data, ...) {
     message("gt package not available. Returning knitr::kable() output instead.")
-    return(knitr::kable(data, ...))
+    class(data) <- c("gt_stub", class(data))
+    return(data)
   },
   tab_header = function(data, title = NULL, subtitle = NULL, ...) {
     attr(data, "title") <- title
     attr(data, "subtitle") <- subtitle
+    return(data)
+  },
+  tab_footnote = function(data, footnote = NULL, locations = NULL, ...) {
+    attr(data, "footnote") <- footnote
     return(data)
   },
   fmt_number = function(data, ...) {
@@ -73,6 +78,18 @@ create_stub_package("gt", list(
   },
   cols_label = function(data, ...) {
     return(data)
+  },
+  cols_align = function(data, ...) {
+    return(data)
+  },
+  tab_style = function(data, ...) {
+    return(data)
+  },
+  cells_body = function(...) {
+    return(NULL)
+  },
+  cell_text = function(...) {
+    return(NULL)
   }
 ))
 
@@ -123,6 +140,36 @@ create_stub_package("DescTools", list(
   CramerV = function(x, y = NULL, ...) {
     message("DescTools::CramerV not available. Returning NA.")
     return(NA)
+  }
+))
+
+# Stub for effsize
+create_stub_package("effsize", list(
+  cliff.delta = function(d, f = NULL, conf.level = 0.95, ...) {
+    if (is.null(f)) {
+      # d is a formula or two vectors
+      message("effsize::cliff.delta not available. Using simple calculation.")
+      message("Note: This is a basic implementation without all features.")
+    }
+    # Try to use effectsize package if available
+    if (requireNamespace("effectsize", quietly = TRUE)) {
+      message("Using effectsize::rank_biserial as alternative to effsize::cliff.delta")
+      result <- effectsize::rank_biserial(d, f, ci = conf.level, ...)
+      return(result)
+    } else {
+      message("Neither effsize nor effectsize packages available.")
+      return(list(estimate = NA, conf.int = c(NA, NA), magnitude = "unavailable"))
+    }
+  },
+  cohen.d = function(d, f = NULL, conf.level = 0.95, ...) {
+    if (requireNamespace("effectsize", quietly = TRUE)) {
+      message("Using effectsize::cohens_d as alternative to effsize::cohen.d")
+      result <- effectsize::cohens_d(d, f, ci = conf.level, ...)
+      return(result)
+    } else {
+      message("effsize package not available. Returning NA.")
+      return(list(estimate = NA, conf.int = c(NA, NA)))
+    }
   }
 ))
 

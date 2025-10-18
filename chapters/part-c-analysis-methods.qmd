@@ -143,6 +143,9 @@ When both tests are available, Barnard's test may be preferred for exploratory a
 # For this example, we'll demonstrate the concept using Fisher's exact test
 # which is more commonly available and serves a similar purpose
 
+# First, always run Fisher's test for comparison
+fisher_result <- fisher.test(table_data, alternative = "two.sided")
+
 if (requireNamespace("exact2x2", quietly = TRUE)) {
   library(exact2x2)
   
@@ -152,11 +155,9 @@ if (requireNamespace("exact2x2", quietly = TRUE)) {
   print(barnard_result)
   
   cat("\nFor comparison, Fisher's exact test:\n")
-  fisher_comparison <- fisher.test(table_data)
-  print(fisher_comparison)
+  print(fisher_result)
 } else {
-  cat("Package exact2x2 not available. Using Fisher's exact test instead:\n")
-  fisher_result <- fisher.test(table_data, alternative = "two.sided")
+  cat("Package exact2x2 not available. Using Fisher's exact test:\n")
   print(fisher_result)
   # Create barnard_result as an alias to fisher_result for compatibility
   barnard_result <- fisher_result
