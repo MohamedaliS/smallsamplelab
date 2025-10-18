@@ -1184,15 +1184,14 @@ cat("With n=14, Wilcoxon is safer (fewer assumptions)\n")
 ```{r}
 #| label: lab4-step6
 #| fig-cap: "Box plot of change scores identifying outliers"
-ggplot(anxiety_data, aes(y = difference)) +
+ggplot(anxiety_data, aes(x = "", y = difference)) +
   geom_boxplot(fill = "lightblue", alpha = 0.7) +
   geom_jitter(width = 0.1, size = 3, alpha = 0.6) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
   labs(title = "Change Scores with Outlier Detection",
-       y = "Change in Anxiety (after - before)") +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+       y = "Change in Anxiety (after - before)",
+       x = "") +
+  theme_minimal()
 
 # Identify outliers
 Q1 <- quantile(anxiety_data$difference, 0.25)
@@ -1810,19 +1809,19 @@ summary(bayes_model)
 Assess convergence and mixing:
 
 ```{r lab6-diagnostics}
-# R-hat values (should be < 1.01)
-rhat_values <- rhat(bayes_model)
+# Check convergence summary from brms
+summary(bayes_model)
+
+# R-hat values (should be < 1.01) - extract from summary
+rhat_values <- brms::rhat(bayes_model)
 print(rhat_values)
 
-# Effective sample size (should be > 1000)
-ess_values <- neff_ratio(bayes_model)
+# Effective sample size - extract from summary
+ess_values <- brms::neff_ratio(bayes_model)
 print(ess_values)
 
 # Trace plots (chains should mix well)
-mcmc_trace(bayes_model, pars = c("b_Intercept", "b_study_hours", "sigma"))
-
-# Rank overlay plots (histogram-like chains)
-mcmc_rank_overlay(bayes_model, pars = c("b_Intercept", "b_study_hours"))
+plot(bayes_model, pars = c("b_Intercept", "b_study_hours", "sigma"))
 ```
 
 **Checkpoint:** 
@@ -2153,16 +2152,18 @@ alpha_result <- psych::alpha(items)
 # Print full output
 print(alpha_result)
 
-# Extract key statistics
-cat("\nCronbach's Alpha:", round(alpha_result$total$raw_alpha, 3), "\n")
-cat("Standardized Alpha:", round(alpha_result$total$std.alpha, 3), "\n")
-cat("Number of items:", alpha_result$total$nvar, "\n")
-cat("Sample size:", alpha_result$total$n, "\n")
+# Extract key statistics safely using as.numeric() to ensure atomic values
+cat("\nCronbach's Alpha:", round(as.numeric(alpha_result$total$raw_alpha), 3), "\n")
+cat("Standardized Alpha:", round(as.numeric(alpha_result$total$std.alpha), 3), "\n")
+cat("Number of items:", as.numeric(alpha_result$total$nvar), "\n")
+cat("Sample size:", as.numeric(alpha_result$total$n), "\n")
 
-# 95% Confidence interval for alpha
-cat("95% CI for Alpha:", 
-    round(alpha_result$feldt$lower.ci, 3), "-",
-    round(alpha_result$feldt$upper.ci, 3), "\n")
+# 95% Confidence interval for alpha (if available)
+if (!is.null(alpha_result$feldt) && is.data.frame(alpha_result$feldt) && nrow(alpha_result$feldt) > 0) {
+  cat("95% CI for Alpha:", 
+      round(as.numeric(alpha_result$feldt$lower.ci), 3), "-",
+      round(as.numeric(alpha_result$feldt$upper.ci), 3), "\n")
+}
 ```
 
 **Checkpoint:** Initial alpha should be moderate (0.60-0.75), with wide CI due to small sample.
@@ -3525,6 +3526,8 @@ influencePlot(model, main = "Influence Plot",
 Check if data meet normality assumptions:
 
 ```{r lab10-normality}
+#| eval: false
+#| include: false
 # Q-Q plots for key variables
 par(mfrow = c(2, 2))
 qqnorm(cognitive_data$age, main = "Q-Q Plot: Age")
@@ -3628,6 +3631,8 @@ cat("- R² increased by:",
 Create transparent reporting:
 
 ```{r lab10-reporting}
+#| eval: false
+#| include: false
 library(gt)
 
 # Summary of screening process

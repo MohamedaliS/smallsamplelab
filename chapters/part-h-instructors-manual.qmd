@@ -1,6 +1,5 @@
 # Part H: Instructor's Manual
 
-# INSTRUCTOR'S MANUAL
 ## Quantitative Analysis with Small Samples
 
 **For Academic Use Only**  
@@ -353,7 +352,9 @@ When teaching this material to undergraduates (typically juniors/seniors with in
 
 **Example: UG Template for Mann-Whitney Test**
 
-```r
+```{r}
+#| eval: false
+#| include: false
 # Lab 3: Mann-Whitney U Test (Undergraduate Version)
 # TODO: Load the required package
 library(__________)  # Hint: starts with "r"
@@ -782,7 +783,9 @@ To ensure UG students succeed, provide these scaffolding materials:
 
 **1. RMarkdown Template (Starter File)**
 
-```r
+```{r}
+#| eval: false
+#| include: false
 ---
 title: "Your Research Question Here"
 author: "Your Name(s)"
@@ -824,6 +827,9 @@ library(ggplot2)
 ```
 
 ```{r load-data}
+#| eval: false
+#| include: false
+
 # Load your data
 df <- read_csv("data/your_dataset.csv")
 
@@ -832,6 +838,9 @@ head(df)
 ```
 
 ```{r screening}
+#| eval: false
+#| include: false
+
 # Check for outliers
 boxplot(df$your_variable, main = "Boxplot of Outcome Variable")
 
@@ -862,6 +871,9 @@ Effect sizes were calculated using [Cohen's d / rank-biserial correlation].
 [Report means, SDs, medians for each group/condition]
 
 ```{r descriptives}
+#| eval: false
+#| include: false
+
 # Calculate descriptives by group
 df %>%
   group_by(group_variable) %>%
@@ -881,6 +893,9 @@ The Shapiro-Wilk test indicated [normality was met / violated], W = [value], p =
 ## Primary Analysis
 
 ```{r analysis}
+#| eval: false
+#| include: false
+
 # Conduct your test (example: t-test)
 result <- t.test(outcome ~ group, data = df, var.equal = TRUE)
 print(result)
@@ -897,6 +912,9 @@ The effect size was [small/medium/large], d = [value], 95% CI [[lower, upper]].
 ## Visualization
 
 ```{r figure, fig.cap="Figure 1. [Your caption here]"}
+#| eval: false
+#| include: false
+
 # Create your plot
 ggplot(df, aes(x = group, y = outcome)) +
   geom_boxplot() +
@@ -931,7 +949,7 @@ ggplot(df, aes(x = group, y = outcome)) +
 **2. Sample Dataset Files (Provided to Students)**
 
 **File: `sleep_intervention.csv`**
-```csv
+```{csv}
 participant_id,pre_hours,post_hours,age,gender
 1,5.2,6.8,22,F
 2,6.1,6.9,24,M
@@ -940,7 +958,7 @@ participant_id,pre_hours,post_hours,age,gender
 ```
 
 **File: `teaching_methods.csv`**
-```csv
+```{csv}
 student_id,method,exam_score,prior_GPA
 1,active,85,3.2
 2,active,92,3.6
@@ -1221,7 +1239,10 @@ The conclusion is misleading. With n = 15 and d = 0.75 (a large effect by Cohen'
 
 **Answer:**
 
-```r
+```{r}
+#| eval: false
+#| include: false
+
 library(pwr)
 pwr.t.test(n = 12, d = 0.6, sig.level = 0.05, type = "two.sample")
 ```

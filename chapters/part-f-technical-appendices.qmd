@@ -1,12 +1,16 @@
-# Part F: Technical Appendices
+---
+title: "Part F: Technical Appendices"
+keep-md: true
+---
 
+# Part F: Technical Appendices
 ## Pre-Registration and Registered Reports for Small-Sample Studies
 
 ### Why Pre-Registration Matters Even More with Small Samples
 
 Pre-registration involves specifying research hypotheses, methods, and the analysis plan before collecting or analysing data. This practice is particularly important for small-sample studies because:
 
-1. **Limited power increases temptation for p-hacking**: With borderline results (p ≈ 0.06), researchers may be tempted to try alternative analyses until significance is achieved.
+1. **Limited power increases temptation for p-hacking**: With borderline results (p ~= 0.06), researchers may be tempted to try alternative analyses until significance is achieved.
 2. **Researcher degrees of freedom are amplified**: Small samples make results more sensitive to analytic choices (outlier handling, transformations, covariates).
 3. **Multiple testing is common**: With limited power, researchers may test many potential predictors or moderators.
 4. **Post-hoc storytelling**: It is easier to construct plausible narratives around unexpected findings when samples are small.
@@ -14,7 +18,6 @@ Pre-registration involves specifying research hypotheses, methods, and the analy
 Pre-registration separates confirmatory from exploratory analyses, making the evidential value of findings transparent.
 
 ### What to Pre-Register
-
 #### Minimum Requirements
 
 1. **Research questions and hypotheses**
@@ -46,7 +49,7 @@ Pre-registration separates confirmatory from exploratory analyses, making the ev
 
 #### Example Pre-Registration Template for Small-Sample Study
 
-```markdown
+```
 # Study Title: Effect of Brief Mindfulness Intervention on Test Anxiety
 
 ## 1. Research Questions
@@ -198,7 +201,7 @@ Deviations are inevitable and acceptable if reported transparently.
 
 #### How to report deviations
 
-```markdown
+```
 **Deviations from Pre-Registration:**
 
 1. **Sample size**: Planned n=40, achieved n=36. Recruitment ended due to 
@@ -609,7 +612,7 @@ A study with n = 15 per group finds a mean difference of 5 points on a 100-point
 
 **Model answer**
 
-> The intervention group scored 5 points higher on average than the control group (95% CI: -2 to 12 points), corresponding to a small-to-medium effect (Cohen's d = 0.42, 95% CI: -0.15 to 0.98). The confidence interval includes both trivial and moderate effects, indicating substantial uncertainty due to the limited sample size (n = 15 per group). The p-value (p = 0.12) does not provide evidence against the null hypothesis, but the study was underpowered to detect effects smaller than d ≈ 1.0. These findings suggest a possible modest benefit that warrants investigation in a larger sample.
+> The intervention group scored 5 points higher on average than the control group (95% CI: -2 to 12 points), corresponding to a small-to-medium effect (Cohen's d = 0.42, 95% CI: -0.15 to 0.98). The confidence interval includes both trivial and moderate effects, indicating substantial uncertainty due to the limited sample size (n = 15 per group). The p-value (p = 0.12) does not provide evidence against the null hypothesis, but the study was underpowered to detect effects smaller than d ~= 1.0. These findings suggest a possible modest benefit that warrants investigation in a larger sample.
 
 **Exercise 16.1 — Visualisation Critique**
 
@@ -809,7 +812,7 @@ write_csv(mediation_example, "data/mediation_example.csv")
 **Key Features**:
 - n = 100 (minimum for mediation analysis with bootstrap)
 - Temporal ordering: Intervention → Self-Efficacy (Week 6) → Exam (Week 8)
-- Strong indirect effect (≈79% of total effect mediated)
+- Strong indirect effect (~=79% of total effect mediated)
 - Used in Part E, Project 5: "Understanding Intervention Mechanisms"
 
 **Methods Demonstrated**:
@@ -821,7 +824,7 @@ write_csv(mediation_example, "data/mediation_example.csv")
 **Sample Size Requirement**: n ≥ 80-100 for adequate power to detect indirect effects via bootstrapping.
 
 ---
-```
+
 
 **Education Applications:**
 - **classroom_reading.csv**: Evaluate literacy interventions, compare pre/post achievement
