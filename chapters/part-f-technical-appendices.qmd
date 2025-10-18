@@ -1,8 +1,6 @@
-# Part F: Technical Appendices
+# Pre Registration and Registered Reports for Small-Sample Studies
 
-## Pre-Registration and Registered Reports for Small-Sample Studies
-
-### Why Pre-Registration Matters Even More with Small Samples
+## Why Pre-Registration Matters Even More with Small Samples
 
 Pre-registration involves specifying research hypotheses, methods, and the analysis plan before collecting or analysing data. This practice is particularly important for small-sample studies because:
 
@@ -494,6 +492,7 @@ e) A comparison of defect rates in 12 manufacturing batches.
 A researcher can measure student performance as binary (pass ≥ 60, fail < 60), ordinal (grades A–F), or continuous (0–100 score). With n = 20 students, which outcome measure provides the most information? Use a simulation to illustrate why preserving granularity improves inference.
 
 ```{r}
+#| label: simulation-1
 set.seed(2025)
 n <- 20
 
@@ -1327,6 +1326,6 @@ Confirm the following before escalating:
 | brms | 2.20.0+ | Optional |
 | mice | 3.16.0+ | Optional |
 
----
+
 
 This appendix compiles pre-registration guidance, teaching resources, troubleshooting tips, and advanced topic pathways so instructors and researchers can implement small-sample methods confidently.

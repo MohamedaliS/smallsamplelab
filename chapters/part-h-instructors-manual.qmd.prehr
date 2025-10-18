@@ -6,7 +6,7 @@
 **For Academic Use Only**  
 **Confidential—Not for Student Distribution**
 
-***
+---
 
 ## Table of Contents
 
@@ -17,7 +17,7 @@
 5. [Common Teaching Challenges](#teaching-challenges)
 6. [Additional Resources](#additional-resources)
 
-***
+---
 
 ## 1. COURSE PLANNING
 
@@ -76,7 +76,7 @@ By the end of this course, students will be able to:
 - Pre-register analyses and document deviations
 - Critique published small-sample studies
 
-***
+---
 
 ## 2. SAMPLE SYLLABI
 
@@ -120,7 +120,7 @@ By the end of this course, students will be able to:
 
 **Total:** 100%
 
-***
+---
 
 ### 2.2 Fifteen-Week Semester Course (Undergraduate Adaptation)
 
@@ -211,7 +211,7 @@ By the end of this course, students will be able to:
 - ❌ Part F: Technical Appendices
 - ❌ Labs 4, 5, 7 (Bayesian, MCDM, advanced bootstrap)
 
-***
+---
 
 ### 2.3 Graduate vs. Undergraduate Comparison Table
 
@@ -228,7 +228,7 @@ By the end of this course, students will be able to:
 | **Reading Load** | ~60 pages/week | ~30 pages/week |
 | **Assessment Rigor** | APA-style reports, preregistration | Simplified reporting, templates provided |
 
-***
+---
 
 ### 2.4 Twelve-Week Semester Course (Condensed Graduate)
 
@@ -251,7 +251,7 @@ By the end of this course, students will be able to:
 | 11 | Synthesis | Part E | Project 3 | Assignment 3 Due |
 | 12 | Presentations | — | Student presentations | Final Presentation |
 
-***
+---
 
 ### 2.5 Five-Day Intensive Workshop
 
@@ -295,7 +295,7 @@ By the end of this course, students will be able to:
 - Lab completion certificates (50%)
 - Take-home capstone project (25%)
 
-***
+---
 
 ### 2.6 Instructor's Guide: Adapting for Undergraduates
 
@@ -584,7 +584,7 @@ print(result)
 
 **Answer Key Provided to Instructor**
 
-***
+---
 
 ### 2.7 Assignment 3: Complete Undergraduate Research Report Guide
 
@@ -595,7 +595,7 @@ print(result)
 
 This section provides a **complete assignment template** that undergraduate students can successfully complete using only the simplified content from Chapters 1, 2, 3, 4, 9, 11, 13, 15, 16.
 
-***
+---
 
 #### Assignment 3: Independent Research Report (UG Version)
 
@@ -611,7 +611,7 @@ This section provides a **complete assignment template** that undergraduate stud
 
 **Weight:** 20% of final grade
 
-***
+---
 
 #### Part 1: Assignment Instructions for Students
 
@@ -629,7 +629,7 @@ You will analyze one of the provided datasets (or your own data with instructor 
 4. Appropriate visualization
 5. Transparent reporting of limitations
 
-***
+---
 
 **STEP 1: Choose Your Dataset (Week 11)**
 
@@ -658,7 +658,7 @@ Select ONE dataset from these options:
 - Must have clear research question
 - Must be approved by instructor by Week 11
 
-***
+---
 
 **STEP 2: Data Screening (Week 12-13)**
 
@@ -673,7 +673,7 @@ Before analyzing, you MUST screen your data and document decisions:
 
 **Deliverable for Draft:** 1 paragraph + 2-3 plots documenting screening decisions.
 
-***
+---
 
 **STEP 3: Analysis (Week 13-14)**
 
@@ -689,7 +689,7 @@ Conduct your primary analysis using methods from this course:
 
 **Deliverable for Draft:** Results section (2 paragraphs) with all components above.
 
-***
+---
 
 **STEP 4: Write Your Report (Week 14)**
 
@@ -729,7 +729,7 @@ Conduct your primary analysis using methods from this course:
 - Include all R code used (cleaning, analysis, visualization)
 - Must be reproducible
 
-***
+---
 
 **STEP 5: Create Your Presentation (Week 15)**
 
@@ -752,7 +752,7 @@ Conduct your primary analysis using methods from this course:
 - Avoid reading slides word-for-word
 - Explain statistics in plain language
 
-***
+---
 
 #### Part 2: Detailed Grading Rubric (100 points)
 
@@ -774,7 +774,7 @@ Conduct your primary analysis using methods from this course:
 
 **TOTAL:** /100 points (× 0.20 = 20% of final grade)
 
-***
+---
 
 #### Part 3: Provided Support Materials
 
@@ -783,7 +783,7 @@ To ensure UG students succeed, provide these scaffolding materials:
 **1. RMarkdown Template (Starter File)**
 
 ```r
-***
+---
 title: "Your Research Question Here"
 author: "Your Name(s)"
 date: "`r Sys.Date()`"
@@ -791,7 +791,7 @@ output:
   pdf_document:
     toc: false
 bibliography: references.bib
-***
+---
 
 # Introduction
 
@@ -926,7 +926,7 @@ ggplot(df, aes(x = group, y = outcome)) +
 [All code chunks are automatically included when you knit this document]
 ```
 
-***
+---
 
 **2. Sample Dataset Files (Provided to Students)**
 
@@ -948,7 +948,7 @@ student_id,method,exam_score,prior_GPA
 [... 26 rows total]
 ```
 
-***
+---
 
 **3. Example Completed Report (Partial - for students to see)**
 
@@ -989,7 +989,7 @@ Provide a 2-page excerpt showing:
 > The boxplot shows higher median scores and less variability in the 
 > active learning group compared to the lecture-only group.
 
-***
+---
 
 **4. Peer Review Worksheet (Week 14)**
 
@@ -1010,7 +1010,7 @@ Students exchange drafts and provide feedback using this structured form:
 
 **Feedback/Suggestions:**
 
-***
+---
 
 **2. Methods (3 points)**
 - [ ] Are participants described (n, demographics)?
@@ -1019,7 +1019,7 @@ Students exchange drafts and provide feedback using this structured form:
 
 **Feedback/Suggestions:**
 
-***
+---
 
 **3. Results (3 points)**
 - [ ] Are descriptive statistics reported?
@@ -1028,7 +1028,7 @@ Students exchange drafts and provide feedback using this structured form:
 
 **Feedback/Suggestions:**
 
-***
+---
 
 **4. Figure (1 point)**
 - [ ] Is the figure clear and professional?
@@ -1036,19 +1036,19 @@ Students exchange drafts and provide feedback using this structured form:
 
 **Feedback/Suggestions:**
 
-***
+---
 
 **5. Overall Strengths (what did they do well?):**
 
-***
+---
 
 **6. Overall Suggestions (what could be improved?):**
 
-***
+---
 
 **7. One specific revision you recommend:**
 
-***
+---
 
 #### Part 4: Addressing the "Are They Ready?" Question
 
@@ -1116,7 +1116,7 @@ By Week 15, UG students have:
 
 **They are ready.**
 
-***
+---
 
 #### Part 5: Instructor Checklist for UG Report Success
 
@@ -1149,7 +1149,7 @@ By Week 15, UG students have:
 - [ ] Provide feedback using detailed rubric
 - [ ] Celebrate completion!
 
-***
+---
 
 #### Part 6: Sample Student Questions & Instructor Responses
 
@@ -1171,7 +1171,7 @@ By Week 15, UG students have:
 **Q: "My peer reviewer said my figure is unclear. Can I fix it after peer review?"**  
 **A:** Yes! That's the point of peer review. Use their feedback to revise before the final submission.
 
-***
+---
 
 ### 2.8 Online Asynchronous Course (8 Weeks)
 
@@ -1198,7 +1198,7 @@ By Week 15, UG students have:
 - Assignment 1: Study design (10%)
 - Final project (20%)
 
-***
+---
 
 ## 3. ANSWER KEYS
 
@@ -1215,7 +1215,7 @@ The conclusion is misleading. With n = 15 and d = 0.75 (a large effect by Cohen'
 - Mentions effect size and CI (1 pt)
 - Proposes better conclusion (1 pt)
 
-***
+---
 
 **Question 2:** *Calculate post-hoc power for a t-test with n₁ = n₂ = 12, d = 0.60, α = 0.05.*
 
@@ -1244,7 +1244,7 @@ pwr.t.test(n = 12, d = 0.6, sig.level = 0.05, type = "two.sample")
 - Correct power value (1 pt)
 - Interpretation (1 pt)
 
-***
+---
 
 ### 3.2 Chapter 3 Homework Solutions
 
@@ -1285,7 +1285,7 @@ The two-sided p-value is 0.0265, indicating significant evidence (α = 0.05) tha
 - Correct p-value and OR (1 pt)
 - Interpretation (1 pt)
 
-***
+---
 
 **Question 2:** *Generate a permutation distribution for the difference in means between two groups (n₁ = 8, n₂ = 7).*
 
@@ -1323,7 +1323,7 @@ Z = 3.12, p-value = 0.002
 - Correct permutation function (2 pts)
 - Interpretation (1 pt)
 
-***
+---
 
 ### 3.3 Chapter 5 Homework Solutions
 
@@ -1361,7 +1361,7 @@ summary(glm_firth)
 - Firth GLM fitted (2 pts)
 - Comparison and interpretation (1 pt)
 
-***
+---
 
 ### 3.4 Chapter 9 Homework Solutions
 
@@ -1387,7 +1387,7 @@ result$d
 - Correct MDE (1 pt)
 - Interpretation with context (1 pt)
 
-***
+---
 
 ### 3.5 Chapter 12 Homework Solutions
 
@@ -1436,7 +1436,7 @@ summary(pooled)
 - Convergence check (1 pt)
 - Model fitting and pooling (2 pts)
 
-***
+---
 
 ## 4. GRADING RUBRICS
 
@@ -1459,7 +1459,7 @@ summary(pooled)
 - **Developing (70–79):** Basic understanding; missing key elements (e.g., no power analysis)
 - **Needs Improvement (<70):** Major conceptual errors; unrealistic design
 
-***
+---
 
 ### 4.2 Assignment 2: Data Analysis (100 points)
 
@@ -1481,7 +1481,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 - Over-interpreting non-significant results (claiming "no effect")
 - Deleting outliers without justification
 
-***
+---
 
 ### 4.3 Lab Participation Rubric (Per Lab, 10 points)
 
@@ -1493,7 +1493,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 
 **Late Submission:** -20% per day up to 3 days; 0 points after 3 days.
 
-***
+---
 
 ### 4.4 Final Presentation Rubric (50 points)
 
@@ -1507,7 +1507,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 | **Q&A Handling** | 5 | Answers questions thoughtfully; defends choices; acknowledges uncertainties |
 | **Time Management** | 5 | Stays within 15 minutes; covers all required sections |
 
-***
+---
 
 ## 5. COMMON TEACHING CHALLENGES
 
@@ -1528,7 +1528,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 - Lab 5: Students run same model with three priors (very weak, weakly informative, informative) and compare posteriors.
 - Discussion: When would you use informative priors? (e.g., clinical trials with historical data)
 
-***
+---
 
 ### 5.2 Challenge: Over-Reliance on P-Values
 
@@ -1545,7 +1545,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 **Activity:**
 - Students replicate a published small-sample study (simulated data) 50 times and plot distribution of p-values and effect sizes. Observe that p-values vary wildly; effect size estimates center on truth.
 
-***
+---
 
 ### 5.3 Challenge: Confusion About "No Evidence of Effect" vs. "Evidence of No Effect"
 
@@ -1565,7 +1565,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
   - Calculate post-hoc power
   - Rewrite conclusion appropriately
 
-***
+---
 
 ### 5.4 Challenge: R Programming Struggles
 
@@ -1585,7 +1585,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 - Create video tutorials for common tasks (e.g., "How to install mice package")
 - Office hours dedicated to R troubleshooting
 
-***
+---
 
 ### 5.5 Challenge: Diverse Student Backgrounds
 
@@ -1604,7 +1604,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 - **Basic:** Run `wilcox.test()` on provided data, interpret output.
 - **Advanced:** Write function to compute rank-biserial correlation manually; compare with package output.
 
-***
+---
 
 ## 6. ADDITIONAL RESOURCES
 
@@ -1627,7 +1627,7 @@ Students analyze a provided dataset (e.g., `anxiety_study.csv`) and write a 5–
 5. **Gelman, A., & Hill, J. (2006).** *Data Analysis Using Regression and Multilevel/Hierarchical Models*. Cambridge University Press.
    - Advanced treatment of small-sample regression issues.
 
-***
+---
 
 ### 6.2 R Packages to Highlight
 
@@ -1655,7 +1655,7 @@ install.packages(c(
 ))
 ```
 
-***
+---
 
 ### 6.3 Datasets for Teaching
 
@@ -1689,7 +1689,7 @@ df <- data.frame(
 write.csv(df, "treatment_study.csv", row.names = FALSE)
 ```
 
-***
+---
 
 ### 6.4 Online Resources
 
@@ -1705,7 +1705,7 @@ write.csv(df, "treatment_study.csv", row.names = FALSE)
 **Preprint Repositories:**
 - **PsyArXiv, OSF Preprints** — Examples of preregistered small-sample studies
 
-***
+---
 
 ### 6.5 Assessment Item Bank
 
@@ -1737,7 +1737,7 @@ write.csv(df, "treatment_study.csv", row.names = FALSE)
 
 3. *What is the difference between MCAR, MAR, and MNAR? Give an example of each.*
 
-***
+---
 
 ## 7. LECTURE NOTES & TIPS
 
@@ -1777,7 +1777,7 @@ write.csv(df, "treatment_study.csv", row.names = FALSE)
 - *"Can I just collect more data?"* — Sometimes yes, but often no (cost, time, access). Focus on optimal analysis given constraints.
 - *"Isn't n = 30 the magic number?"* — No. It's a rough heuristic for CLT, not a universal threshold.
 
-***
+---
 
 ### 7.2 Chapter 3: Exact Tests and Resampling
 
@@ -1816,7 +1816,7 @@ write.csv(df, "treatment_study.csv", row.names = FALSE)
 - Forgetting to set `set.seed()` for reproducibility
 - Confusing bootstrap (resample with replacement) with permutation (resample without replacement)
 
-***
+---
 
 ### 7.3 Chapter 12: Missing Data
 
@@ -1856,7 +1856,7 @@ write.csv(df, "treatment_study.csv", row.names = FALSE)
 - *"How many imputations (m) should I use?"* — Default m = 5; modern recommendation m = 20–40 for more stable SEs.
 - *"What if I have MNAR?"* — Sensitivity analysis; report results with/without imputation; acknowledge limitation.
 
-***
+---
 
 ## 8. EXTENDING THE COURSE
 
@@ -1884,7 +1884,7 @@ For students who complete core material early or want deeper treatment:
 - **Reading:** Collett (2014), *Modelling Survival Data in Medical Research*
 - **Activity:** Analyze time-to-event data (n = 20) with `survival` package
 
-***
+---
 
 ### 8.2 Capstone Project Ideas
 
@@ -1919,7 +1919,7 @@ Students design and execute a complete small-sample study (real or simulated).
 - Presentation (30 pts)
 - Peer review participation (20 pts)
 
-***
+---
 
 ### 8.3 Flipped Classroom Implementation
 
@@ -1942,7 +1942,7 @@ Students design and execute a complete small-sample study (real or simulated).
 - Embed quizzes in videos (e.g., via **EdPuzzle**)
 - Track completion via LMS analytics
 
-***
+---
 
 ### 8.4 Collaborative Learning Activities
 
@@ -1970,7 +1970,7 @@ Students design and execute a complete small-sample study (real or simulated).
 - Class circulates, leaves sticky-note comments
 - Author responds to questions
 
-***
+---
 
 ## 9. INSTRUCTOR REFLECTION PROMPTS
 
@@ -1984,7 +1984,7 @@ After teaching the course, consider these questions to improve future iterations
 6. **Did students achieve learning outcomes?** (Administer pre/post concept inventory)
 7. **What feedback did students provide?** (End-of-course evaluations)
 
-***
+---
 
 ## 10. ETHICAL CONSIDERATIONS IN TEACHING
 
@@ -2000,7 +2000,7 @@ After teaching the course, consider these questions to improve future iterations
 - Show example of published study with n = 12, p = 0.048, no effect size reported, no preregistration
 - Ask: What are the red flags? How could this study be improved?
 
-***
+---
 
 ### 10.2 Diversity and Inclusion
 
@@ -2014,7 +2014,7 @@ After teaching the course, consider these questions to improve future iterations
 - Provide multiple modes of assessment (written, presentation, coding)
 - Offer flexible deadlines for students with caregiving responsibilities
 
-***
+---
 
 ### 10.3 Open Science Practices
 
@@ -2027,7 +2027,7 @@ After teaching the course, consider these questions to improve future iterations
 **Activity:**
 - Students create OSF project for final assignment; upload data, code, preregistration
 
-***
+---
 
 ## 11. CONCLUSION
 
@@ -2041,7 +2041,7 @@ By equipping students with exact tests, resampling methods, Bayesian tools, and 
 
 **Good luck with your teaching!** For questions or suggestions, contact the authors or visit the companion website.
 
-***
+---
 
 ## APPENDIX A: SOLUTIONS TO WORKED PROJECTS
 
@@ -2097,7 +2097,7 @@ ggplot(df_long, aes(x = time, y = score)) +
 - No control group—cannot rule out placebo effects, time trends
 - Generalizability limited to this organization
 
-***
+---
 
 ### Project 2: A/B Test
 
@@ -2144,7 +2144,7 @@ df %>%
 - Report CI to show uncertainty
 - Consider Bayesian approach with informative prior from past A/B tests
 
-***
+---
 
 ### Project 3: Hospital Readmissions
 
@@ -2198,7 +2198,7 @@ summary(model)
 - Hierarchical model pools information across hospitals (shrinkage)
 - Could add covariates (patient age, comorbidities) to explain variation
 
-***
+---
 
 ## APPENDIX B: SAMPLE FINAL EXAM (Take-Home, 48 Hours)
 
@@ -2232,7 +2232,7 @@ pwr::pwr.t.test(n = 10, d = 0.5, sig.level = 0.05, type = "two.sample")
 # 3. Accept lower power; report as pilot study
 ```
 
-***
+---
 
 ### Question 2 (30 points): Data Analysis
 
@@ -2277,7 +2277,7 @@ ggplot(df, aes(x = method, y = score)) +
   theme_minimal()
 ```
 
-***
+---
 
 ### Question 3 (25 points): Missing Data
 
@@ -2321,7 +2321,7 @@ summary(fit_cc)
 # Comparison: Imputed SE smaller, coefficient similar
 ```
 
-***
+---
 
 ### Question 4 (25 points): Reporting
 
@@ -2338,7 +2338,7 @@ Write a Results section (300 words) reporting the analysis from Question 2. Incl
 - Effect size and CI (5 pts)
 - Appropriate interpretation (5 pts)
 
-***
+---
 
 **END OF INSTRUCTOR'S MANUAL**
 

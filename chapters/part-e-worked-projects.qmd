@@ -28,6 +28,7 @@ We use the `mini_marketing.csv` dataset (n = 30) generated earlier. Variables in
 ### Preliminary Exploration
 
 ```{r}
+#| label: setup-1
 library(tidyverse)
 library(rstatix)
 library(gt)
@@ -78,6 +79,7 @@ ggplot(marketing_data, aes(x = campaign, y = satisfaction, fill = campaign)) +
 Since satisfaction is ordinal and sample sizes are small, we use the Mann–Whitney U test (Wilcoxon rank-sum) as the primary analysis. This nonparametric test does not assume normality and is robust to the ordinal nature of the outcome (Conover, 1999).
 
 ```{r}
+#| label: plot-2
 # Mann–Whitney U test
 mw_result <- wilcox_test(marketing_data, satisfaction ~ campaign, detailed = TRUE)
 print(mw_result)
@@ -105,6 +107,7 @@ if (requireNamespace("coin", quietly = TRUE)) {
 To assess robustness, we repeat the analysis using a t-test, treating satisfaction as if it were continuous. If both tests yield similar conclusions, confidence in the findings increases.
 
 ```{r}
+#| label: t-test-3
 # Independent samples t-test (assuming equal variances)
 t_result <- t_test(marketing_data, satisfaction ~ campaign, var.equal = TRUE, detailed = TRUE)
 print(t_result)
@@ -124,6 +127,7 @@ cat("95% CI: [", round(t_result$conf.low, 2), ",", round(t_result$conf.high, 2),
 We examine whether prior purchase history influences satisfaction, using stratified analyses and a permutation test.
 
 ```{r}
+#| label: t-test-4
 # Stratify by prior purchase
 stratified_desc <- marketing_data %>%
   group_by(campaign, prior_purchase) %>%
@@ -155,6 +159,7 @@ print(kw_result)
 We create a plot showing mean satisfaction by campaign and prior purchase status.
 
 ```{r}
+#| label: plot-5
 # Compute means for plotting
 interaction_plot_data <- marketing_data %>%
   group_by(campaign, prior_purchase) %>%
@@ -187,6 +192,7 @@ ggplot(interaction_plot_data, aes(x = campaign, y = mean_satisfaction,
 We create a publication-ready summary table using `gt`.
 
 ```{r}
+#| label: summary-stats-6
 summary_table <- desc_stats %>%
   gt() %>%
   tab_header(
@@ -256,6 +262,7 @@ We use the `service_quality.csv` dataset (n = 36) generated earlier. Variables i
 ### Preliminary Exploration
 
 ```{r}
+#| label: setup-7
 library(tidyverse)
 library(psych)
 library(gt)
@@ -295,6 +302,7 @@ print(round(cor_matrix, 2))
 We compute Cronbach's alpha for the 3-item scale.
 
 ```{r}
+#| label: correlation-8
 # Cronbach's alpha
 alpha_result <- alpha(items_only)
 print(alpha_result)
@@ -311,6 +319,7 @@ cat("95% CI (approx):", round(alpha_result$total$raw_alpha - 1.96 * alpha_result
 We compute McDonald's omega as a robustness check.
 
 ```{r}
+#| label: confidence-interval-9
 # McDonald's omega
 omega_result <- omega(items_only, nfactors = 1, plot = FALSE)
 print(omega_result)
@@ -325,6 +334,7 @@ cat("McDonald's omega total:", round(omega_result$omega.tot, 3), "\n")
 We examine corrected item-total correlations to identify weak items.
 
 ```{r}
+#| label: plot-10
 # Item statistics from alpha output
 item_stats <- alpha_result$item.stats
 print(item_stats)
@@ -348,6 +358,7 @@ if (nrow(weak_items) > 0) {
 We compute alpha separately for each branch to assess whether reliability differs by location. This is exploratory, as branch samples are very small (n ≈ 12 per branch).
 
 ```{r}
+#| label: correlation-11
 # Compute alpha by branch
 alpha_by_branch <- service_data %>%
   group_by(branch) %>%
@@ -370,6 +381,7 @@ print(alpha_by_branch)
 We visualise the distribution of responses for each item.
 
 ```{r}
+#| label: plot-12
 # Reshape data for plotting
 items_long <- service_data %>%
   select(respondent_id, starts_with("q")) %>%
@@ -392,6 +404,7 @@ ggplot(items_long, aes(x = score, fill = item)) +
 ### Summary Table: Reliability Statistics
 
 ```{r}
+#| label: plot-13
 reliability_summary <- tibble(
   Statistic = c("Cronbach's Alpha", "McDonald's Omega", "Mean Inter-Item Correlation", "Number of Items"),
   Value = c(
@@ -421,6 +434,7 @@ $$\text{SEM} = SD_{\text{total}} \times \sqrt{1 - \alpha}.$$
 A smaller SEM indicates more precise measurement.
 
 ```{r}
+#| label: summary-stats-14
 # Compute total score and SEM using Cronbach's alpha
 total_scores <- rowSums(items_only)
 total_sd <- sd(total_scores)
@@ -484,6 +498,7 @@ We use the `process_change.csv` dataset (n = 20 units) generated earlier. Variab
 ### Preliminary Exploration
 
 ```{r}
+#| label: setup-15
 library(tidyverse)
 library(rstatix)
 library(ggplot2)
@@ -528,6 +543,7 @@ ggplot(process_data, aes(x = before, y = after)) +
 Since defect counts are small and may not be normally distributed, we use the Wilcoxon signed-rank test (nonparametric paired test). This test assesses whether the distribution of differences differs from zero (Conover, 1999).
 
 ```{r}
+#| label: plot-16
 # Wilcoxon signed-rank test (base R)
 wilcox_base <- wilcox.test(process_data$before, process_data$after, paired = TRUE, conf.int = TRUE)
 print(wilcox_base)
@@ -545,6 +561,7 @@ cat("95% CI:", paste(formatC(wilcox_base$conf.int, format = "f", digits = 2), co
 To assess robustness, we also conduct a paired t-test, treating defect counts as if they were continuous and normally distributed.
 
 ```{r}
+#| label: plot-17
 # Paired t-test (base R)
 t_base <- t.test(process_data$before, process_data$after, paired = TRUE)
 print(t_base)
@@ -569,6 +586,7 @@ cat("Cohen's d (paired):", formatC(cohens_d_value, format = "f", digits = 2), "\
 We identify any extreme changes that might unduly influence results.
 
 ```{r}
+#| label: t-test-18
 # Identify outliers in the change variable
 Q1 <- quantile(process_data$change, 0.25)
 Q3 <- quantile(process_data$change, 0.75)
@@ -605,6 +623,7 @@ ggplot(process_data, aes(x = "", y = change)) +
 We create a spaghetti plot showing each unit's trajectory.
 
 ```{r}
+#| label: plot-19
 # Reshape data for plotting
 process_long <- process_data %>%
   pivot_longer(cols = c(before, after), names_to = "time", values_to = "defects") %>%
@@ -633,6 +652,7 @@ ggplot(process_long, aes(x = time, y = defects, group = unit_id)) +
 We explore whether the intervention effect differs by department.
 
 ```{r}
+#| label: plot-20
 # Descriptive by department
 dept_summary <- process_data %>%
   group_by(department) %>%
@@ -664,6 +684,7 @@ ggplot(process_data, aes(x = department, y = change, fill = department)) +
 ### Summary Table
 
 ```{r}
+#| label: plot-21
 summary_table <- tibble(
   Measure = c("Mean Before", "Mean After", "Mean Change", "Median Change", "p-value (Wilcoxon)", "Effect Size (Cohen's d)"),
   Value = c(
@@ -736,6 +757,7 @@ We use the `classroom_reading.csv` dataset (n = 22 students). Variables include:
 ### Preliminary Exploration
 
 ```{r}
+#| label: setup-22
 library(tidyverse)
 library(rstatix)
 library(effsize)
@@ -784,6 +806,7 @@ ggplot(reading_data, aes(x = improvement)) +
 ### Visualizing Individual Trajectories
 
 ```{r}
+#| label: plot-23
 # Create long format for paired plot
 reading_long <- reading_data %>%
   pivot_longer(cols = c(pre_reading_score, post_reading_score),
@@ -816,6 +839,7 @@ ggplot(reading_long, aes(x = time, y = score, group = student_id)) +
 We use a paired t-test to assess whether the mean improvement differs significantly from zero. This test is appropriate if differences are approximately normally distributed (we check this below).
 
 ```{r}
+#| label: summary-stats-24
 # Normality check for differences
 shapiro.test(reading_data$improvement)
 
@@ -833,6 +857,7 @@ ggplot(reading_data, aes(sample = improvement)) +
 **Normality Assessment**: Shapiro-Wilk test (p > 0.05) suggests no strong evidence against normality. Q-Q plot shows points close to the line with minor deviations at extremes—acceptable for paired t-test with n = 22.
 
 ```{r}
+#| label: plot-25
 # Paired t-test
 t_result <- t.test(reading_data$post_reading_score, 
                    reading_data$pre_reading_score, 
@@ -859,6 +884,7 @@ cat("95% CI for mean improvement: [", formatC(ci_lower, format = "f", digits = 1
 ### Effect Size: Cohen's d for Paired Design
 
 ```{r}
+#| label: t-test-26
 # Cohen's d for paired samples
 d_effect <- cohen.d(reading_data$post_reading_score, 
                     reading_data$pre_reading_score, 
@@ -878,6 +904,7 @@ cat("95% CI: [", formatC(d_effect$conf.int[1], format = "f", digits = 2),
 To check robustness to non-normality, we run the nonparametric Wilcoxon signed-rank test.
 
 ```{r}
+#| label: t-test-27
 # Wilcoxon signed-rank test
 wilcox_result <- wilcox.test(reading_data$post_reading_score, 
                               reading_data$pre_reading_score, 
@@ -896,6 +923,7 @@ cat("\nWilcoxon signed-rank test: V =", wilcox_result$statistic,
 With only n = 22, subgroup comparisons have limited power and should be interpreted cautiously.
 
 ```{r}
+#| label: t-test-28
 # Descriptive statistics by teacher
 teacher_desc <- reading_data %>%
   group_by(teacher) %>%
@@ -934,6 +962,7 @@ cat("Formal tests of teacher differences should be pre-specified in future studi
 ### Exploratory Subgroup Analysis: By Grade Level
 
 ```{r}
+#| label: analysis-29
 # Descriptive statistics by grade
 grade_desc <- reading_data %>%
   group_by(grade_level) %>%
@@ -968,6 +997,7 @@ ggplot(reading_data, aes(x = grade_level, y = improvement, fill = grade_level)) 
 ### Summary Table
 
 ```{r}
+#| label: plot-30
 # Create summary table
 summary_table <- tibble(
   Analysis = c("Paired t-test", "Wilcoxon signed-rank", "Cohen's d (paired)"),
@@ -1315,14 +1345,14 @@ model_m <- lm(self_efficacy ~ intervention, data = data)
 # Fit outcome model (Y ~ X + M)
 model_y <- lm(exam_score ~ intervention + self_efficacy, data = data)
 
-# Estimate indirect effect via bootstrap (5000 iterations)
+# Estimate indirect effect via bootstrap (500 iterations for rendering)
 med_out <- mediate(
   model_m,
   model_y,
   treat = "intervention",
   mediator = "self_efficacy",
   boot = TRUE,
-  sims = 5000
+  sims = 500
 )
 
 # Summary
@@ -1386,14 +1416,14 @@ plot(sens_out)
 model_m_cov <- lm(self_efficacy ~ intervention + prior_gpa + age + gender, data = data)
 model_y_cov <- lm(exam_score ~ intervention + self_efficacy + prior_gpa + age + gender, data = data)
 
-# Bootstrap mediation
+# Bootstrap mediation (500 iterations for rendering)
 med_out_cov <- mediate(
   model_m_cov,
   model_y_cov,
   treat = "intervention",
   mediator = "self_efficacy",
   boot = TRUE,
-  sims = 5000
+  sims = 500
 )
 
 summary(med_out_cov)

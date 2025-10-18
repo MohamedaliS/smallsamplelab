@@ -426,7 +426,6 @@ cat("   With skewed data and n=15, this assumption is violated.\n")
 
 ```{r}
 #| label: lab2-step3
-#| eval: false
 # Manual bootstrap (for teaching purposes)
 n_boot <- 5000
 boot_medians <- numeric(n_boot)
@@ -462,7 +461,6 @@ tibble(boot_medians) %>%
 
 ```{r}
 #| label: lab2-step4
-#| eval: false
 # Percentile method: 2.5th and 97.5th percentiles
 ci_lower_boot <- quantile(boot_medians, 0.025)
 ci_upper_boot <- quantile(boot_medians, 0.975)
@@ -481,17 +479,16 @@ cat("Observed median:", median(vit_d), "ng/mL\n")
 
 ```{r}
 #| label: lab2-step5
-#| eval: false
 # Define statistic function for boot package
 median_func <- function(data, indices) {
   return(median(data[indices]))
 }
 
 # Run bootstrap
-# boot_result <- boot(data = vit_d, statistic = median_func, R = 5000)
+boot_result <- boot(data = vit_d, statistic = median_func, R = 5000)
 
 # BCa confidence interval (bias-corrected and accelerated)
-# boot_ci <- boot.ci(boot_result, type = c("perc", "bca"))
+boot_ci <- boot.ci(boot_result, type = c("perc", "bca"))
 
 print(boot_ci)
 ```
@@ -535,7 +532,6 @@ comparison %>%
 
 ```{r}
 #| label: lab2-step7
-#| eval: false
 # Check for duplicate bootstrap samples (quality check)
 unique_samples <- length(unique(boot_medians))
 cat("Unique bootstrap medians:", unique_samples, "out of", n_boot, "\n")
@@ -561,7 +557,6 @@ cat("(Small bias is expected; large bias suggests problems)\n")
 
 ```{r}
 #| label: lab2-step8
-#| eval: false
 #| fig-cap: "Vitamin D levels with bootstrap 95% CI for median"
 # Box plot with bootstrap CI overlay
 tibble(vit_d) %>%
@@ -694,7 +689,7 @@ recovery_data <- tibble(
 # Box plot with individual points
 ggplot(recovery_data, aes(x = treatment, y = days, fill = treatment)) +
   geom_boxplot(alpha = 0.5, outlier.shape = NA) +
-  geom_jitter(width = 0.1, size = 3, alpha = 0.6) +
+  geom_jitter(aes(x = treatment, y = days), width = 0.1, size = 3, alpha = 0.6) +
   labs(title = "Recovery Times by Treatment",
        y = "Days to Recovery") +
   theme_minimal() +
@@ -1189,15 +1184,16 @@ cat("With n=14, Wilcoxon is safer (fewer assumptions)\n")
 ```{r}
 #| label: lab4-step6
 #| fig-cap: "Box plot of change scores identifying outliers"
-ggplot(anxiety_data, aes(y = difference)) +
+ggplot(anxiety_data, aes(x = "", y = difference)) +
   geom_boxplot(fill = "lightblue", alpha = 0.7) +
-  geom_jitter(width = 0.1, size = 3, alpha = 0.6) +
+  geom_jitter(aes(x = "", y = difference), width = 0.1, size = 3, alpha = 0.6) +
   geom_hline(yintercept = 0, color = "red", linetype = "dashed") +
   labs(title = "Change Scores with Outlier Detection",
        y = "Change in Anxiety (after - before)") +
   theme_minimal() +
   theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank())
 
 # Identify outliers
 Q1 <- quantile(anxiety_data$difference, 0.25)
@@ -3916,8 +3912,8 @@ cohens_d_boot <- function(data, indices) {
   return((m_b - m_a) / sd_pooled)
 }
 
-# boot_result <- boot(teaching_data, cohens_d_boot, R = 2000)
-# boot_ci <- boot.ci(boot_result, type = "bca")
+boot_result <- boot(teaching_data, cohens_d_boot, R = 2000)
+boot_ci <- boot.ci(boot_result, type = "bca")
 
 cat("\nBootstrap 95% CI (BCa method):\n")
 cat("[", round(boot_ci$bca[4], 3), ", ", 

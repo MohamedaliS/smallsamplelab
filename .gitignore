@@ -13,6 +13,8 @@ figure/
 *_files/
 site_libs/
 *.rmarkdown
+*.knit.md
+*.utf8.md
 
 # Data files (optional - uncomment if you want to exclude generated data)
 # data/*.csv
